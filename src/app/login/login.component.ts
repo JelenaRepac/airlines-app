@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';  // Import FormsModule
 import { CommonModule } from '@angular/common';  // Import CommonModule
-import { AppComponent } from '../app/app.component';
-import { AuthService } from '../login/login.service';
+import { AuthService } from '../service/login.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,  
-  imports: [FormsModule, CommonModule, HttpClientModule ],  // Include CommonModule here
+  imports: [FormsModule, CommonModule, HttpClientModule,   RouterModule, ],  // Include CommonModule here
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -38,14 +38,3 @@ export class LoginComponent {
     }
   }
 }
-// }
-
-//   onSubmit() {
-//     if (!this.username || !this.password) {
-//       this.errorMessage = 'Both username and password are required!';
-//     } else {
-//       this.errorMessage = '';  
-//       console.log('Form submitted with username:', this.username);
-//     }
-//   }
-// }

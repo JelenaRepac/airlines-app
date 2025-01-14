@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../login/login.service';  // Import AuthService
+import { AuthService } from '../service/login.service';  // Import AuthService
 import { FormsModule } from '@angular/forms';  // Import FormsModule
 import { CommonModule } from '@angular/common'; 
 
@@ -26,10 +26,10 @@ export class SignUpComponent {
     console.log('Submit button clicked');
     this.resetMessages();
   
-    if (!this.isFormValid()) {
-      this.errorMessage = 'All fields are required!';
-      return;
-    }
+    // if (!this.isFormValid()) {
+    //   this.errorMessage = 'All fields are required!';
+    //   return;
+    // }
   
     const userData = { 
       firstname: this.firstname,
@@ -42,19 +42,11 @@ export class SignUpComponent {
   
     this.authService.register(userData).subscribe({
       next: (response) => {
-        this.successMessage = 'Sign-up successful! You must confirm your user in the mail.';
-        console.log('Sign-up successful:', response);
-        this.resetForm();  // Reset form after successful submission
+        console.log('Registration successful!', response);
+        // Handle success (e.g., navigate to login page)
       },
-      error: (err) => {
-        if (err.error && err.error.message) {
-          // If backend error contains a message, display it
-          this.errorMessage = err.error.message;
-        } else {
-          // Default error message if no specific message is provided
-          this.errorMessage = 'Sign-up failed. Please try again.';
-        }
-        console.error('Error:', err);
+      error: (error) => {
+        this.errorMessage = error.message;
       }
     });
   }

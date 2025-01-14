@@ -1,0 +1,15 @@
+/* navbar.component.css */
+mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
+  
+  nav a {
+    margin: 0 10px;
+  }
+  

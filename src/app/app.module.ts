@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SignUpComponent } from '../sign-up/sign-up.component';
-import { LoginComponent } from '../login/login.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from '../app/app.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -18,11 +17,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ReactiveFormsModule } from '@angular/forms';
+import {  MatNativeDateModule } from '@angular/material/core';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'login', component: LoginComponent },
+  { path: '', component: AppComponent },
+  { path: 'login', component: AppComponent },
   { path: 'sign-up', component: SignUpComponent },
 ];
 
@@ -42,7 +44,16 @@ const routes: Routes = [
     MatSlideToggleModule,
     MatSelectModule,
     MatOptionModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: []
+  providers: [  
+    MatDatepickerModule,
+    MatNativeDateModule  
+  ],
+  exports: [RouterModule]
 })
 export class AppModule  { }

@@ -1,3 +1,4 @@
+
 <div class="sign-up-form">
   <h2>Sign Up</h2>
   <form (ngSubmit)="onSubmit()">
@@ -52,7 +53,7 @@
       />
     </div>
 
-    <button type="submit" [disabled]="!isFormValid()" >Sign Up</button>
+    <button type="submit" >Sign Up</button>
     <!-- [disabled]="!isFormValid()" -->
 
     <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
