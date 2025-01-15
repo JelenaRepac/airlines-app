@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from '../app/app.component';
 import {HttpClientModule} from '@angular/common/http';
 
-import { FormsModule } from '@angular/forms';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +18,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { ReactiveFormsModule } from '@angular/forms';
 import {  MatNativeDateModule } from '@angular/material/core';
 
 const routes: Routes = [
@@ -33,7 +31,6 @@ const routes: Routes = [
     BrowserModule,
     RouterModule,
     HttpClientModule, 
-    FormsModule,
     MatToolbarModule,
     MatInputModule,
     MatCardModule,
@@ -47,7 +44,6 @@ const routes: Routes = [
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    ReactiveFormsModule,
     RouterModule.forRoot(routes)
   ],
   providers: [  

@@ -1,34 +1,53 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';  // Import FormsModule
 import { CommonModule } from '@angular/common';  // Import CommonModule
-import { AuthService } from '../service/login.service';
+import { AuthService } from '../service/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RouterModule, Routes } from '@angular/router';
+import Swal from 'sweetalert2';
+
+
 @Component({
   selector: 'app-login',
-  standalone: true,  
-  imports: [FormsModule, CommonModule, HttpClientModule,   RouterModule, ],  // Include CommonModule here
+  standalone: true,
+  imports: [FormsModule, CommonModule, HttpClientModule, RouterModule,],  // Include CommonModule here
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string = '';  
-  password: string = ''; 
-  errorMessage: string = ''; 
-  
-  constructor(private authService: AuthService,  private router: Router) {}
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
+
+  constructor(private authService: AuthService, private router: Router) { }
 
   onSubmit() {
-    if (!this.username || !this.password) {
-      this.errorMessage = 'Both username and password are required!';
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Both email and password are required!';
     } else {
+      this.authService.isAdmin();
       this.errorMessage = '';
-      this.authService.login(this.username, this.password).subscribe({
+      this.authService.login(this.email, this.password).subscribe({
         next: (response) => {
-          
+
           console.log('Login successful:', response);
-          this.router.navigate(['/home']);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Successful!',
+            text: 'Welcome back! You have successfully login in.',
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1000,
+            toast: true,
+            background: '#AEEA94',
+            color: '#fff',
+          }).then(() => {
+            this.router.navigate(['/home']);
+          });
+
+
         },
         error: (error) => {
           console.error('Login failed:', error);

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../service/login.service';  // Import AuthService
+import { AuthService } from '../service/auth.service';  // Import AuthService
 import { FormsModule } from '@angular/forms';  // Import FormsModule
 import { CommonModule } from '@angular/common'; 
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sign-up',
@@ -26,10 +27,11 @@ export class SignUpComponent {
     console.log('Submit button clicked');
     this.resetMessages();
   
-    // if (!this.isFormValid()) {
-    //   this.errorMessage = 'All fields are required!';
-    //   return;
-    // }
+
+    if (!this.firstname || !this.lastname || !this.password || !this.email || !this.passportNumber) {
+      this.errorMessage = 'All fields are required!';
+      return;
+    }
   
     const userData = { 
       firstname: this.firstname,
@@ -41,13 +43,20 @@ export class SignUpComponent {
     };
   
     this.authService.register(userData).subscribe({
-      next: (response) => {
-        console.log('Registration successful!', response);
-        // Handle success (e.g., navigate to login page)
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Registration Successful',
+          text: 'Please check your email to confirm your account.',
+        });
       },
       error: (error) => {
-        this.errorMessage = error.message;
-      }
+        Swal.fire({
+          icon: 'error',
+          title: 'Registration Failed',
+          text: `Error: ${error.message}`,
+        });
+      },
     });
   }
   
@@ -61,9 +70,6 @@ export class SignUpComponent {
     this.successMessage = '';
   }
 
-  public isFormValid(): boolean {
-    return !!this.firstname && !!this.lastname && !!this.username && !!this.password && !!this.email && !!this.passportNumber;
-  }
 
   private resetForm() {
     this.firstname = '';

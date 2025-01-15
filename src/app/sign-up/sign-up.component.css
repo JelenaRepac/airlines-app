@@ -1,6 +1,8 @@
 body, html {
   height: 100%;
   margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fa; /* Light background for contrast */
 }
 
 .main-container {
@@ -8,59 +10,69 @@ body, html {
   justify-content: center;
   align-items: center;
   height: 100%;
+  padding: 20px;
 }
 
 .sign-up-form {
   width: 100%;
-  max-width: 400px;
-  margin: 100px auto;
-  padding: 20px;
+  max-width: 420px;
+  margin: 30px auto;
+  padding: 15px;
   border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: rgba(255, 255, 255, 0.8); /* Slight opacity to see background */
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
   text-align: center;
-  font-family: Arial, sans-serif;
 }
 
 h2 {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
   color: #333;
+  font-weight: 600;
 }
 
 form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-row {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
 label {
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: #555;
+  text-align: left;
 }
 
 input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 16px;
+  background-color: #fafafa;
   box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
 input:focus {
   border-color: #007bff;
   outline: none;
-  box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.2);
 }
-
 button {
   padding: 10px 15px;
   background-color: #007bff;
   color: #fff;
   font-size: 16px;
+  width: 50%;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -68,29 +80,56 @@ button {
 }
 
 button:hover {
-  background-color: #218838;
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 .forgot-password {
-  display: block;
-  margin-top: 10px;
+  display: inline-block;
+  margin-top: 15px;
   text-decoration: none;
   font-size: 0.875rem;
   color: #007bff;
+  transition: color 0.3s ease;
 }
 
 .forgot-password:hover {
   text-decoration: underline;
+  color: #0056b3;
 }
 
-.error {
-  color: red;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.success {
+.success-message {
   color: green;
-  font-size: 14px;
-  margin-top: 10px;
+  margin-top: 15px;
+  font-size: 0.875rem;
+}
+
+.error-message {
+  color: red;
+  margin-top: 15px;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 600px) {
+  .sign-up-form {
+    width: 100%;
+    margin: 20px;
+    padding: 25px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+  }
 }

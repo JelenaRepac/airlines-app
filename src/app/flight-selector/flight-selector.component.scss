@@ -1,66 +1,74 @@
+@use '@angular/material' as mat;
 
-.flight-selector-container mat-card {
-    width: 100%;
-    max-width: 600px;
-    margin: 20px auto; /* Center card with some space above and below */
-    padding: 16px; /* Add padding inside the card */
-    border-radius: 8px; /* Round corners for a smoother look */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    background-color: #fff; /* Ensure the background is white */
-  }
-  
-  /* Header styling */
-  .flight-selector-container mat-card-title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333; /* Dark color for the title */
-    margin-bottom: 16px; /* Space below the title */
-  }
-  
-  /* Form styling */
-  mat-form-field {
-    width: 100%; /* Ensure each form field takes full width */
-    margin-bottom: 16px; /* Add some space between the fields */
-  }
-  
-  /* Row styling for date pickers */
-  .date-picker-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px; /* Add space between date pickers */
-    flex-wrap: nowrap; /* Ensure date pickers stay in one row */
-  }
-  
-  /* Each date picker */
-  .date-picker {
-    flex: 1; /* Make each form field take equal space */
-    min-width: 160px; /* Set a minimum width to avoid squeezing */
-    margin-bottom: 16px; /* Add space below the date pickers */
-  }
-  
-  /* Button styling */
-  button[type="submit"] {
-    width: 100%; /* Make the button full-width */
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #1976D2; /* Primary color */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #1565C0; /* Darker shade on hover */
-  }
-  
-  button[type="submit"]:disabled {
-    background-color: #B0BEC5; /* Disable button with a grey color */
-    cursor: not-allowed;
-  }
-  
 
-  
+.flight-selector-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40vh; /* Full viewport height */
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+mat-card {
+  max-width: 1500px; /* Max width of the card */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+/* Date Picker Row */
+.date-picker-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100vh;
+}
+
+/* Date Pickers */
+mat-form-field {
+  flex: 1; /* Each date picker will take equal space */
+}
+
+mat-hint {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+/* Button */
+button {
+  align-self: center;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover {
+  background-color: #1976d2;
+}
+
+button:disabled:hover {
+  background-color: #ccc;
+}
+
+

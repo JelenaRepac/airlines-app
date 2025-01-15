@@ -1,15 +1,39 @@
 /* navbar.component.css */
+
+/* Toolbar styling */
 mat-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .spacer {
-    flex: 1 1 auto;
-  }
-  
-  nav a {
-    margin: 0 10px;
-  }
-  
+  background-color: #e3f2fd; /* Material blue color */
+  color: #497aec;
+  /* padding: 5px 5px; Reduced top and bottom padding */
+}
+
+span {
+  font-size: 1.25rem;
+}
+
+/* Spacer for pushing items to the right */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Navigation links */
+nav a {
+  margin: 0 15px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  color:  #497aec;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effects for links */
+nav a:hover {
+  color: #f1f1f1;
+  transform: translateY(-2px);
+}
+
+/* Active link styling (optional) */
+nav a.router-link-active {
+  color: #ff4081; /* Material pink accent color */
+}

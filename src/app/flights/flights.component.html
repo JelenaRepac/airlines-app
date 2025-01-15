@@ -1,0 +1,47 @@
+<mat-tab-group>
+    <!-- First Tab: Flight Table -->
+    <mat-tab label="First">
+      <div class="flight-table-container">
+        <table mat-table [dataSource]="flights" class="mat-elevation-z8">
+          <!-- From City Column -->
+          <ng-container matColumnDef="fromCity">
+            <th mat-header-cell *matHeaderCellDef> From </th>
+            <td mat-cell *matCellDef="let flight"> {{flight.fromCity}} </td>
+          </ng-container>
+  
+          <!-- To City Column -->
+          <ng-container matColumnDef="toCity">
+            <th mat-header-cell *matHeaderCellDef> To </th>
+            <td mat-cell *matCellDef="let flight"> {{flight.toCity}} </td>
+          </ng-container>
+  
+          <!-- Departure Time Column -->
+          <ng-container matColumnDef="departureTime">
+            <th mat-header-cell *matHeaderCellDef> Departure Time </th>
+            <td mat-cell *matCellDef="let flight"> {{flight.departureTime }} </td>
+          </ng-container>
+  
+          <!-- Price Column -->
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef> Price </th>
+            <td mat-cell *matCellDef="let flight"> ${{flight.price}} </td>
+          </ng-container>
+  
+          <!-- Header and Rows -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+  
+    <!-- Second Tab: Placeholder for other content -->
+    <mat-tab label="Second">
+      Content 2
+    </mat-tab>
+  
+    <!-- Third Tab: Placeholder for other content -->
+    <mat-tab label="Third">
+      Content 3
+    </mat-tab>
+  </mat-tab-group>
+  

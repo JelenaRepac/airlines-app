@@ -1,9 +1,8 @@
 <div class="flight-selector-container">
     <mat-card>
-      <mat-card-title>Choose Your Flight</mat-card-title>
       <mat-card-content>
         <form [formGroup]="flightForm" (ngSubmit)="onSubmit()">
-          <!-- From City -->
+          <div class="date-picker-row">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>City From</mat-label>
             <input matInput placeholder="Enter departure city" formControlName="fromCity" required />
@@ -15,9 +14,9 @@
             <input matInput placeholder="Enter destination city" formControlName="toCity" required />
           </mat-form-field>
   
-          <!-- Travel Dates in One Row -->
-          <div class="date-picker-row">
-            <!-- Going Date Picker -->
+          <!-- Travel Dates in One Row
+         
+            Going Date Picker
             <mat-form-field>
               <mat-label>Going</mat-label>
               <input matInput [matDatepicker]="goingPicker" formControlName="goingDate" required />
@@ -26,16 +25,18 @@
               <mat-datepicker #goingPicker></mat-datepicker>
             </mat-form-field>
   
-            <!-- Return Date Picker -->
-            <mat-form-field>
+            Return Date Picker -->
+            <!-- <mat-form-field>
               <mat-label>Return</mat-label>
               <input matInput [matDatepicker]="returnPicker" formControlName="returnDate" required />
               <mat-hint>MM/DD/YYYY</mat-hint>
               <mat-datepicker-toggle matIconSuffix [for]="returnPicker"></mat-datepicker-toggle>
               <mat-datepicker #returnPicker></mat-datepicker>
-            </mat-form-field>
-          </div>
-  
+            </mat-form-field> -->
+      
+          <date-range-picker></date-range-picker>
+
+        </div>
           <button mat-raised-button color="primary" type="submit" [disabled]="!flightForm.valid">Search Flights</button>
         </form>
       </mat-card-content>
