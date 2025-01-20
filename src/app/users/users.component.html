@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+
+<table mat-table [dataSource]="users">
+    <!-- Columns definition -->
+    <ng-container matColumnDef="firstname">
+      <th mat-header-cell *matHeaderCellDef>First Name</th>
+      <td mat-cell *matCellDef="let user">{{ user.firstname || 'N/A' }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="lastname">
+      <th mat-header-cell *matHeaderCellDef>Last Name</th>
+      <td mat-cell *matCellDef="let user">{{ user.lastname || 'N/A' }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="passportNumber">
+      <th mat-header-cell *matHeaderCellDef>Passport Number</th>
+      <td mat-cell *matCellDef="let user">{{ user.passportNumber || 'N/A' }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let user">{{ user.email || 'N/A' }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="rank">
+      <th mat-header-cell *matHeaderCellDef>Rank</th>
+      <td mat-cell *matCellDef="let user">{{ user.rank || 'N/A' }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="miles">
+      <th mat-header-cell *matHeaderCellDef>Miles</th>
+      <td mat-cell *matCellDef="let user">{{ user.miles || 'N/A' }}</td>
+    </ng-container>
+  
+    <!-- Table row -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  

@@ -1,12 +1,14 @@
 <!-- navbar.component.html -->
 <mat-toolbar color="accent">
-    <span>My Application</span>
-    <span class="spacer"></span>
-    <nav>
-      <a mat-button routerLink="/home">Home</a>
-      <a mat-button routerLink="/profile">Profile</a>
-      <a mat-button (click)="logout()">Logout</a>
-    </nav>
-    
-  </mat-toolbar>
-  
+  <span>My Application</span>
+  <span class="spacer"></span>
+  <nav>
+    <a mat-button routerLink="/home">Home</a>
+    <a mat-button routerLink="/profile">Profile</a>
+
+    <a *ngIf="isAdminUser" mat-button routerLink="/users">Users</a>
+
+    <a mat-button (click)="logout()">Logout</a>
+  </nav>
+
+</mat-toolbar>

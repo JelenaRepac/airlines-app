@@ -5,17 +5,25 @@ import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
-  imports: [MatToolbar, RouterModule]
+  imports: [MatToolbar, RouterModule,CommonModule]
 })
 export class NavbarComponent {
 
   constructor(private authService: AuthService, private router: Router) { }
 
+  isAdminUser = false;
+
+
+  ngOnInit(): void {
+    // Check the role on component initialization
+    this.isAdminUser = this.authService.isAdmin();
+  }
   logout(): void {
     this.authService.logout();
 
@@ -26,9 +34,8 @@ export class NavbarComponent {
       position: 'top-end',
       showConfirmButton: false,
       timer: 3000,
-      toast: true,
-      background: '#AEEA94',
-      color: '#fff'
+      toast: true
+    
     }).then(() => {
       this.router.navigate(['/home']);
     });

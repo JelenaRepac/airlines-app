@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button'; // If you use button
 import { MatPaginatorModule } from '@angular/material/paginator'; // If you need pagination
 import { MatSortModule } from '@angular/material/sort'; // If you need sorting
 import {MatTabsModule} from '@angular/material/tabs'
+import { AuthService } from '../service/auth.service';
 
 export interface Flight {
   flightNumber: string;
@@ -25,8 +26,11 @@ export interface Flight {
   ],
 })
 export class FlightsComponent {
+
+
+
   displayedColumns: string[] = ['fromCity', 'toCity', 'departureTime', 'price']; // List of columns to display
-  
+
   flights = [
     {
       flightNumber: 'AA123',

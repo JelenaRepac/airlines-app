@@ -6,7 +6,7 @@ body, html {
 }
 
 .profile-container {
-  max-width: 500px;
+  max-width: 400px;
   margin: 40px auto;
   padding: 30px;
   border: 1px solid #ddd;

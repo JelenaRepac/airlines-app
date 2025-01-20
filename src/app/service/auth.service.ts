@@ -3,13 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../environment';
 import { tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private api = 'http://localhost:8000';
-  private apiUrl = 'http://localhost:8000/auth';
+
+
+private api = environment.apiUrl;
+  private apiUrl = environment.apiUrl + '/auth';
 
 
   constructor(private http: HttpClient) { }
@@ -20,14 +23,14 @@ export class AuthService {
     if (token) {
       const decodedToken: any = jwtDecode(token);
       console.log(decodedToken);
-      console.log(decodedToken.role);
-      return decodedToken.role;
+      console.log(decodedToken.roles);
+      return decodedToken.roles;
     }
     return '';
   }
 
   isAdmin(): boolean {
-    return this.getUserRole() === 'admin';  // Compare role to 'admin'
+    return this.getUserRole() === 'ROLE_ADMIN';  // Compare role to 'admin'
   }
 
 
@@ -73,17 +76,15 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('authToken');
   }
-
   register(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, userData).pipe(
       catchError(this.handleError)
     );
   }
-
-
+  
   private handleError(error: any): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
-
+  
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error: ${error.error.message}`;
     } else {
@@ -92,14 +93,20 @@ export class AuthService {
       } else if (error.status === 404) {
         errorMessage = 'The requested resource was not found.';
       } else if (error.status === 500) {
-        errorMessage = 'A server error occurred. Please try again later.';
+        // Check for specific message returned in 500 error
+        if (error.error && error.error.message === 'User with that email already exists') {
+          errorMessage = 'A user with this email already exists. Please try with a different email.';
+        } else {
+          errorMessage = 'A server error occurred. Please try again later.';
+        }
       }
     }
-
+  
     console.error('Error:', error);
-
+  
     return throwError(() => new Error(errorMessage));
   }
+  
 
   getToken(): string | null {
     return localStorage.getItem('authToken');
@@ -148,10 +155,26 @@ export class AuthService {
       console.error('Token not found');
     }
 
-    return this.http.post(`${this.apiUrl}/update`, { user: userData }, {
+    const headers = {'Authorization': `${token}` };
+    const body = userData;
+
+    return this.http.post(`${this.apiUrl}/update`, body,{headers});
+   
+
+
+  }
+
+  getUsers(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+      console.error('Token not found in local storage.');
+    }
+
+    return this.http.get(`${this.apiUrl}`, {
       headers: {
-        'Authorization': `${token}`, 
-      },
+        'Authorization': `${token}`
+      }
     });
   }
 

@@ -14,6 +14,15 @@
             <input matInput placeholder="Enter destination city" formControlName="toCity" required />
           </mat-form-field>
   
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Select Country</mat-label>
+            <mat-select [(value)]="selectedCountry">
+              <mat-option *ngFor="let country of countries" [value]="country.countryId">
+                {{ country.countryName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          
           <!-- Travel Dates in One Row
          
             Going Date Picker

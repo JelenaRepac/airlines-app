@@ -41,8 +41,6 @@ export class LoginComponent {
             showConfirmButton: false,
             timer: 1000,
             toast: true,
-            background: '#AEEA94',
-            color: '#fff',
           }).then(() => {
             this.router.navigate(['/home']);
           });
