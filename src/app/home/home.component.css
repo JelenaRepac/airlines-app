@@ -1,6 +1,8 @@
 .home-container {
     text-align: center;
     margin-top: 0;
+    display: grid;
+    gap: 50px;
   }
   
   h1 {

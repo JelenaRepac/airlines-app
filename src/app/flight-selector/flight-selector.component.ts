@@ -11,11 +11,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DateRange } from './date-range.component';
 import { HttpClient } from '@angular/common/http';
+import { CountryService } from '../service/country.service';
+import {Country} from '../models/country.model';
 
-interface Country {
-  countryId: number;
-  countryName: string;
-}
 
 @Component({
   selector: 'app-flight-selector',
@@ -23,13 +21,17 @@ interface Country {
   templateUrl: './flight-selector.component.html',
   styleUrls: ['./flight-selector.component.scss']
 })
+
 export class FlightSelectorComponent {
+
+  
   countries: Country[] = [];  // Use the Country interface to type the array
-  selectedCountry: string = '';  // Store the selected country
+  selectedCountry: string = '';
+  selectedCountryIso: string = ''; 
   accessKey = 'a0c2b52e19dd4518239d16ae667b4c22';
   flightForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private countryService: CountryService) {
     this.flightForm = this.fb.group({
       fromCity: ['', Validators.required],
       toCity: ['', Validators.required],
@@ -37,16 +39,10 @@ export class FlightSelectorComponent {
       returnDate: ['', Validators.required],
     });
   }
-
-  onCountryChange() {
-    const fromCity = this.flightForm.value.fromCity;
-    const toCity = this.flightForm.value.toCity;
-
-    // Check if both cities are selected before making the API call
-    if (fromCity && toCity) {
-      this.callCountryAPI(fromCity, toCity);
-    }
+  ngOnInit(): void {
+    this.loadCountries();
   }
+
 
   callCountryAPI(fromCity: string, toCity: string) {
     const url = `http://localhost:9090/flight/flight/country?accessKey=${this.accessKey}}`;
@@ -65,4 +61,21 @@ export class FlightSelectorComponent {
       console.log(this.flightForm.value);
     }
   }
+
+  loadCountries(): void{
+    this.countryService.getCountries(0,250).subscribe({
+      next: (data)=>{
+        console.log(data);
+        this.countries = data.map((country) => ({
+          country_name: country.country_name,
+          country_id: country.country_id,
+        }));
+        console.log(this.countries);
+      },
+      error: (err)=>{
+        console.error("Error fetching countries: ", err);
+      }
+    })
+  }
+ 
 }

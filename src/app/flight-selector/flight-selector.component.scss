@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40vh; /* Full viewport height */
+  height: 50vh; /* Full viewport height */
   background-color: #f4f4f4;
   padding: 20px;
 }
@@ -23,18 +23,13 @@ mat-card-content {
   flex-direction: column;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
 
 
 /* Date Picker Row */
-.date-picker-row {
+.form-row {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 10px;
   width: 100vh;
 }
 
