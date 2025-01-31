@@ -1,14 +1,10 @@
-<!-- navbar.component.html -->
-<mat-toolbar color="accent">
-  <span>My Application</span>
+<mat-toolbar >
+  <span>AERO DREAMS</span>
   <span class="spacer"></span>
   <nav>
-    <a mat-button routerLink="/home">Home</a>
-    <a mat-button routerLink="/profile">Profile</a>
-
-    <a *ngIf="isAdminUser" mat-button routerLink="/users">Users</a>
-
-    <a mat-button (click)="logout()">Logout</a>
+    <span class="material-icons nav-icon" routerLink="/home">home</span>
+    <span class="material-icons nav-icon" routerLink="/profile">account_circle</span>
+    <span  *ngIf="isAdminUser"  class="material-icons" routerLink="/users">people</span>
+    <span class="material-icons nav-icon" (click)="logout()">logout</span>
   </nav>
-
 </mat-toolbar>

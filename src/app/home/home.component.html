@@ -1,9 +1,24 @@
 <!-- home.component.html -->
 <app-navbar></app-navbar>
 
-<div class="home-container">
+<div>
   <!-- <h1>{{ title }}</h1>
   <button mat-raised-button (click)="navigate()">Click me to navigate</button> -->
-  <app-flight-selector></app-flight-selector>
-  <app-flights></app-flights>
+  <!-- home.component.html -->
+  <div class="gif-container">
+    <img src="../../assets/AIRLINE-TRAVEL.gif" alt="Airline Image">
+
+  </div>
+
+  <div *ngIf="isAdminUser" class="admin-home">
+    <button mat-raised-button (click)="onButtonClick('first')">Manage flights</button>
+    <button mat-raised-button (click)="onButtonClick('second')">Manage schedules</button>
+    <button mat-raised-button (click)="onButtonClick('third')">Manage admins</button>
+  </div>
+
+  <div *ngIf="!isAdminUser" class="client-home">
+    <button mat-raised-button (click)="onButtonClick('bookFlight')">Book a flight</button>
+    <button mat-raised-button (click)="onButtonClick('flightSchedule')">Flight schedule</button>
+  </div>
+
 </div>

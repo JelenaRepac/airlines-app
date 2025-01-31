@@ -21,7 +21,6 @@ export class NavbarComponent {
 
 
   ngOnInit(): void {
-    // Check the role on component initialization
     this.isAdminUser = this.authService.isAdmin();
   }
   logout(): void {
