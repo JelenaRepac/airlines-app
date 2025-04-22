@@ -1,5 +1,4 @@
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-
+@use '@angular/material' as mat;
 body {
     font-family: Arial, sans-serif;
   }
@@ -14,5 +13,4 @@ body {
     font-weight: bold;
   }
   
-
   

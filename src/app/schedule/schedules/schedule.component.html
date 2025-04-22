@@ -1,0 +1,77 @@
+<div class="panel-container">
+  <div class="panel-header" (click)="togglePanel()">
+    <h3>Schedules</h3>
+    <span>{{ panelOpen ? '▲' : '▼' }}</span>
+  </div>
+
+  <div *ngIf="panelOpen" class="panel-body">
+    <div *ngIf="flightSchedules.length === 0" class="no-flights">No schedules available.</div>
+
+    <!-- Admin view -->
+    <table *ngIf="isAdmin && flightSchedules.length > 0" class="schedule-table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>To</th>
+          <th>Departure Date</th>
+          <th>Arrival Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let schedule of flightSchedules">
+          <td>{{ schedule.startAirport }}</td>
+          <td>{{ schedule.endAirport }}</td>
+          <td>{{ schedule.departureDate | date:'short' }}</td>
+          <td>{{ schedule.arrivalDate | date:'short' }}</td>
+          <td>{{ schedule.status }}</td>
+          <td>
+            <button mat-icon-button color="primary"><mat-icon>visibility</mat-icon></button>
+            <button mat-icon-button color="accent"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Non-admin view -->
+    <table *ngIf="!isAdmin && flightSchedules.length > 0" class="schedule-table custom-nonadmin">
+      <thead>
+        <tr>
+          <th>Flight</th>
+          <th>Status</th>
+          <th>Arrival / Departure</th>
+          <th>Source / Destination</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let schedule of flightSchedules">
+          <td>
+            <div>{{ schedule.flightInformation.flightName }}</div>
+            <small>{{ schedule.flightInformation.airlineService }}</small>
+          </td>
+          <td>{{ schedule.status }}</td>
+          <td>
+            <div class="stacked-values">
+            <div>{{ schedule.arrivalDate | date:'short' }}</div>
+            <div class="divider">|</div>
+            <div>{{ schedule.departureDate | date:'short' }}</div>
+            </div>
+          </td>
+          <td>
+            <div class="stacked-values">
+            <div>{{ schedule.startAirport }}</div>
+            <div class="divider">|</div>
+            <div>{{ schedule.endAirport }}</div>
+            </div>
+          </td>
+          <td>
+            <button class="btn">Book a flight</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

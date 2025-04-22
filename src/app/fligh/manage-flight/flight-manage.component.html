@@ -1,0 +1,104 @@
+<app-navbar></app-navbar>
+<div *ngIf="showAddFlightModal" class="flight-form-overlay" (click)="closeAddFlightModal()"></div>
+
+<div *ngIf="showAddFlightModal" class="flight-form">
+    <h2>Insert New Flight</h2>
+    <form (ngSubmit)="submitFlight()" #flightForm="ngForm">
+      <div>
+        <label>Flight Name:</label>
+        <input type="text" [(ngModel)]="flight.flightName" name="flightName" required />
+      </div>
+  
+      <div>
+        <label>Capacity:</label>
+        <input type="number" [(ngModel)]="flight.capacity" name="capacity" required />
+      </div>
+  
+      <div>
+        <label>Flight Type:</label>
+        <select [(ngModel)]="flight.flightType" name="flightType" required>
+          <option *ngFor="let type of flightTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+      
+      <div>
+        <label>Seat Type:</label>
+        <select [(ngModel)]="flight.seatType" name="seatType" required>
+          <option *ngFor="let st of seatTypes" [value]="st">{{ st }}</option>
+        </select>
+      </div>
+      
+  
+      <div>
+        <label>Max Passenger Weight (kg):</label>
+        <input type="number" [(ngModel)]="flight.maximumWeightForPassenger" name="maximumWeightForPassenger" required />
+      </div>
+  
+      <div>
+        <label>Airline Service:</label>
+        <input type="text" [(ngModel)]="flight.airlineService" name="airlineService" required />
+      </div>
+  
+      <button class="btn" type="submit">Submit</button>
+
+ 
+    </form>
+  
+  
+  </div>
+  <mat-card class="flight-card">
+    <mat-card-content>
+      <div class="button-container">
+        <button mat-raised-button color="primary" class="add-btn" (click)="openAddFlightModal()">Add Flight</button>
+      </div>
+      <app-flights></app-flights>
+    </mat-card-content>
+  </mat-card>
+  
+ 
+<!-- 
+  
+<div class="panel-container">
+  <div class="panel-header" (click)="togglePanel()">
+    <h3>Flights</h3>
+    <span>{{ panelOpen ? '▲' : '▼' }}</span>
+  </div>
+
+  <div *ngIf="panelOpen" class="panel-body">
+
+    <button class="add-btn" (click)="openAddFlightModal()">Add Flight</button>
+    
+
+    <div *ngIf="flights.length === 0" class="no-flights">No flights available.</div>
+    <table *ngIf="flights.length > 0" class="flight-table">
+      <thead>
+        <tr>
+          <th>Flight ID</th>
+          <th>Flight Name</th>
+          <th>Capacity</th>
+          <th>Flight Type</th>
+          <th>Seat Type</th>
+          <th>Max: Weight per Person</th>
+          <th>Airline Service</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let flight of flights">
+          <td>{{ flight.id }}</td>
+          <td>{{ flight.flightName }}</td>
+          <td>{{ flight.capacity }}</td>
+          <td>{{ flight.flightType }}</td>
+          <td>{{ flight.seatType }}</td>
+          <td>{{ flight.maximumWeightForPassenger }} kg</td>
+          <td>{{ flight.airlineService }}</td>
+          <td class="action">
+            <button class="view-btn">👁️</button>
+            <button class="edit-btn">✏️</button>
+            <button class="delete-btn">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->

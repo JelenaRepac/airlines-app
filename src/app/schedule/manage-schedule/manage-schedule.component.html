@@ -1,0 +1,68 @@
+<app-navbar></app-navbar>
+
+ <div *ngIf="showAddScheduleModal" class="schedule-form-overlay" (click)="closeAddScheduleModal()"></div>
+
+<div *ngIf="showAddScheduleModal" class="schedule-form">
+ <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <h2>Add New Schedule</h2>
+
+    <div>
+      <label for="flight">Flight:</label>
+      <select formControlName="flightInformation">
+        <option *ngFor="let f of flights" [value]="f.id">
+          {{ f.flightName }}
+        </option>
+      </select>
+      
+    </div>
+
+    <div>
+      <label for="departureDate">Departure Date:</label>
+      <input type="date" formControlName="departureDate" />
+    </div>
+
+    <div>
+      <label for="departureTime">Departure Time:</label>
+      <input type="time" formControlName="departureTime" />
+    </div>
+
+    <div>
+      <label for="arrivalDate">Arrival Date:</label>
+      <input type="date" formControlName="arrivalDate" />
+    </div>
+
+    <div>
+      <label for="arrivalTime">Arrival Time:</label>
+      <input type="time" formControlName="arrivalTime" />
+    </div>
+
+    <div>
+      <label for="sourceAirport">Source Airport:</label>
+      <input formControlName="sourceAirport" placeholder="Select Source Airport" />
+    </div>
+
+    <div>
+      <label for="destinationAirport">Destination Airport:</label>
+      <input formControlName="destinationAirport" placeholder="Select Destination Airport" />
+    </div>
+
+    <div>
+      <label for="status">Status:</label>
+      <input formControlName="status" placeholder="Status" />
+    </div>
+
+    <button type="submit" class="btn">+ Add New Flight Schedule</button>
+  </div>
+</form>
+
+</div>
+
+<mat-card class="schedule-card">
+  <mat-card-content>
+    <div class="button-container">
+      <button mat-raised-button color="primary" class="add-btn" (click)="openAddScheduleModal()">Add Schedule</button>
+    </div>
+    <flight-schedule></flight-schedule>
+  </mat-card-content>
+</mat-card> 

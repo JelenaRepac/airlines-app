@@ -1,0 +1,46 @@
+<div class="panel-container">
+  <div class="panel-header" (click)="togglePanel()">
+    <h3>Flights</h3>
+    <span>{{ panelOpen ? '▲' : '▼' }}</span>
+  </div>
+
+  <div *ngIf="panelOpen" class="panel-body">
+    <div *ngIf="flights.length === 0" class="no-flights">No flights available.</div>
+    <table *ngIf="flights.length > 0" class="flight-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Flight</th>
+          <th>Capacity</th>
+          <th>Flight Type</th>
+          <th>Seat Type</th>
+          <th>Max Weight per Person</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let flight of flights">
+          <td>
+            <span class="material-symbols-outlined" 
+                  style="vertical-align: middle; font-size: 24px;">
+              flight
+            </span>
+          </td>
+          <td>
+            <div class="flight-name">{{ flight.flightName }}</div>
+            <div class="airline-service">{{ flight.airlineService }}</div>
+          </td>
+          <td>{{ flight.capacity }}</td>
+          <td>{{ flight.flightType }}</td>
+          <td>{{ flight.seatType }}</td>
+          <td>{{ flight.maximumWeightForPassenger }} kg</td>
+          <td>
+            <button mat-icon-button color="primary"><mat-icon>visibility</mat-icon></button>
+            <button mat-icon-button color="accent"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button color="warn" (click)="deleteFlight(flight.id!)"><mat-icon>delete</mat-icon></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<app-navbar></app-navbar>
+
+<div class="admin-container">
+  <h2>Manage Admins</h2>
+
+  <div class="admin-list" *ngFor="let admin of users">
+    <div class="admin-item">
+      <span>{{ admin.username }}</span>
+      <button mat-button color="warn" (click)="openConfirmDialog(admin)">DELETE</button>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" class="add-btn" (click)="openAddAdminDialog()">+ ADD NEW ADMIN</button>
+
+</div>

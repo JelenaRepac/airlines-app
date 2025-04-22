@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UsersComponent } from './users.component';
-
+import { UsersComponent } from './admins.component';
 describe('UsersComponent', () => {
   let component: UsersComponent;
   let fixture: ComponentFixture<UsersComponent>;
@@ -20,4 +19,6 @@ describe('UsersComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+ 
 });

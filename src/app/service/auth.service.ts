@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
@@ -11,7 +12,7 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
 
 
-private api = environment.apiUrl;
+  private api = environment.apiUrl;
   private apiUrl = environment.apiUrl + '/auth';
 
 
@@ -72,110 +73,109 @@ private api = environment.apiUrl;
     }
     return null;
   }
-
+  /** Logs out user by removing token */
   logout(): void {
     localStorage.removeItem('authToken');
   }
+
+  /** Registers a new user */
   register(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, userData).pipe(
       catchError(this.handleError)
     );
   }
-  
-  private handleError(error: any): Observable<never> {
-    let errorMessage = 'An unknown error occurred!';
-  
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      if (error.status === 400) {
-        errorMessage = 'Invalid input data. Please check the entered details.';
-      } else if (error.status === 404) {
-        errorMessage = 'The requested resource was not found.';
-      } else if (error.status === 500) {
-        // Check for specific message returned in 500 error
-        if (error.error && error.error.message === 'User with that email already exists') {
-          errorMessage = 'A user with this email already exists. Please try with a different email.';
-        } else {
-          errorMessage = 'A server error occurred. Please try again later.';
-        }
-      }
-    }
-  
-    console.error('Error:', error);
-  
-    return throwError(() => new Error(errorMessage));
-  }
-  
 
+  /** Retrieves stored token */
   getToken(): string | null {
     return localStorage.getItem('authToken');
   }
 
-
+  /** Fetches user profile by email */
   getProfile(email: string): Observable<any> {
-    const token = localStorage.getItem('authToken');
-
-    if (!token) {
-      console.error('Token not found in local storage.');
-    }
-
     return this.http.get(`${this.apiUrl}/profile`, {
-      headers: {
-        'Authorization': `${token}`
-      },
-      params: {
-        email: email,
-      },
-    });
+      headers: this.getAuthHeaders(),
+      params: { email }
+    }).pipe(catchError(this.handleError));
   }
 
+  /** Extracts email from token */
   getEmailFromToken(): string | null {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      console.error('No token found in local storage');
-      return null;
-    }
-
-    try {
-
-      const decodedToken: any = this.decodeToken(token);
-
-      return decodedToken.sub || null;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
-    }
+    const decodedToken = this.decodeToken(this.getToken()!);
+    return decodedToken ? decodedToken.sub : null;
   }
 
+  /** Updates user info */
   updateUserInfo(userData: any): Observable<any> {
-    const token = localStorage.getItem('authToken'); 
-
-    if (!token) {
-      console.error('Token not found');
-    }
-
-    const headers = {'Authorization': `${token}` };
-    const body = userData;
-
-    return this.http.post(`${this.apiUrl}/update`, body,{headers});
-   
-
-
+    return this.http.post(`${this.apiUrl}/update`, userData, {
+      headers: this.getAuthHeaders()
+    }).pipe(catchError(this.handleError));
   }
+
+  /** Fetches all admins */
+  getAdmins(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/admin`, {
+      headers: this.getAuthHeaders()
+    }).pipe(catchError(this.handleError));
+  }
+
 
   getUsers(): Observable<any> {
-    const token = localStorage.getItem('authToken');
-
-    if (!token) {
-      console.error('Token not found in local storage.');
-    }
-
     return this.http.get(`${this.apiUrl}`, {
-      headers: {
-        'Authorization': `${token}`
-      }
+      headers: this.getAuthHeaders()
+    }).pipe(catchError(this.handleError));
+  }
+  /** Constructs authentication headers */
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Authorization': token ? `${token}` : ''
     });
   }
 
+  /** Handles API errors */
+  private handleError(error: any): Observable<never> {
+    let errorMessage = 'An unknown error occurred!';
+
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      switch (error.status) {
+        case 400:
+          errorMessage = 'Invalid input data. Please check your details.';
+          break;
+        case 404:
+          errorMessage = 'Requested resource not found.';
+          break;
+        case 500:
+          errorMessage = error.error?.message === 'User with that email already exists'
+            ? 'A user with this email already exists. Please try another email.'
+            : 'A server error occurred. Please try again later.';
+          break;
+      }
+    }
+    console.error('Error:', error);
+    return throwError(() => new Error(errorMessage));
+  }
+
+  addAdmin(userData: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/admin`,
+      userData,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deleteAdmin(userId: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/admin/${userId}`,
+      {
+        headers: this.getAuthHeaders()
+      }
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
 }

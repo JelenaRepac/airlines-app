@@ -5,6 +5,7 @@ import { routes } from './app/app.routes';
 import { provideHttpClient } from '@angular/common/http';  
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 bootstrapApplication(AppComponent, {
@@ -12,6 +13,6 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(),
     provideRouter(routes),
      provideNativeDateAdapter(),
-     provideAnimations()
+     provideAnimations(), provideAnimationsAsync()
   ],
 }).catch(err => console.error(err));

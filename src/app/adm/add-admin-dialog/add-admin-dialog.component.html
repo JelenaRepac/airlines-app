@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Select a User to Promote</h2>
+
+<mat-dialog-content>
+  <div *ngIf="users.length > 0; else noUsers">
+    <mat-selection-list>
+      <mat-list-option *ngFor="let user of users" (click)="addAdmin(user)">
+        {{ user.firstname }}
+        {{ user.lastname }}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+
+  <ng-template #noUsers>
+    <p>No users found.</p>
+  </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="btn-row">
+  <button mat-button (click)="close()">Cancel</button>
+
+  </div>
+</mat-dialog-actions>

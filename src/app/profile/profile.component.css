@@ -1,98 +1,67 @@
-body, html {
-  height: 100%;
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f7fa; /* Light background for contrast */
-}
-
 .profile-container {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 30px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #ffffff;
-  text-align: center;
+  max-width: 600px;
+  margin: auto;
+  margin-top: 30px;
+  padding: 40px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.profile-container h2 {
-  font-size: 1.8rem;
-  color: #333;
-  margin-bottom: 25px;
-  font-weight: 600;
+h2 {
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .profile-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
-.profile-form label {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #555;
-  text-align: left;
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
-.profile-form input {
-  width: 100%;
-  padding: 12px;
+.form-row {
+  display: flex;
+  gap: 40px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 5px;
   font-size: 16px;
-  background-color: #fafafa;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
+  width: 100%;
 }
 
-.profile-form input:focus {
-  border-color: #007bff;
-  outline: none;
-  box-shadow: 0 0 6px rgba(0, 123, 255, 0.2);
-}
 
-.profile-form button {
-    padding: 10px 15px;
-    background-color:  #2e304c;
-    color: #fff;
-    font-size: 16px;
-    width: 50%;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  
-}
-.profile-form  button:hover {
-    background-color: #8d8e9fe9;
-  }
-
-
-.profile-form button:active {
-  transform: translateY(0);
-}
-
-.logout-btn {
-  padding: 12px 18px;
-  background-color: #f44336;
+.save-btn {
+  align-self: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color:#2e304c;
   color: #fff;
   font-size: 16px;
+  width: 40%;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
-  margin-top: 20px;
-}
-
-.logout-btn:hover {
-  background-color: #d32f2f;
-  transform: translateY(-2px);
-}
-
-.logout-btn:active {
-  transform: translateY(0);
+  transition: background-color 0.3s ease;
 }
 
 
+.save-btn:hover {
+  background-color:#484b75e9;
+}

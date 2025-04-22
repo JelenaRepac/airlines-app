@@ -11,8 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DateRange } from './date-range.component';
 import { HttpClient } from '@angular/common/http';
-import { CountryService } from '../service/country.service';
-import {Country} from '../models/country.model';
+import { CountryService } from '../../service/country.service';
+import {Country} from '../../models/country.model';
 
 
 @Component({

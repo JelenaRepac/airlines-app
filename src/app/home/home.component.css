@@ -38,9 +38,10 @@
   }
   .gif-container {
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    height: 50vh; /* Makes the container take up the full height of the viewport */
+    justify-content: center; 
+    align-items: center; 
+    height: 50vh; 
+    overflow: hidden;
   }
   
   .gif-container img {
