@@ -2,9 +2,9 @@
   <span>AERO DREAMS</span>
   <span class="spacer"></span>
   <nav>
-    <span class="material-icons nav-icon" routerLink="/home">home</span>
-    <span class="material-icons nav-icon" routerLink="/profile">account_circle</span>
-    <span  *ngIf="isAdminUser"  class="material-icons" routerLink="/users">people</span>
+    <span class="material-icons nav-icon" routerLink="/airline/home">home</span>
+    <span class="material-icons nav-icon" routerLink="/airline/profile">account_circle</span>
+    <span  *ngIf="isAdminUser"  class="material-icons" routerLink="/airline/users">people</span>
     <span class="material-icons nav-icon" (click)="logout()">logout</span>
   </nav>
 </mat-toolbar>

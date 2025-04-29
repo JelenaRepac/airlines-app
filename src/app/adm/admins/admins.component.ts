@@ -1,29 +1,14 @@
 import { Component } from '@angular/core';
-import { NavbarComponent } from "../../navbar/navbar.component";
-import { MatTableModule } from '@angular/material/table'; // Import the MatTableModule
-import { MatButtonModule } from '@angular/material/button'; // If you use buttons
-import { MatPaginatorModule } from '@angular/material/paginator'; // If you need pagination
-import { MatSortModule } from '@angular/material/sort'; // If you need sorting
-import {MatTabsModule} from '@angular/material/tabs'
 import { AuthService } from '../../service/auth.service';
 import Swal from 'sweetalert2';
-import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AddAdminDialogComponent } from '../add-admin-dialog/add-admin-dialog.component';
-import { nextTick } from 'process';
-import { response } from 'express';
-import { error } from 'console';
+import { SharedModules } from '../../shared.module';
 
 @Component({
   selector: 'users',
   imports: [
-    NavbarComponent,
-    MatTableModule, // Make sure MatTableModule is imported
-    MatButtonModule, // If you use buttons
-    MatPaginatorModule, // If you need pagination
-    MatSortModule, // If you need sorting,
-    MatTabsModule,
-    CommonModule
+    SharedModules
   ],
   templateUrl: './admins.component.html',
   styleUrl: './admins.component.css'
@@ -35,9 +20,9 @@ export class UsersComponent {
   users: any[] = [];
   displayedColumns: string[] = ['email'];
 
-  constructor(private authService: AuthService, private dialog: MatDialog) {}
-  
-  
+  constructor(private authService: AuthService, private dialog: MatDialog) { }
+
+
 
   loadUsers(): void {
     this.authService.getAdmins().subscribe({
@@ -58,11 +43,11 @@ export class UsersComponent {
       },
     });
   }
-  
+
   ngOnInit() {
     this.loadUsers();
   }
-  
+
 
   openConfirmDialog(admin) {
     Swal.fire({
@@ -76,7 +61,7 @@ export class UsersComponent {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        
+
         this.authService.deleteAdmin(admin.id).subscribe({
           next: response => {
             console.log('Server responded:', response);
@@ -86,7 +71,7 @@ export class UsersComponent {
             console.error('Delete admin failed:', err);
           }
         });
-        
+
 
 
         Swal.fire({
@@ -98,7 +83,7 @@ export class UsersComponent {
         });
       }
     });
-    
+
   }
 
   openAddAdminDialog(): void {

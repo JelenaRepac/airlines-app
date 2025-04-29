@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'; // SweetAlert2 for alerts
-import { AuthService } from '../service/auth.service'; // AuthService for API calls
-import { FormsModule } from '@angular/forms';  // Import FormsModule
-import { NavbarComponent } from '../navbar/navbar.component';
+import { AuthService } from '../service/auth.service'; 
+import { SharedModules } from '../shared.module';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-  imports:[FormsModule, NavbarComponent]
+  imports:[SharedModules]
 })
 export class ProfileComponent implements OnInit {
   user: any = {

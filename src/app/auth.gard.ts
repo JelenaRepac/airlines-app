@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
   ): boolean {
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     if (!isAuthenticated) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/airline/login']);
       return false;
     }
     return true;

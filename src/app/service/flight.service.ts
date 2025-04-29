@@ -1,41 +1,44 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable,throwError } from 'rxjs';
-import { FlightInformationDto } from '../models/flight.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { FlightInformationDto } from '../models/flight.model';
+import { environment } from '../environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FlightService {
+  private flightUrl = environment.apiUrlFlight + '/flight'; 
 
-  private flightUrl = 'http://localhost:9090/flight'; // adjust if needed
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
+  // Add a new flight
   addFlight(flight: FlightInformationDto): Observable<FlightInformationDto> {
-    return this.http.post<FlightInformationDto>(this.flightUrl, flight);
+    return this.http
+      .post<FlightInformationDto>(this.flightUrl, flight)
+      .pipe(catchError(this.handleError)); 
   }
 
+  // Get all flights
   getFlights(): Observable<FlightInformationDto[]> {
-    return this.http.get<FlightInformationDto[]>(`${this.flightUrl}`);
-
+    return this.http
+      .get<FlightInformationDto[]>(this.flightUrl)
+      .pipe(catchError(this.handleError)); 
   }
 
-
+  // Delete a flight by ID
   deleteFlight(flightId: number): Observable<any> {
-    return this.http.delete(
-      `${this.flightUrl}/${flightId}`
-    ).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .delete(`${this.flightUrl}/${flightId}`)
+      .pipe(catchError(this.handleError)); 
   }
 
- private handleError(error: any): Observable<never> {
+  // Handle HTTP errors
+  private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
-
     if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
+      errorMessage = `Client-side error: ${error.error.message}`;
     } else {
       switch (error.status) {
         case 400:
@@ -49,6 +52,8 @@ export class FlightService {
             ? 'A flight with this name already exists. Please try another name.'
             : 'A server error occurred. Please try again later.';
           break;
+        default:
+          errorMessage = `Server-side error: ${error.statusText}`;
       }
     }
     console.error('Error:', error);

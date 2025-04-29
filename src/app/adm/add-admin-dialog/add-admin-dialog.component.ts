@@ -1,17 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatListModule } from '@angular/material/list';
-import { CommonModule } from '@angular/common';
 import { AuthService } from '../../service/auth.service';
 import Swal from 'sweetalert2';
+import { SharedModules } from '../../shared.module';
+
+
 @Component({
   selector: 'app-add-admin-dialog',
   templateUrl: './add-admin-dialog.component.html',
   styleUrls: ['./add-admin-dialog.component.css'],
 
-  imports:[MatDialogModule, MatListModule, CommonModule],
+  imports:[SharedModules],
   standalone: true,
 
 })

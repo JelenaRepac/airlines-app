@@ -13,19 +13,19 @@ import {  ScheduleManageComponent } from './schedule/manage-schedule/manage-sche
 
 export const routes: Routes = [
   // Default route redirects to login if not authenticated
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/airline/login', pathMatch: 'full' },
 
   // Routes
-  { path: 'login', component: LoginComponent },
-  { path: 'sign-up', component: SignUpComponent },
-  { path: 'confirm', component: ConfirmUserComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'book-flight', component: FlightHomeComponent, canActivate: [AuthGuard] },
-  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
-  { path: 'manage-flight', component: FlightManageComponent,canActivate: [AuthGuard]  },
-  { path: 'manage-flight-schedule', component: ScheduleManageComponent,canActivate: [AuthGuard]  },
+  { path: '/airline/login', component: LoginComponent },
+  { path: '/airline/sign-up', component: SignUpComponent },
+  { path: '/airline/confirm', component: ConfirmUserComponent },
+  { path: '/airline/home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: '/airline/profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: '/airline/book-flight', component: FlightHomeComponent, canActivate: [AuthGuard] },
+  { path: '/airline/users', component: UsersComponent, canActivate: [AuthGuard] },
+  { path: '/airline/manage-flight', component: FlightManageComponent,canActivate: [AuthGuard]  },
+  { path: '/airline/manage-flight-schedule', component: ScheduleManageComponent,canActivate: [AuthGuard]  },
 
   // Fallback for undefined routes
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/airline/login' }
 ];

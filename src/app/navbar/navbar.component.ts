@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
-import { MatToolbar } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-
-import { CommonModule } from '@angular/common';
+import { SharedModules } from '../shared.module';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
-  imports: [MatToolbar, RouterModule,CommonModule]
+  imports: [SharedModules]
 })
 export class NavbarComponent {
 
@@ -36,10 +33,10 @@ export class NavbarComponent {
       toast: true
     
     }).then(() => {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/airline/home']);
     });
 
 
-    this.router.navigate(['/login']);
+    this.router.navigate(['/airline/login']);
   }
 }

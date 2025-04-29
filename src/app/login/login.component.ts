@@ -1,17 +1,12 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';  // Import FormsModule
-import { CommonModule } from '@angular/common';  // Import CommonModule
 import { AuthService } from '../service/auth.service';
-import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { RouterModule, Routes } from '@angular/router';
+import { SharedModules } from '../shared.module';
+import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [FormsModule, CommonModule, HttpClientModule, RouterModule,],  // Include CommonModule here
+  imports: [SharedModules],  // Include CommonModule here
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -42,7 +37,7 @@ export class LoginComponent {
             timer: 1000,
             toast: true,
           }).then(() => {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/airline/home']);
           });
 
 

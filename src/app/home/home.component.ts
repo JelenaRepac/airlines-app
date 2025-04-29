@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { NavbarComponent } from '../navbar/navbar.component';
-import { FlightSelectorComponent } from '../fligh/flight-selector/flight-selector.component';
-import { FlightsComponent } from "../fligh/flights/flights.component";
 import { AuthService } from '../service/auth.service';
+import { SharedModules } from '../shared.module';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  imports: [NavbarComponent, CommonModule]// FlightSelectorComponent, FlightsComponent]
+  imports: [SharedModules]
 })
 export class HomeComponent {
   title = 'AIRLINE';
@@ -23,24 +20,24 @@ export class HomeComponent {
     this.isAdminUser = this.auth.isAdmin();
   }
   navigate() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/airline/login']);
   }
 
 
 
   onButtonClick(buttonType: string): void {
     if (buttonType === 'bookFlight') {
-      this.router.navigate(['/book-flight']);  // Adjust the route as per your application
+      this.router.navigate(['/airline/book-flight']);  // Adjust the route as per your application
     }
     else if (buttonType === 'manageAdmins') {
-      this.router.navigate(['/users']);  // Adjust the route as per your application
+      this.router.navigate(['/airline/users']);  // Adjust the route as per your application
     }
     else if (buttonType === 'manageFlights') {
-      this.router.navigate(['/manage-flight']);  // Adjust the route as per your application
+      this.router.navigate(['/airline/manage-flight']);  // Adjust the route as per your application
 
     }
     else if (buttonType === 'manage-schedules') {
-      this.router.navigate(['/manage-flight-schedule']);  // Adjust the route as per your application
+      this.router.navigate(['/airline/manage-flight-schedule']);  // Adjust the route as per your application
     }
   }
 

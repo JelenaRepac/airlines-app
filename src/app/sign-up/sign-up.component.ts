@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../service/auth.service';  // Import AuthService
-import { FormsModule } from '@angular/forms';  // Import FormsModule
-import { CommonModule } from '@angular/common'; 
+import { AuthService } from '../service/auth.service';  
 import Swal from 'sweetalert2';
+import { SharedModules } from '../shared.module';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-   imports: [FormsModule, CommonModule ],
+   imports: [SharedModules ],
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css'],
 })
