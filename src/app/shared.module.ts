@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
@@ -17,7 +16,6 @@ import { MatToolbar } from '@angular/material/toolbar';
 export const SharedModules = [
     CommonModule,
     FormsModule,
-    HttpClientModule,
     MatButtonModule,
     MatIconModule,
     MatInputModule,

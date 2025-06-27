@@ -20,24 +20,24 @@ export class HomeComponent {
     this.isAdminUser = this.auth.isAdmin();
   }
   navigate() {
-    this.router.navigate(['/airline/login']);
+    this.router.navigate(['airline/login']);
   }
 
 
 
   onButtonClick(buttonType: string): void {
     if (buttonType === 'bookFlight') {
-      this.router.navigate(['/airline/book-flight']);  // Adjust the route as per your application
+      this.router.navigate(['airline/book-flight']);  // Adjust the route as per your application
     }
     else if (buttonType === 'manageAdmins') {
-      this.router.navigate(['/airline/users']);  // Adjust the route as per your application
+      this.router.navigate(['airline/users']);  // Adjust the route as per your application
     }
     else if (buttonType === 'manageFlights') {
-      this.router.navigate(['/airline/manage-flight']);  // Adjust the route as per your application
+      this.router.navigate(['airline/manage-flight']);  // Adjust the route as per your application
 
     }
     else if (buttonType === 'manage-schedules') {
-      this.router.navigate(['/airline/manage-flight-schedule']);  // Adjust the route as per your application
+      this.router.navigate(['airline/manage-flight-schedule']);  // Adjust the route as per your application
     }
   }
 

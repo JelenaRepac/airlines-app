@@ -12,10 +12,9 @@ body, html {
   height: 100%;
   padding: 20px;
 }
-
 .sign-up-form {
   width: 100%;
-  max-width: 420px;
+  max-width: 500px;
   margin: 30px auto;
   padding: 15px;
   border: 1px solid #ddd;
@@ -31,26 +30,19 @@ h2 {
   color: #333;
   font-weight: 600;
 }
-
-form {
+.input-row {
   display: flex;
-  flex-direction: column;
   gap: 20px;
 }
 
-.input-row {
+.input-group {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 15px;
 }
 
-label {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #555;
-  text-align: left;
-}
 
+/* 
 input {
   width: 100%;
   padding: 12px;
@@ -60,7 +52,7 @@ input {
   background-color: #fafafa;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
-}
+} */
 
 input:focus {
   border-color: #007bff;

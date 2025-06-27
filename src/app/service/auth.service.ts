@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../environment';
+import { error } from 'node:console';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthService {
     const token = localStorage.getItem('authToken');
     if (token) {
       const decodedToken: any = jwtDecode(token);
-      return decodedToken.roles || ''; 
+      return decodedToken.roles || '';
     }
     return '';
   }
@@ -72,20 +73,42 @@ export class AuthService {
 
   // Register a new user
   register(userData: any): Observable<any> {
-    return this.http.post(`http://localhost:8081/auth/register`, userData).pipe(
-      catchError(this.handleError)
+    return this.http.post( `${this.apiUrl}/register`, userData).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const backendMessage = error.error?.message || 'Unknown error ocurred!';
+        return throwError(() => new Error(backendMessage));
+      })
+    );
+  }
+
+  twoFactorAuthentication(twoFactor: any): Observable<any> {
+    const token = this.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(
+      `${this.apiUrl}/2fa/verify`,
+      twoFactor,
+      { headers }
+    ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const backendMessage = error.error?.message || 'Unknown error occurred!';
+        return throwError(() => new Error(backendMessage));
+      })
     );
   }
 
   // Retrieve the stored token
-  getToken(): string | null {
+  getToken() {
     return localStorage.getItem('authToken');
   }
 
   // Get the user's profile by email
   getProfile(email: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/auth/profile`, {
-      headers: this.getAuthHeaders(),
+    return this.http.get(`${this.apiUrl}/profile`, {
       params: { email }
     }).pipe(catchError(this.handleError));
   }
@@ -99,40 +122,35 @@ export class AuthService {
   // Update user information
   updateUserInfo(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/update`, userData, {
-      headers: this.getAuthHeaders()
     }).pipe(catchError(this.handleError));
   }
 
   // Fetch all admins
   getAdmins(): Observable<any> {
     return this.http.get(`${this.apiUrl}/admin`, {
-      headers: this.getAuthHeaders()
     }).pipe(catchError(this.handleError));
   }
 
   // Get all users
   getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/auth`, {
-      headers: this.getAuthHeaders()
+    return this.http.get(`${this.apiUrl}`, {
     }).pipe(catchError(this.handleError));
   }
 
   // Add a new admin
   addAdmin(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/admin`, userData, {
-      headers: this.getAuthHeaders()
     }).pipe(catchError(this.handleError));
   }
 
   // Delete an admin by ID
   deleteAdmin(userId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/admin/${userId}`, {
-      headers: this.getAuthHeaders()
     }).pipe(catchError(this.handleError));
   }
 
   // Create authorization headers for HTTP requests
-  private getAuthHeaders(): HttpHeaders {
+  getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
     return new HttpHeaders({
       'Authorization': token ? `Bearer ${token}` : ''
@@ -158,9 +176,9 @@ export class AuthService {
     switch (status) {
       case 400: return 'Invalid input data. Please check your details.';
       case 404: return 'Requested resource not found.';
-      case 500: 
-        return serverMessage === 'User with that email already exists' 
-          ? 'A user with this email already exists. Please try another email.' 
+      case 500:
+        return serverMessage === 'User with that email already exists'
+          ? 'A user with this email already exists. Please try another email.'
           : 'A server error occurred. Please try again later.';
       default: return 'An unknown error occurred!';
     }

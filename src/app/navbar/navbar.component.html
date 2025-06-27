@@ -1,10 +1,10 @@
-<mat-toolbar >
+<mat-toolbar>
   <span>AERO DREAMS</span>
   <span class="spacer"></span>
   <nav>
     <span class="material-icons nav-icon" routerLink="/airline/home">home</span>
     <span class="material-icons nav-icon" routerLink="/airline/profile">account_circle</span>
-    <span  *ngIf="isAdminUser"  class="material-icons" routerLink="/airline/users">people</span>
+    <span *ngIf="isAdminUser" class="material-icons nav-icon" routerLink="/airline/users">people</span>
     <span class="material-icons nav-icon" (click)="logout()">logout</span>
   </nav>
 </mat-toolbar>

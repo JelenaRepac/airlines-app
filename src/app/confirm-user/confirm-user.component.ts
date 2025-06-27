@@ -22,7 +22,7 @@ export class ConfirmUserComponent implements OnInit {
         text: 'You can now log in.',
       }).then(() => {
         // Redirect to home page after confirmation
-        this.router.navigate(['/airline/login']);
+        this.router.navigate(['airline/login']);
       });
   }
 }

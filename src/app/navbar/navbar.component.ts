@@ -33,10 +33,10 @@ export class NavbarComponent {
       toast: true
     
     }).then(() => {
-      this.router.navigate(['/airline/home']);
+      this.router.navigate(['airline/home']);
     });
 
 
-    this.router.navigate(['/airline/login']);
+    this.router.navigate(['airline/login']);
   }
 }

@@ -9,10 +9,19 @@ import { environment } from '../environment';
   providedIn: 'root',
 })
 export class ScheduleService {
-  private apiUrl = environment.apiUrlFlight + '/flightSchedule'; 
+  private apiUrl = environment.apiUrlFlight + '/api/flightSchedule'; 
+
+  private selectedFlightId;
+
 
   constructor(private http: HttpClient) {}
-
+ setSelectedFlightId(id: number | undefined): void {
+    this.selectedFlightId = id;
+}
+  getSelectedFlightId(): number | undefined {
+    return this.selectedFlightId;
+  }
+  
   // Get all flight schedules
   getSchedules(): Observable<ScheduleDto[]> {
     return this.http

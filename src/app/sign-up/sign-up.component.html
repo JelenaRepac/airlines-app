@@ -1,55 +1,92 @@
-
 <div class="sign-up-form">
   <h2>Sign Up</h2>
   <form (ngSubmit)="onSubmit()">
     <div class="input-row">
-      <label for="firstname">Firstname</label>
-      <input
-        type="text"
-        id="firstname"
-        [(ngModel)]="firstname"
-        name="firstname"
-        required
-      />
-      <label for="lastname">Lastname</label>
-      <input
-        type="text"
-        id="lastname"
-        [(ngModel)]="lastname"
-        name="lastname"
-        required
-      />
-      <label for="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        [(ngModel)]="email"
-        name="email"
-        required
-      />
-      <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        [(ngModel)]="password"
-        name="password"
-        required
-      />
-      <label for="passportNumber">Passport number</label>
-      <input
-        type="text"
-        id="passportNumber"
-        [(ngModel)]="passportNumber"
-        name="passportNumber"
-        required
-      />
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Username</mat-label>
+          <input matInput id="username" [(ngModel)]="username" name="username" required />
+        </mat-form-field>
+      </div>
+
     </div>
-   
+    <div class="input-row">
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Firstname</mat-label>
+          <input matInput id="firstname" [(ngModel)]="firstname" name="firstname" required />
+        </mat-form-field>
+      </div>
+
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Lastname</mat-label>
+          <input matInput id="lastname" [(ngModel)]="lastname" name="lastname" required />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Email</mat-label>
+          <input matInput id="email" [(ngModel)]="email" name="email" required />
+        </mat-form-field>
+      </div>
+
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Password</mat-label>
+          <input type="password" matInput id="password" id="password" [(ngModel)]="password" name="password" required />
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Passport number</mat-label>
+          <input matInput id="passportNumber" [(ngModel)]="passportNumber" name="passportNumber" required />
+        </mat-form-field>
+      </div>
+
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Phone number</mat-label>
+          <input matInput id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber" required />
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Birthday</mat-label>
+          <input matInput [matDatepicker]="picker" id="birthday" [(ngModel)]="birthday" name="birthday" required />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Country</mat-label>
+          <input matInput id="country" [(ngModel)]="country" name="country" required />
+        </mat-form-field>
+
+      </div>
+    </div>
+
+
     <div>
-    <button type="submit"  >Sign Up</button>
-  </div>
+      <button type="submit">Sign Up</button>
+    </div>
+
     <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
     <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-    <!-- [disabled]="!isFormValid()" -->
+
   </form>
 </div>

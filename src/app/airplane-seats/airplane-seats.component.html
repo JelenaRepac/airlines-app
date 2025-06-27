@@ -1,0 +1,17 @@
+<app-navbar></app-navbar>
+<div class="airplane">
+  <h2>Flight: {{ flightName }}</h2>
+  <div class="seats-grid">
+    <div
+      *ngFor="let seat of seats"
+      class="seat"
+      [ngClass]="{
+        'booked': seat.bookingStatus,
+        'selected': seat.selected
+      }"
+      (click)="selectSeat(seat)"
+    >
+      {{ seat.seatNumber }}
+    </div>
+  </div>
+</div>

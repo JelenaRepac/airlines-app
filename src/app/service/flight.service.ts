@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { FlightInformationDto } from '../models/flight.model';
 import { environment } from '../environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { environment } from '../environment';
 export class FlightService {
   private flightUrl = environment.apiUrlFlight + '/flight'; 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   // Add a new flight
   addFlight(flight: FlightInformationDto): Observable<FlightInformationDto> {
@@ -26,6 +27,7 @@ export class FlightService {
       .get<FlightInformationDto[]>(this.flightUrl)
       .pipe(catchError(this.handleError)); 
   }
+
 
   // Delete a flight by ID
   deleteFlight(flightId: number): Observable<any> {

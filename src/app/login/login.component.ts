@@ -37,7 +37,7 @@ export class LoginComponent {
             timer: 1000,
             toast: true,
           }).then(() => {
-            this.router.navigate(['/airline/home']);
+            this.router.navigate(['airline/home']);
           });
 
 

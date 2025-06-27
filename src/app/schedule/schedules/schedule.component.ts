@@ -2,6 +2,7 @@ import { ScheduleService } from '../../service/schedule.service';
 import { ScheduleDto } from '../../models/schedule.dto';
 import { Component, OnInit } from '@angular/core';
 import { SharedModules } from '../../shared.module';
+import {  Router } from '@angular/router';
 
 
 @Component({
@@ -15,7 +16,9 @@ export class FlightScheduleComponent implements OnInit {
   panelOpen = false;
   isAdmin: boolean = false; 
 
-  constructor(private scheduleService: ScheduleService) {}
+  constructor(private scheduleService: ScheduleService, private router: Router,
+    private flightSelectionService: ScheduleService
+  ) {}
 
   ngOnInit(): void {
     this.loadSchedules();
@@ -31,4 +34,10 @@ export class FlightScheduleComponent implements OnInit {
   togglePanel(): void {
     this.panelOpen = !this.panelOpen;
   }
+onButtonClick(flightScheduleId: number | undefined): void {
+    this.flightSelectionService.setSelectedFlightId(flightScheduleId);
+  this.router.navigate(['airline/book-seats']); // Pass ID as route param
+}
+
+
 }
