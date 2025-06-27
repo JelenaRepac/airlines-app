@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { SharedModules } from './shared.module';
 import { ChatWidgetComponent } from "./chat-widget/chat-widget.component";
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +12,18 @@ import { ChatWidgetComponent } from "./chat-widget/chat-widget.component";
   imports: [
     SharedModules,
     ChatWidgetComponent
-],
+  ],
 })
 export class AppComponent {
   title = 'airlines-app';
+  showChat = true;
+
+  constructor(private router: Router) {
+    this.router.events.
+    pipe(filter(event => event instanceof NavigationEnd)).
+    subscribe((event: NavigationEnd) => {
+      const url = event.urlAfterRedirects;
+      this.showChat = !(url.includes('/login') || url.includes('/sign-up'));
+    });
+  }
 }

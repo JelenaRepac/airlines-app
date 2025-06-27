@@ -1,6 +1,6 @@
 <!-- Floating Button -->
 <div class="chat-button" (click)="toggleChat()">
-  <span *ngIf="!isOpen"class="material-icons nav-icon" routerLink="/airline/home">help</span>
+  <span *ngIf="!isOpen"class="material-icons nav-icon" routerLink="/airline/home">waving_hand</span>
   <span *ngIf="isOpen">✖</span>
 </div>
 
@@ -22,7 +22,7 @@
     </div>
     <div class="chat-input">
       <input [(ngModel)]="message" (keyup.enter)="sendMessage()" placeholder="Type your message..." />
-      <button (click)="sendMessage()">Send</button>
+      <button type="button"  class="send-button" (click)="sendMessage()">Send</button>
     </div>
   </div>
 </div>

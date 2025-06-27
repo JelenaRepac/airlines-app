@@ -4,6 +4,27 @@ body, html {
   font-family: 'Arial', sans-serif;
   background-color: #f4f7fa; /* Light background for contrast */
 }
+button.material-icons.nav-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #2e304c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  transition: background-color 0.1s ease;
+}
+
+button.material-icons.nav-icon:hover {
+  background-color: #64689c;
+}
+
 
 .main-container {
   display: flex;

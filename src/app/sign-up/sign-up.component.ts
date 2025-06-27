@@ -5,7 +5,10 @@ import { SharedModules } from '../shared.module';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
+import { CountryService } from '../service/country.service';
+import { response } from 'express';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-sign-up',
@@ -13,13 +16,20 @@ import { MatNativeDateModule } from '@angular/material/core';
   imports: [SharedModules,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelect,
+    MatOption
   ],
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css'],
 })
 
 export class SignUpComponent {
+  countries: { country: string; cities: string[] }[] = [];
+selectedCountry: string | null = null;
+
+
+
   firstname: string = '';
   lastname: string = '';
   username: string = '';
@@ -27,14 +37,25 @@ export class SignUpComponent {
   email: string = '';
   passportNumber: string = '';
   phoneNumber: string = '';
-birthday: Date | null = null;
-  country: string ='';
+  birthday: Date | null = null;
+  country: string = '';
 
 
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }  // Inject AuthService
+  constructor(private authService: AuthService, 
+    private router: Router,
+  private countryService: CountryService) { }  // Inject AuthService
+
+ngOnInit(): void {
+ this.countryService.getCountries().subscribe((response) => {
+  if (!response.error) {
+    this.countries = response.data; // čuvamo celu listu objekata
+  }
+});
+
+}
 
   onSubmit() {
     console.log('Submit button clicked');

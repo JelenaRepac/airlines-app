@@ -1,3 +1,6 @@
+  <button class="material-icons nav-icon" routerLink="/airline/home">backspace</button>
+
+
 <div class="sign-up-form">
   <h2>Sign Up</h2>
   <form (ngSubmit)="onSubmit()">
@@ -72,10 +75,15 @@
 
 
       <div class="input-group">
-        <mat-form-field appearance="fill" style="width: 100%;">
-          <mat-label>Country</mat-label>
-          <input matInput id="country" [(ngModel)]="country" name="country" required />
+        <mat-form-field appearance="fill">
+          <mat-label>Select Country</mat-label>
+          <mat-select [(value)]="selectedCountry">
+            <mat-option *ngFor="let country of countries" [value]="country">
+              {{ country.country }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
+
 
       </div>
     </div>

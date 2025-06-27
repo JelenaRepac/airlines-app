@@ -40,21 +40,21 @@ export class FlightSelectorComponent {
     });
   }
   ngOnInit(): void {
-    this.loadCountries();
+    // this.loadCountries();
   }
 
 
-  callCountryAPI(fromCity: string, toCity: string) {
-    const url = `http://localhost:9090/flight/flight/country?accessKey=${this.accessKey}}`;
+  // callCountryAPI(fromCity: string, toCity: string) {
+  //   const url = `http://localhost:9090/flight/flight/country?accessKey=${this.accessKey}}`;
     
-    // Call the API and get the list of countries
-    this.http.get<Country[]>(url).subscribe(response => {
-      console.log('API Response:', response);
-      this.countries = response;  // Now TypeScript knows the type of countries
-    }, error => {
-      console.error('API Error:', error);
-    });
-  }
+  //   // Call the API and get the list of countries
+  //   this.http.get<Country[]>(url).subscribe(response => {
+  //     console.log('API Response:', response);
+  //     this.countries = response;  // Now TypeScript knows the type of countries
+  //   }, error => {
+  //     console.error('API Error:', error);
+  //   });
+  // }
 
   onSubmit(): void {
     if (this.flightForm.valid) {
@@ -62,20 +62,20 @@ export class FlightSelectorComponent {
     }
   }
 
-  loadCountries(): void{
-    this.countryService.getCountries(0,250).subscribe({
-      next: (data)=>{
-        console.log(data);
-        this.countries = data.map((country) => ({
-          country_name: country.country_name,
-          country_id: country.country_id,
-        }));
-        console.log(this.countries);
-      },
-      error: (err)=>{
-        console.error("Error fetching countries: ", err);
-      }
-    })
-  }
+  // loadCountries(): void{
+  //   this.countryService.getCountries(0,250).subscribe({
+  //     next: (data)=>{
+  //       console.log(data);
+  //       this.countries = data.map((country) => ({
+  //         country_name: country.country_name,
+  //         country_id: country.country_id,
+  //       }));
+  //       console.log(this.countries);
+  //     },
+  //     error: (err)=>{
+  //       console.error("Error fetching countries: ", err);
+  //     }
+  //   })
+  // }
  
 }
