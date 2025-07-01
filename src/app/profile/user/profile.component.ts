@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'; // SweetAlert2 for alerts
-import { AuthService } from '../service/auth.service'; 
-import { SharedModules } from '../shared.module';
+import { AuthService } from '../../service/auth.service'; 
+import { SharedModules } from '../../shared.module';
+import { ReservationComponent } from "../booking/reservation.component";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-  imports:[SharedModules]
+  imports: [SharedModules, ReservationComponent]
 })
 export class ProfileComponent implements OnInit {
   user: any = {
@@ -18,6 +19,8 @@ export class ProfileComponent implements OnInit {
     password: '',
     rank: '',
   };
+
+  readonlyMode: boolean = true;
 
   constructor(private authService: AuthService, private router: Router) {}
 

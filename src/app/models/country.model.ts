@@ -1,5 +1,7 @@
 export interface Country {
-  country_id: number;
-  country_name: string;
+  id: number;
+  name: string;
+  code: string;
+  continent: string;
 
 }

@@ -5,37 +5,67 @@
   </div>
 
   <div *ngIf="panelOpen" class="panel-body">
-    <div *ngIf="flightSchedules.length === 0" class="no-flights">No schedules available.</div>
+    <div *ngIf="schedules.length === 0" class="no-flights">No schedules available.</div>
 
-    <!-- Admin view -->
-    <table *ngIf="isAdmin && flightSchedules.length > 0" class="schedule-table">
-      <thead>
-        <tr>
-          <th>From</th>
-          <th>To</th>
-          <th>Departure Date</th>
-          <th>Arrival Date</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let schedule of flightSchedules">
-          <td>{{ schedule.startAirport }}</td>
-          <td>{{ schedule.endAirport }}</td>
-          <td>{{ schedule.departureDate | date:'short' }}</td>
-          <td>{{ schedule.arrivalDate | date:'short' }}</td>
-          <td>{{ schedule.status }}</td>
-          <td>
+    <ng-container *ngIf="isAdmin && schedules.length > 0">
+      <table mat-table [dataSource]="schedules" class="mat-elevation-z2 full-width-table">
+
+        <!-- Flight Column -->
+        <ng-container matColumnDef="flight">
+          <th mat-header-cell *matHeaderCellDef>Flight</th>
+          <td mat-cell *matCellDef="let schedule">
+            <div>{{ schedule.flightInformation.flightName }}</div>
+            <small>{{ schedule.flightInformation.airlineService }}</small>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let schedule">{{ schedule.status }}</td>
+        </ng-container>
+
+        <!-- Arrival / Departure Column -->
+        <ng-container matColumnDef="arrivalDeparture">
+          <th mat-header-cell *matHeaderCellDef>Arrival / Departure</th>
+          <td mat-cell *matCellDef="let schedule">
+            <div class="stacked-values">
+              <div>{{ schedule.arrivalDate | date:'short' }}</div>
+              <div class="divider">|</div>
+              <div>{{ schedule.departureDate | date:'short' }}</div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Source / Destination Column -->
+        <ng-container matColumnDef="sourceDestination">
+          <th mat-header-cell *matHeaderCellDef>Source / Destination</th>
+          <td mat-cell *matCellDef="let schedule">
+            <div class="stacked-values">
+              <div>{{ schedule.startAirport }}</div>
+              <div class="divider">|</div>
+              <div>{{ schedule.endAirport }}</div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let schedule">
             <button mat-icon-button color="primary"><mat-icon>visibility</mat-icon></button>
             <button mat-icon-button color="accent"><mat-icon>edit</mat-icon></button>
             <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
           </td>
-        </tr>
-      </tbody>
-    </table>
+        </ng-container>
 
-    <!-- Non-admin view -->
+        <!-- Header and Row Declarations -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </ng-container>
+
+     <!--
     <table *ngIf="!isAdmin && flightSchedules.length > 0" class="schedule-table custom-nonadmin">
       <thead>
         <tr>
@@ -50,21 +80,21 @@
         <tr *ngFor="let schedule of flightSchedules">
           <td>
             <div>{{ schedule.flightInformation.flightName }}</div>
-            <small>{{ schedule.flightInformation.airlineService }}</small>
+            <small>{{ schedule.flightInformation.airlineService }}</small> 
           </td>
           <td>{{ schedule.status }}</td>
           <td>
             <div class="stacked-values">
-            <div>{{ schedule.arrivalDate | date:'short' }}</div>
-            <div class="divider">|</div>
-            <div>{{ schedule.departureDate | date:'short' }}</div>
+              <div>{{ schedule.arrivalDate | date:'short' }}</div>
+              <div class="divider">|</div>
+              <div>{{ schedule.departureDate | date:'short' }}</div>
             </div>
           </td>
           <td>
             <div class="stacked-values">
-            <div>{{ schedule.startAirport }}</div>
-            <div class="divider">|</div>
-            <div>{{ schedule.endAirport }}</div>
+              <div>{{ schedule.startAirport }}</div>
+              <div class="divider">|</div>
+              <div>{{ schedule.endAirport }}</div>
             </div>
           </td>
           <td>
@@ -72,6 +102,6 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
 </div>

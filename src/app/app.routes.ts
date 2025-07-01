@@ -4,7 +4,7 @@ import { LoginComponent } from "./login/login.component";
 import { HomeComponent } from './home/home.component';
 import { ConfirmUserComponent } from './confirm-user/confirm-user.component';
 import { AuthGuard } from './auth-guard/auth-guard.component';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent } from './profile/user/profile.component';
 import { UsersComponent } from './adm/admins/admins.component';
 import { FlightHomeComponent } from './fligh/flight-home/flight-home.component';
 import { FlightManageComponent } from './fligh/manage-flight/flight-manage.component';

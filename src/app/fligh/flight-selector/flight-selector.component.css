@@ -1,17 +1,16 @@
-@use '@angular/material' as mat;
 
 
 .flight-selector-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50vh; /* Full viewport height */
+  height: 50vh; 
   background-color: #f4f4f4;
   padding: 20px;
 }
 
 mat-card {
-  max-width: 1500px; /* Max width of the card */
+  max-width: 1500px;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -25,17 +24,21 @@ mat-card-content {
 
 
 
-/* Date Picker Row */
 .form-row {
   display: flex;
   justify-content: space-between;
   gap: 10px;
   width: 100vh;
 }
+.form-field {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center; 
+}
 
-/* Date Pickers */
+
 mat-form-field {
-  flex: 1; /* Each date picker will take equal space */
+  flex: 1; 
 }
 
 mat-hint {
@@ -43,27 +46,24 @@ mat-hint {
   color: #888;
 }
 
-/* Button */
 button {
-  align-self: center;
-  padding: 12px 24px;
+  padding: 10px 15px;
+  background-color: #2e304c;
+  color: #fff;
   font-size: 16px;
-  font-weight: 600;
+  width: 20%;
+  border: none;
   border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #1976d2;
+  background-color: #8d8e9fe9;
+
+  transform: translateY(-2px);
 }
 
-button:disabled:hover {
-  background-color: #ccc;
+button:active {
+  transform: translateY(0);
 }
-
-

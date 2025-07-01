@@ -1,4 +1,5 @@
 <app-navbar></app-navbar>
 
-<app-flight-selector></app-flight-selector>
-<flight-schedule></flight-schedule>
+<app-flight-selector (schedulesFound)="onSchedulesFound($event)"></app-flight-selector>
+
+<flight-schedule [schedules]="selectedSchedules" [panelOpen]="true"></flight-schedule>

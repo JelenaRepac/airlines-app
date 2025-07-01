@@ -1,68 +1,106 @@
 <app-navbar></app-navbar>
 
- <div *ngIf="showAddScheduleModal" class="schedule-form-overlay" (click)="closeAddScheduleModal()"></div>
+<div *ngIf="showAddScheduleModal" class="schedule-form-overlay" (click)="closeAddScheduleModal()"></div>
 
 <div *ngIf="showAddScheduleModal" class="schedule-form">
- <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <h2>Add New Schedule</h2>
+  
+  
+        <!-- Flight -->
+        <div class="row single">
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Flight</mat-label>
+            <mat-select formControlName="flightInformation">
+              <mat-option *ngFor="let f of flights" [value]="f">{{ f.flightName }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-    <div>
-      <label for="flight">Flight:</label>
-      <select formControlName="flightInformation">
-        <option *ngFor="let f of flights" [value]="f.id">
-          {{ f.flightName }}
-        </option>
-      </select>
-      
-    </div>
+        <!-- Departure/Arrival Date -->
+        <div class="row">
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Departure Date</mat-label>
+            <input matInput [matDatepicker]="departurePicker" formControlName="departureDate" required />
+            <mat-datepicker-toggle matSuffix [for]="departurePicker"></mat-datepicker-toggle>
+            <mat-datepicker #departurePicker></mat-datepicker>
+          </mat-form-field>
 
-    <div>
-      <label for="departureDate">Departure Date:</label>
-      <input type="date" formControlName="departureDate" />
-    </div>
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Arrival Date</mat-label>
+            <input matInput [matDatepicker]="arrivalPicker" formControlName="arrivalDate" required />
+            <mat-datepicker-toggle matSuffix [for]="arrivalPicker"></mat-datepicker-toggle>
+            <mat-datepicker #arrivalPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
 
-    <div>
-      <label for="departureTime">Departure Time:</label>
-      <input type="time" formControlName="departureTime" />
-    </div>
+        <!-- Departure/Arrival Time -->
+        <div class="row">
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Departure Time</mat-label>
+            <input matInput type="time" formControlName="departureTime" />
+          </mat-form-field>
 
-    <div>
-      <label for="arrivalDate">Arrival Date:</label>
-      <input type="date" formControlName="arrivalDate" />
-    </div>
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Arrival Time</mat-label>
+            <input matInput type="time" formControlName="arrivalTime" />
+          </mat-form-field>
+        </div>
 
-    <div>
-      <label for="arrivalTime">Arrival Time:</label>
-      <input type="time" formControlName="arrivalTime" />
-    </div>
+        <!-- Row 4: Source Country + Source Airport -->
+        <div class="row">
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Source Country</mat-label>
+            <mat-select formControlName="countrySource">
+              <mat-option *ngFor="let country of countries" [value]="country">{{ country.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <div>
-      <label for="sourceAirport">Source Airport:</label>
-      <input formControlName="sourceAirport" placeholder="Select Source Airport" />
-    </div>
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Source Airport</mat-label>
+            <mat-select formControlName="sourceAirport">
+              <mat-option *ngFor="let airport of sourceAirports" [value]="airport">{{ airport.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-    <div>
-      <label for="destinationAirport">Destination Airport:</label>
-      <input formControlName="destinationAirport" placeholder="Select Destination Airport" />
-    </div>
+        <!-- Row 5: Destination Country + Destination Airport -->
+        <div class="row">
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Destination Country</mat-label>
+            <mat-select formControlName="countryDestination">
+              <mat-option *ngFor="let country of countries" [value]="country">{{ country.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <div>
-      <label for="status">Status:</label>
-      <input formControlName="status" placeholder="Status" />
-    </div>
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Destination Airport</mat-label>
+            <mat-select formControlName="destinationAirport">
+              <mat-option *ngFor="let airport of destinationAirports" [value]="airport">{{ airport.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-    <button type="submit" class="btn">+ Add New Flight Schedule</button>
-  </div>
-</form>
+        <!-- Row 6: Status (full width) -->
+        <div class="row single">
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Status</mat-label>
+            <input matInput formControlName="status" placeholder="Status" />
+          </mat-form-field>
+        </div>
+
+         <button type="submit" class="btn">+ Add New Flight Schedule</button>
+  </form>
 
 </div>
 
+
+<!-- Schedule Display -->
 <mat-card class="schedule-card">
   <mat-card-content>
     <div class="button-container">
       <button mat-raised-button color="primary" class="add-btn" (click)="openAddScheduleModal()">Add Schedule</button>
     </div>
-    <flight-schedule></flight-schedule>
+    <flight-schedule [newSchedule]="newlyAddedSchedule"></flight-schedule>
   </mat-card-content>
-</mat-card> 
+</mat-card>

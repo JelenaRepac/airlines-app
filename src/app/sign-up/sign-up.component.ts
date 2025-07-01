@@ -26,7 +26,7 @@ import { MatSelect } from '@angular/material/select';
 
 export class SignUpComponent {
   countries: { country: string; cities: string[] }[] = [];
-selectedCountry: string | null = null;
+  selectedCountry: string | null = null;
 
 
 
@@ -44,18 +44,18 @@ selectedCountry: string | null = null;
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private authService: AuthService, 
+  constructor(private authService: AuthService,
     private router: Router,
-  private countryService: CountryService) { }  // Inject AuthService
+    private countryService: CountryService) { }  // Inject AuthService
 
-ngOnInit(): void {
- this.countryService.getCountries().subscribe((response) => {
-  if (!response.error) {
-    this.countries = response.data; // čuvamo celu listu objekata
+  ngOnInit(): void {
+    this.countryService.getCountries().subscribe((response) => {
+      if (!response.error) {
+        this.countries = response.data; // čuvamo celu listu objekata
+      }
+    });
+
   }
-});
-
-}
 
   onSubmit() {
     console.log('Submit button clicked');
@@ -73,6 +73,9 @@ ngOnInit(): void {
       username: this.username,
       password: this.password,
       passportNumber: this.passportNumber,
+      birthday: this.birthday,
+      phoneNumber: this.phoneNumber,
+      country: this.country,
       email: this.email
     };
 

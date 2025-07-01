@@ -1,0 +1,101 @@
+.ticket-container {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.ticket {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  padding: 16px;
+  font-family: 'Arial', sans-serif;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 300px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.ticket-info .label {
+  display: block;
+  font-weight: 400;
+}
+
+.ticket-info .value {
+  font-weight: bold;
+  color: #444;
+}
+
+.ticket-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-column {
+  text-align: center;
+}
+
+.time-column .time {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.time-column .date {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.time-column .airport {
+  font-size: 1rem;
+  margin-top: 4px;
+  font-weight: 500;
+  color: #555;
+}
+
+.time-column .terminal {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.center-column {
+  text-align: center;
+  font-size: 1rem;
+  color: #777;
+}
+
+.center-column .icon {
+  font-size: 1.5rem;
+}
+
+.center-column .duration {
+  margin-top: 4px;
+}
+
+.ticket-footer {
+  text-align: center;
+  margin-top: 16px;
+}
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+mat-card-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: right;
+  width: 100%; 
+  padding: 8px;
+}

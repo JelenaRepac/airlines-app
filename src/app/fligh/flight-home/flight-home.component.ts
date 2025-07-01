@@ -5,6 +5,7 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { AuthService } from '../../service/auth.service';
 import { FlightSelectorComponent } from '../flight-selector/flight-selector.component';
 import { FlightScheduleComponent } from "../../schedule/schedules/schedule.component";
+import { ScheduleDto } from '../../models/schedule-dto.model';
 
 @Component({
   selector: 'flight-home',
@@ -12,10 +13,16 @@ import { FlightScheduleComponent } from "../../schedule/schedules/schedule.compo
   imports: [NavbarComponent, CommonModule, FlightSelectorComponent, FlightScheduleComponent]
 })
 export class FlightHomeComponent {
+
   title = 'AIRLINE';
 
   constructor(private router: Router, private auth: AuthService) { }
   isAdminUser = false;
+  selectedSchedules: ScheduleDto[] = [];
+
+  onSchedulesFound(schedules: ScheduleDto[]): void {
+    this.selectedSchedules = schedules;
+  }
 
 
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Country } from '../models/country.model';
@@ -11,28 +11,31 @@ import { environment } from '../environment';
 @Injectable({
   providedIn: 'root',
 })
-export class CountryService {
-    private apiCountryUrl = `${environment.countryUrl}`;
+export class AirportService {
+    private apiAirportUrl = `${environment.airportUrl}`;
 
 
   constructor(private http: HttpClient) { }
 
  
-   getCountries(): Observable<any> {
-      const token = localStorage.getItem('authToken'); // or wherever you store your token
-  
-      console.log(token);
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      });
-  
-      return this.http.get(`${this.apiCountryUrl}`, {
-        headers
-      }).pipe(
-        catchError(this.handleError)
-      );
-    }
+ getAirportsByCountry(countryCode: string): Observable<any> {
+  const token = localStorage.getItem('authToken');
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  const params = new HttpParams().set('countryCode', countryCode);
+
+  return this.http.get(`${this.apiAirportUrl}/country`, {
+    headers,
+    params
+  }).pipe(
+    catchError(this.handleError)
+  );
+}
+
 
      private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';

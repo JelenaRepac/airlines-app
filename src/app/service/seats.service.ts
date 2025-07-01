@@ -4,12 +4,15 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { FlightScheduleSeatInformationOutputDto } from '../models/flight-schedule-seat.model';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SeatsService {
-  private apiUrl = 'http://localhost:9090/api/seats';
+    private apiUrlFlightSchedule = environment.apiUrlFlightSchedule;
+  
+  
 
   constructor(private http: HttpClient) {}
 
@@ -18,14 +21,15 @@ export class SeatsService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http
-      .get<FlightScheduleSeatInformationOutputDto[]>(this.apiUrl, { headers })
+      .get<FlightScheduleSeatInformationOutputDto[]>(this.apiUrlFlightSchedule, { headers })
       .pipe(catchError(this.handleError));
   }
 
    getSeatsByFlightSchedule(flightScheduleId : number | undefined): Observable<FlightScheduleSeatInformationOutputDto[]> {
-    const token = localStorage.getItem('token'); // Adjust key if needed
+    const token = localStorage.getItem('authToken'); // Adjust key if needed
+    console.log(token);
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const url = `${this.apiUrl}/flight-schedule/${flightScheduleId}`;
+    const url = `${this.apiUrlFlightSchedule}/seat/${flightScheduleId}`;
 
   return this.http
     .get<FlightScheduleSeatInformationOutputDto[]>(url, { headers })

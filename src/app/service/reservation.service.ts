@@ -3,46 +3,32 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../environment';
-import { ScheduleInput } from '../models/schedule-input.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ScheduleService {
-  private apiUrl = environment.apiUrlFlightSchedule;
+export class ReservationService {
+  private reservationUrl = `${environment.reservationUrl}`;
 
-  private selectedFlightId;
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
+  //get reservation by user id
+  getResrvationByUserId(userId: number): Observable<any> {
+    const token = localStorage.getItem('authToken'); // or wherever you store your token
 
-  constructor(private http: HttpClient) { }
-  setSelectedFlightId(id: number | undefined): void {
-    this.selectedFlightId = id;
-  }
-  getSelectedFlightId(): number | undefined {
-    return this.selectedFlightId;
-  }
-
-  // Get all flight schedules
-  getSchedules(): Observable<ScheduleInput[]> {
-    return this.http
-      .get<ScheduleInput[]>(this.apiUrl)
-      .pipe(catchError(this.handleError));
-  }
-
-  // Add a new flight schedule
-  addSchedule(schedule: ScheduleInput): Observable<ScheduleInput> {
-    const token = localStorage.getItem("authToken");
-
-    console.log(schedule);
-    console.log('POSTing to:', this.apiUrl);
-
+    console.log(token);
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
 
-    return this.http
-      .post<ScheduleInput>(this.apiUrl, schedule, { headers })
-      .pipe(catchError(this.handleError));
+    return this.http.get(`${this.reservationUrl}/user`, {
+      headers,
+      params: { userId: userId.toString() }  // Always convert numbers to strings here
+    }).pipe(
+      catchError(this.handleError)
+    );
   }
 
 
@@ -60,7 +46,9 @@ export class ScheduleService {
           errorMessage = 'Requested resource not found.';
           break;
         case 500:
-          errorMessage = 'A server error occurred. Please try again later.';
+          errorMessage = error.error?.message === 'Flight with that name already exists'
+            ? 'A flight with this name already exists. Please try another name.'
+            : 'A server error occurred. Please try again later.';
           break;
         default:
           errorMessage = `Server-side error: ${error.statusText}`;

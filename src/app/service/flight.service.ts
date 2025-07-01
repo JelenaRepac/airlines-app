@@ -1,39 +1,67 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { FlightInformationDto } from '../models/flight.model';
 import { environment } from '../environment';
 import { AuthService } from './auth.service';
+import { ScheduleDto } from '../models/schedule-dto.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FlightService {
-  private flightUrl = environment.apiUrlFlight + '/flight'; 
+  private flightUrl = environment.apiUrlFlight ;
+  private flightScheduleUrl = environment.apiUrlFlightSchedule;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   // Add a new flight
   addFlight(flight: FlightInformationDto): Observable<FlightInformationDto> {
     return this.http
       .post<FlightInformationDto>(this.flightUrl, flight)
-      .pipe(catchError(this.handleError)); 
+      .pipe(catchError(this.handleError));
   }
 
   // Get all flights
   getFlights(): Observable<FlightInformationDto[]> {
     return this.http
       .get<FlightInformationDto[]>(this.flightUrl)
-      .pipe(catchError(this.handleError)); 
+      .pipe(catchError(this.handleError));
   }
 
+  getSchedulesByRoute(from: string, to: string): Observable<ScheduleDto[]> {
+  const params = new HttpParams()
+    .set('from', from)
+    .set('to', to);
+
+  return this.http
+    .get<ScheduleDto[]>(`${this.flightScheduleUrl}`, { params })
+    .pipe(catchError(this.handleError));
+}
+
+
+  getFlightScheduleByid(id: number): Observable<any> {
+    const token = localStorage.getItem('authToken'); // or wherever you store your token
+
+    console.log(token);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(`${this.flightScheduleUrl}/${id}`, {
+      headers
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   // Delete a flight by ID
   deleteFlight(flightId: number): Observable<any> {
     return this.http
       .delete(`${this.flightUrl}/${flightId}`)
-      .pipe(catchError(this.handleError)); 
+      .pipe(catchError(this.handleError));
   }
 
   // Handle HTTP errors

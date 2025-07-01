@@ -5,52 +5,47 @@
         <div class="form-row">
 
           <!-- Country From -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-select [(value)]="selectedCountry">
-              <mat-option *ngFor="let country of countries" [value]="country.country_id">
-                {{ country.country_name }}
-              </mat-option>
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Source Country</mat-label>
+            <mat-select formControlName="countrySource">
+              <mat-option *ngFor="let country of countries" [value]="country">{{ country.name }}</mat-option>
             </mat-select>
-            
           </mat-form-field>
 
-          <!-- City From -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>City From</mat-label>
-            <input matInput placeholder="Enter departure city" formControlName="fromCity" required />
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Source Airport</mat-label>
+            <mat-select formControlName="sourceAirport">
+              <mat-option *ngFor="let airport of sourceAirports" [value]="airport">{{ airport.name }}</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
         <div class="form-row">
           <!-- Country To -->
-         <mat-form-field appearance="outline" class="full-width">
-          <mat-select [(value)]="selectedCountry">
-            <mat-option *ngFor="let country of countries" [value]="country.country_id">
-              {{ country.country_name }}
-            </mat-option>
-          </mat-select>
-          
-        </mat-form-field>
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Destination Country</mat-label>
+            <mat-select formControlName="countryDestination">
+              <mat-option *ngFor="let country of countries" [value]="country">{{ country.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-          <!-- City To -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>City To</mat-label>
-            <input matInput placeholder="Enter destination city" formControlName="toCity" required />
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Destination Airport</mat-label>
+            <mat-select formControlName="destinationAirport">
+              <mat-option *ngFor="let airport of destinationAirports" [value]="airport">{{ airport.name }}</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
         <!-- Date Picker -->
 
+
+
+
+        <!-- Submit Button -->
         <div class="form-field">
-      
-          <date-range-picker></date-range-picker>
+          <button type="submit" [disabled]="!flightForm.valid">Search Flights</button>
         </div>
 
-
-<!-- Submit Button -->
-<div class="form-field">
-  <button mat-raised-button color="primary" type="submit" [disabled]="!flightForm.valid">Search Flights</button>
-</div>
-
-</form>
-</mat-card-content>
-</mat-card>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>
