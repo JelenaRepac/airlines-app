@@ -74,3 +74,40 @@ label {
 .save-btn:hover {
   background-color:#484b75e9;
 }
+
+.custom-file-upload {
+  display: inline-flex;
+  width: 150px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #4b4d67; /* blue */
+  color: white;
+  font-weight: 200;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  font-size: 14px;
+  border: 2px solid transparent;
+}
+
+.custom-file-upload:hover:not(.disabled) {
+  background-color: #8387b8;
+}
+
+.custom-file-upload.disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+  border-color: #888;
+  color: #ddd;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.upload-icon {
+  font-size: 20px;
+  vertical-align: middle;
+}

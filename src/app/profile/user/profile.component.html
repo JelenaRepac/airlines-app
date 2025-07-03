@@ -84,13 +84,24 @@
                     </div>
 
                 </div>
-                <div class="input-row">
+            <label class="custom-file-upload" [class.disabled]="readonlyMode">
+  <input
+    type="file"
+    id="travelDocument"
+    (change)="onFileSelected($event)"
+    [disabled]="readonlyMode"
+    accept=".pdf,.jpg,.jpeg,.png"
+  />
+  <span class="material-icons upload-icon">upload</span>
+  Upload Document
+</label>
 
-                    <div class="input-group">
-                        Travel documents
-            </div>
+<!-- Display selected file name -->
+<div *ngIf="selectedFileName" class="file-name">
+  Selected: {{ selectedFileName }}
+</div>
 
-                </div>
+
                 <button type="submit" class="save-btn" [disabled]="readonlyMode">Save Profile</button>
             </form>
         </div>
@@ -98,7 +109,8 @@
 
 
     </mat-tab>
-    <mat-tab label="BOOKINGS"> 
-        <reservation></reservation> </mat-tab>
+    <mat-tab label="BOOKINGS">
+        <reservation></reservation>
+    </mat-tab>
     <mat-tab label="VAUCHERS"> Content 3 </mat-tab>
 </mat-tab-group>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'; // SweetAlert2 for alerts
-import { AuthService } from '../../service/auth.service'; 
+import { AuthService } from '../../service/auth.service';
 import { SharedModules } from '../../shared.module';
 import { ReservationComponent } from "../booking/reservation.component";
 
@@ -21,8 +21,9 @@ export class ProfileComponent implements OnInit {
   };
 
   readonlyMode: boolean = true;
-
-  constructor(private authService: AuthService, private router: Router) {}
+  selectedFile: File | null = null;
+  selectedFileName: string | null = null;
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -37,7 +38,7 @@ export class ProfileComponent implements OnInit {
         title: 'Error',
         text: 'No email found in local storage.',
       });
-      return; 
+      return;
     }
 
     this.authService.getProfile(email).subscribe({
@@ -53,6 +54,20 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
+
+
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name;
+    } else {
+      this.selectedFile = null;
+      this.selectedFileName = null;
+    }
+  }
+
 
   onSubmit() {
     this.authService.updateUserInfo(this.user).subscribe({
@@ -71,6 +86,7 @@ export class ProfileComponent implements OnInit {
         });
       },
     });
+  
   }
 
 

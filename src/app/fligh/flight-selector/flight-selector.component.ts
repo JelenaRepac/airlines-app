@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -27,7 +27,7 @@ import { ScheduleDto } from '../../models/schedule-dto.model';
 })
 
 export class FlightSelectorComponent {
-@Output() schedulesFound = new EventEmitter<ScheduleDto[]>();
+  @Output() schedulesFound = new EventEmitter<ScheduleDto[]>();
 
 
   countries: Country[] = [];  // Use the Country interface to type the array
@@ -51,10 +51,12 @@ export class FlightSelectorComponent {
       countrySource: [''],
       sourceAirport: [''],
       countryDestination: [''],
-      destinationAirport: ['']
+      destinationAirport: [''],
+      arrivalDate: [''],
+      departureDate: ['']
     });
   }
-  
+
   ngOnInit(): void {
     this.loadCountries();
 
@@ -78,14 +80,26 @@ export class FlightSelectorComponent {
 
 
 
- onSubmit(): void {
+  onSubmit(): void {
   if (this.flightForm.valid) {
     const from = this.flightForm.value.sourceAirport?.name;
     const to = this.flightForm.value.destinationAirport?.name;
+    const departureDateRaw = this.flightForm.value.departureDate;
+    const arrivalDateRaw = this.flightForm.value.arrivalDate;
 
-    this.flightService.getSchedulesByRoute(from, to).subscribe({
+    // Format dates to 'YYYY-MM-DD'
+    const departureDate = departureDateRaw
+      ? formatDate(departureDateRaw, 'yyyy-MM-dd', 'en-US')
+      : undefined;
+
+    const arrivalDate = arrivalDateRaw
+      ? formatDate(arrivalDateRaw, 'yyyy-MM-dd', 'en-US')
+      : undefined;
+
+    this.flightService.getSchedulesDinamically(from, to, departureDate, arrivalDate).subscribe({
       next: (schedules) => {
-        this.schedulesFound.emit(schedules); // Send data to parent
+        console.log(schedules);
+        this.schedulesFound.emit(schedules);
       },
       error: (err) => {
         console.error('Error fetching schedules:', err);
@@ -102,5 +116,15 @@ export class FlightSelectorComponent {
       }
     });
   }
-
+clearSearch():void{
+  this.flightService.getSchedulesDinamically().subscribe({
+      next: (schedules) => {
+        console.log(schedules);
+        this.schedulesFound.emit(schedules);
+      },
+      error: (err) => {
+        console.error('Error fetching schedules:', err);
+      }
+    });
+}
 }

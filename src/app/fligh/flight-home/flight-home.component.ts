@@ -6,11 +6,12 @@ import { AuthService } from '../../service/auth.service';
 import { FlightSelectorComponent } from '../flight-selector/flight-selector.component';
 import { FlightScheduleComponent } from "../../schedule/schedules/schedule.component";
 import { ScheduleDto } from '../../models/schedule-dto.model';
+import { SubscriptionCardComponent } from "../../subscribtion/subscription.component";
 
 @Component({
   selector: 'flight-home',
   templateUrl: './flight-home.component.html',
-  imports: [NavbarComponent, CommonModule, FlightSelectorComponent, FlightScheduleComponent]
+  imports: [NavbarComponent, CommonModule, FlightSelectorComponent, FlightScheduleComponent, SubscriptionCardComponent]
 })
 export class FlightHomeComponent {
 

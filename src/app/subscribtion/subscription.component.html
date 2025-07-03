@@ -1,0 +1,19 @@
+<div class="subscription-container">
+  <div class="form-side">
+    <h2><strong>Stay tuned!</strong></h2>
+    <p>Subscribe to our newsletter and be the first to know about new routes and special offers.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
+      <input formControlName="firstName" placeholder="First name" type="text" />
+      <input formControlName="email" placeholder="E-mail" type="email" />
+
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="agree" />
+        By clicking this checkbox, I accept receiving newsletters and offers.
+      </label>
+      <div class="button-row">
+              <button type="submit" [disabled]="!form.valid || !form.value.agree">Subscribe</button>
+      </div>
+    </form>
+  </div>
+</div>

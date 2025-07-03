@@ -11,7 +11,7 @@ import { ScheduleDto } from '../models/schedule-dto.model';
   providedIn: 'root',
 })
 export class FlightService {
-  private flightUrl = environment.apiUrlFlight ;
+  private flightUrl = environment.apiUrlFlight;
   private flightScheduleUrl = environment.apiUrlFlightSchedule;
 
   constructor(private http: HttpClient, private authService: AuthService) { }
@@ -30,19 +30,45 @@ export class FlightService {
       .pipe(catchError(this.handleError));
   }
 
-  getSchedulesByRoute(from: string, to: string): Observable<ScheduleDto[]> {
-  const params = new HttpParams()
-    .set('from', from)
-    .set('to', to);
+  // dinamically get flight schedules
 
-  return this.http
-    .get<ScheduleDto[]>(`${this.flightScheduleUrl}`, { params })
-    .pipe(catchError(this.handleError));
+getSchedulesDinamically(
+  from?: string,
+  to?: string,
+  departureDate?: string,
+  arrivalDate?: string
+): Observable<ScheduleDto[]> {
+  let params = new HttpParams();
+
+  console.log(params);
+  if (from) {
+    params = params.set('from', from);
+  }
+
+  if (to) {
+    params = params.set('to', to);
+  }
+
+  if (departureDate) {
+    params = params.set('departureDate', departureDate);
+  }
+
+  if (arrivalDate) {
+    params = params.set('arrivalDate', arrivalDate);
+  }
+
+  const token = localStorage.getItem('authToken'); 
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+
+  return this.http.get<ScheduleDto[]>(`${this.flightScheduleUrl}`, { params, headers });
 }
 
 
   getFlightScheduleByid(id: number): Observable<any> {
-    const token = localStorage.getItem('authToken'); // or wherever you store your token
+    const token = localStorage.getItem('authToken'); 
 
     console.log(token);
     const headers = new HttpHeaders({
