@@ -1,11 +1,11 @@
 <div class="panel-container" *ngIf="schedules.length > 0">
   <div class="panel-header" (click)="togglePanel()">
     <h3>Schedules</h3>
-   
+
   </div>
 
   <div class="panel-body">
-    <ng-container >
+    <ng-container>
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 full-width-table" matSort>
 
         <!-- Flight Column -->
@@ -57,17 +57,18 @@
         </ng-container>
 
 
-        <!-- Actions Column -->
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let schedule">
-            <button mat-icon-button color="primary" *ngIf="isAdmin"><mat-icon>visibility</mat-icon></button>
-            <button mat-icon-button color="accent" *ngIf="isAdmin"><mat-icon>edit</mat-icon></button>
-            <button mat-icon-button color="warn" *ngIf="isAdmin"><mat-icon>delete</mat-icon></button>
-            <button *ngIf="!isAdmin">Book</button>
-
+          <td mat-cell *matCellDef="let schedule" class="mat-column-actions">
+            <div class="actions">
+              <button mat-icon-button *ngIf="isAdmin"><mat-icon>visibility</mat-icon></button>
+              <button mat-icon-button *ngIf="isAdmin"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button *ngIf="isAdmin"><mat-icon>delete</mat-icon></button>
+              <button *ngIf="!isAdmin" (click)="onButtonClick(schedule.id)">Book</button>
+            </div>
           </td>
         </ng-container>
+
 
 
 
@@ -77,43 +78,5 @@
       </table>
     </ng-container>
 
-    <!--
-    <table *ngIf="!isAdmin && flightSchedules.length > 0" class="schedule-table custom-nonadmin">
-      <thead>
-        <tr>
-          <th>Flight</th>
-          <th>Status</th>
-          <th>Arrival / Departure</th>
-          <th>Source / Destination</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let schedule of flightSchedules">
-          <td>
-            <div>{{ schedule.flightInformation.flightName }}</div>
-            <small>{{ schedule.flightInformation.airlineService }}</small> 
-          </td>
-          <td>{{ schedule.status }}</td>
-          <td>
-            <div class="stacked-values">
-              <div>{{ schedule.arrivalDate | date:'short' }}</div>
-              <div class="divider">|</div>
-              <div>{{ schedule.departureDate | date:'short' }}</div>
-            </div>
-          </td>
-          <td>
-            <div class="stacked-values">
-              <div>{{ schedule.startAirport }}</div>
-              <div class="divider">|</div>
-              <div>{{ schedule.endAirport }}</div>
-            </div>
-          </td>
-          <td>
-            <button class="btn" (click)="onButtonClick(schedule.id)">Book a flight</button>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
   </div>
 </div>

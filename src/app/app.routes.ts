@@ -10,6 +10,7 @@ import { FlightHomeComponent } from './fligh/flight-home/flight-home.component';
 import { FlightManageComponent } from './fligh/manage-flight/flight-manage.component';
 import { ScheduleManageComponent } from './schedule/manage-schedule/manage-schedule.component';
 import { AirplaneSeatsComponent } from './airplane-seats/airplane-seats.component';
+import { BookFlightComponent } from './book-flight/book-flight.component';
 
 export const routes: Routes = [
   // Default route redirects to login
@@ -28,6 +29,7 @@ export const routes: Routes = [
   { path: 'airline/manage-flight', component: FlightManageComponent, canActivate: [AuthGuard] },
   { path: 'airline/manage-flight-schedule', component: ScheduleManageComponent, canActivate: [AuthGuard] },
   {path: 'airline/book-seats', component:AirplaneSeatsComponent, canActivate:[AuthGuard]},
+  {path:'airline/app-book-flight/:id', component:BookFlightComponent, canActivate:[AuthGuard]},
 
   // Fallback
   { path: '**', redirectTo: 'airline/login' }

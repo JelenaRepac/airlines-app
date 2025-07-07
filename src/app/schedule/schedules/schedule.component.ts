@@ -19,7 +19,7 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
   isAdmin: boolean = false;
 
   @Input() schedules: ScheduleDto[] = [];
-  @Input() panelOpen: boolean = false;
+  @Input() panelOpen: boolean = true;
   @Input() newSchedule: ScheduleInput | null = null;
 
   displayedColumns: string[] = ['flight', 'status', 'arrivalDeparture', 'sourceDestination', 'actions'];
@@ -40,7 +40,7 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
   ) { }
 
   ngOnInit(): void {
-    //this.loadSchedules();
+    this.loadSchedules();
     console.log(this.schedules);
     this.isAdmin = this.authService.isAdmin();
     console.log(this.isAdmin);
@@ -115,7 +115,7 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
   }
   onButtonClick(flightScheduleId: number | undefined): void {
     this.flightSelectionService.setSelectedFlightId(flightScheduleId);
-    this.router.navigate(['airline/book-seats']); // Pass ID as route param
+    this.router.navigate(['airline/app-book-flight', flightScheduleId]); // Pass ID as route param
   }
 
 

@@ -1,0 +1,47 @@
+<div class="tab-buttons">
+  <button mat-button [color]="selectedTab === 'available' ? 'primary' : 'accent'" (click)="selectedTab = 'available'">
+    Available Vouchers
+  </button>
+  <button mat-button [color]="selectedTab === 'used' ? 'primary' : 'accent'" (click)="selectedTab = 'used'">
+    Used Vouchers
+  </button>
+</div>
+
+<div *ngIf="selectedTab === 'available'">
+  <div class="voucher-container" *ngIf="availableVouchers.length > 0; else noAvailableVouchers">
+    <mat-card class="voucher-card" *ngFor="let voucher of availableVouchers">
+      <mat-card-header>
+        <mat-card-title> {{ voucher.code }}</mat-card-title>
+      </mat-card-header>
+    <mat-card-content>
+  <span class="discount-badge">{{ voucher.discountPercentage }}%</span>
+  <p>{{ voucher.validUntil }}</p>
+</mat-card-content>
+
+    </mat-card>
+  </div>
+
+  <ng-template #noAvailableVouchers>
+    <p class="no-vouchers">You currently have no available vouchers.</p>
+  </ng-template>
+</div>
+
+<div *ngIf="selectedTab === 'used'">
+  <div class="voucher-container" *ngIf="usedVouchers.length > 0; else noUsedVouchers">
+    <mat-card class="voucher-card used" *ngFor="let voucher of usedVouchers">
+     <mat-card-header>
+        <mat-card-title> {{ voucher.code }}</mat-card-title>
+      </mat-card-header>
+    <mat-card-content>
+  <span class="discount-badge">{{ voucher.discountPercentage }}%</span>
+  <p>{{ voucher.validUntil }}</p>
+  <p>Used</p>
+</mat-card-content>
+
+    </mat-card>
+  </div>
+
+  <ng-template #noUsedVouchers>
+    <p class="no-vouchers">You have not used any vouchers yet.</p>
+  </ng-template>
+</div>

@@ -1,0 +1,13 @@
+.flight-info-tab {
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+.flight-info-tab h2 {
+  margin-top: 0;
+  color: #3f51b5;
+}
+
+.flight-info-tab p {
+  margin: 0.25rem 0;
+}

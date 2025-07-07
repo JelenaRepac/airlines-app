@@ -3,32 +3,29 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../environment';
+import { Voucher } from '../models/voucher.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SubscriptionService {
-  private apiUrl = environment.apiUrlSybscription;
+export class VoucherService {
+  private apiUrl = environment.apiUrlVoucher;
   constructor(private http: HttpClient) {}
 
   
-subscribeToNewsletter(firstname: string, email: string): Observable<any> {
-  const token = localStorage.getItem("authToken");
+getVouchersByUserId(userId: number | undefined): Observable<Voucher[]> {
+  const token = localStorage.getItem('authToken');
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const url = `${this.apiUrl}/user/${userId}`;
 
-  const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token}`
-  });
+  console.log('Calling Voucher API for user ID:', userId);
 
-  const url = `${this.apiUrl}/subscribe`;
-
-  const params = new HttpParams()
-    .set('email', email)
-    .set('name', firstname);
-
-  return this.http
-    .post(url, null, { headers, params })
-    .pipe(catchError(this.handleError));
+  return this.http.get<Voucher[]>(url, { headers }).pipe(
+    catchError(this.handleError)
+  );
 }
+
+
 
 
   // Handle HTTP errors

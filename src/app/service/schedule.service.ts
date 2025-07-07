@@ -29,6 +29,14 @@ export class ScheduleService {
       .pipe(catchError(this.handleError));
   }
 
+  getScheduleById(id: number): Observable<ScheduleInput> {
+  const url = `${this.apiUrl}/${id}`;
+  return this.http.get<ScheduleInput>(url).pipe(
+    catchError(this.handleError)
+  );
+}
+
+
   // Add a new flight schedule
   addSchedule(schedule: ScheduleInput): Observable<ScheduleInput> {
     const token = localStorage.getItem("authToken");

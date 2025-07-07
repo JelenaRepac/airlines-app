@@ -25,7 +25,7 @@ th.mat-header-cell {
 
 .arrival-departure {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1rem;
   align-items: center;
   text-align: center;
@@ -44,7 +44,7 @@ th.mat-header-cell {
 }
 
 .segment .date {
-  font-size: 12px;
+  font-size: 11px;
   color: #555;
 }
 
@@ -67,12 +67,11 @@ th.mat-header-cell {
 
 
 
-
 button {
   padding: 10px 15px;
   background-color: #2e304c;
   color: #fff;
-  font-size: 10px;
+  font-size: 16px;
   width: 50%;
   border: none;
   border-radius: 5px;
@@ -89,3 +88,12 @@ button:hover {
 button:active {
   transform: translateY(0);
 }
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px; /* space between buttons */
+}
+

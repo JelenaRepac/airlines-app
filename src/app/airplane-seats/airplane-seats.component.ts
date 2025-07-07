@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ScheduleService } from '../service/schedule.service';
 
 @Component({
-  selector: 'book-seats',
+  selector: 'airpline-seats',
   templateUrl: './airplane-seats.component.html',
      imports: [SharedModules ],
   styleUrls: ['./airplane-seats.component.css']

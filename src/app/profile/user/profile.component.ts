@@ -4,21 +4,23 @@ import Swal from 'sweetalert2'; // SweetAlert2 for alerts
 import { AuthService } from '../../service/auth.service';
 import { SharedModules } from '../../shared.module';
 import { ReservationComponent } from "../booking/reservation.component";
+import { User } from '../../models/user.model';
+import { VoucherComponent } from "../voucher/voucher.component";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-  imports: [SharedModules, ReservationComponent]
+  imports: [SharedModules, ReservationComponent, VoucherComponent]
 })
 export class ProfileComponent implements OnInit {
-  user: any = {
-    firstname: '',
-    lastname: '',
-    email: '',
-    password: '',
-    rank: '',
-  };
+  user: User = {
+  firstname: '',
+  lastname: '',
+  email: '',
+  password: '',
+  rank: '',
+};
 
   readonlyMode: boolean = true;
   selectedFile: File | null = null;
