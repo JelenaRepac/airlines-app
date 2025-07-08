@@ -1,7 +1,5 @@
 <div class="ticket-container" *ngFor="let schedule of scheduleList">
   <mat-card class="ticket">
-  
-
     <mat-card-content>
       <div class="ticket-body">
         <div class="column time-column">
@@ -14,6 +12,9 @@
           <mat-icon class="flight-icon">flight</mat-icon>
           <div class="duration">
             {{ getFlightDuration(schedule.departureTime, schedule.arrivalTime) }}
+          </div>
+          <div class="price" *ngIf="pricingMap.get(schedule.id)">
+            {{ pricingMap.get(schedule.id)?.price }} {{ pricingMap.get(schedule.id)?.currency }}
           </div>
         </div>
 

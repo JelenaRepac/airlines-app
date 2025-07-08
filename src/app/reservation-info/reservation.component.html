@@ -1,0 +1,7 @@
+
+<app-ticket-view  [scheduleList]="scheduleList" ></app-ticket-view>
+
+<div *ngIf="selectedSeat" class="selected-seat-info">
+  <h4>Selected Seat</h4>
+  <p>Seat Number: {{ selectedSeat.seatNumber }}</p>
+</div>

@@ -9,6 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AfterViewInit } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
 import Swal from 'sweetalert2';
+import { PricingService } from '../../service/pricing.service';
 @Component({
   selector: 'flight-schedule',
   templateUrl: './schedule.component.html',
@@ -23,8 +24,10 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
   @Input() panelOpen: boolean = true;
   @Input() newSchedule: ScheduleInput | null = null;
 
-  displayedColumns: string[] = ['flight', 'status', 'arrivalDeparture', 'sourceDestination', 'actions'];
+  displayedColumns: string[] = ['flight', 'status', 'arrivalDeparture', 'sourceDestination','actions'];
   dataSource = new MatTableDataSource<ScheduleDto>([]);
+
+
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -37,12 +40,14 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
 
   constructor(private scheduleService: ScheduleService, private router: Router,
     private flightSelectionService: ScheduleService,
-    private authService: AuthService
+    private authService: AuthService,
+    private pricingService:PricingService
   ) { }
 
   ngOnInit(): void {
     this.loadSchedules();
     console.log(this.schedules);
+
     this.isAdmin = this.authService.isAdmin();
     console.log(this.isAdmin);
 
@@ -73,6 +78,8 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
       }
     };
   }
+
+
 onSortChange(): void {
   setTimeout(() => {
     if (this.dataSource.filteredData.length === 0) {
@@ -130,7 +137,9 @@ onSortChange(): void {
           text: 'Please try again later.',
         });
       }
+      
     });
+    
   }
 
 

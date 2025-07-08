@@ -11,6 +11,8 @@ import { MatStep } from '@angular/material/stepper';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { TicketViewComponent } from '../ticket/ticket-view.component';
+import { ReservationComponent } from "../reservation-info/reservation.component";
+import { FlightScheduleSeatInformationOutputDto } from '../models/flight-schedule-seat.model';
 
 @Component({
     selector: 'app-book-flight',
@@ -22,7 +24,7 @@ import { TicketViewComponent } from '../ticket/ticket-view.component';
         NavbarComponent,
         ReactiveFormsModule,
         CommonModule,
-        TicketViewComponent]
+        TicketViewComponent, ReservationComponent]
 })
 export class BookFlightComponent implements OnInit {
     flightScheduleId!: number;
@@ -51,6 +53,13 @@ export class BookFlightComponent implements OnInit {
                 console.error('Failed to load schedules', err);
             }
         });
+    }
+
+    selectedSeat: FlightScheduleSeatInformationOutputDto | null = null; 
+
+    onSeatSelected(seat: FlightScheduleSeatInformationOutputDto) {
+        this.selectedSeat = seat;
+        console.log('Selected seat:', seat);
     }
 }
 

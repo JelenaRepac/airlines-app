@@ -1,26 +1,55 @@
 <app-navbar></app-navbar>
 
-<mat-horizontal-stepper linear #stepper>
-  <mat-step [stepControl]="flightInfoForm">
-    <form [formGroup]="flightInfoForm">
-      <ng-template matStepLabel>Flight Info</ng-template>
-      <app-ticket-view [scheduleList]="schedule"></app-ticket-view>
+<div class="stepper-wrapper">
+  <mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="flightInfoForm">
+      <form [formGroup]="flightInfoForm">
+        <ng-template matStepLabel>Flight Info</ng-template>
+        <app-ticket-view [scheduleList]="schedule"></app-ticket-view>
 
-      <div class="btn-tab">
-        <button mat-button matStepperNext>Next</button>
+        <div class="btn-tab-next">
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+
+
+    <mat-step>
+      <ng-template matStepLabel>Seat Info</ng-template>
+      <div class="seat-tab">
+        <airpline-seats (seatSelected)="onSeatSelected($event)"></airpline-seats>
       </div>
-    </form>
-  </mat-step>
 
-  <mat-step>
-    <ng-template matStepLabel>Seat Info</ng-template>
-    <div class="seat-tab">
-      <airpline-seats></airpline-seats>
-    </div>
+      <div class="button-row">
 
-      <div class="btn-tab">
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-    </div>
-  </mat-step>
-</mat-horizontal-stepper>
+
+        <div class="btn-tab-back">
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+        <div class="btn-tab-next">
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </div>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Reservation info</ng-template>
+      <div class="reservation-tab">
+
+        <app-reservation [scheduleList]="schedule" [selectedSeat]="selectedSeat"></app-reservation>
+      </div>
+
+        <div class="button-row">
+      <div class="btn-tab-back">
+
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+      </div>
+        <div class="btn-tab-next">
+          <button mat-button matStepperNext>Reserve</button>
+        </div></div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
