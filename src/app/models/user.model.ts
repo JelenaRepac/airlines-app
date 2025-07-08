@@ -1,5 +1,5 @@
 export interface User {
-  id?: number; // optional if you get it from backend only
+  id: number; // optional if you get it from backend only
   firstname: string;
   lastname: string;
   email: string;

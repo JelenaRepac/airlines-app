@@ -1,0 +1,28 @@
+<div class="ticket-container" *ngFor="let schedule of scheduleList">
+  <mat-card class="ticket">
+  
+
+    <mat-card-content>
+      <div class="ticket-body">
+        <div class="column time-column">
+          <div class="date">{{ schedule.departureDate }}</div>
+          <div class="time">{{ schedule.departureTime }}</div>
+          <div class="airport">{{ schedule.startAirport }}</div>
+        </div>
+
+        <div class="column center-column">
+          <mat-icon class="flight-icon">flight</mat-icon>
+          <div class="duration">
+            {{ getFlightDuration(schedule.departureTime, schedule.arrivalTime) }}
+          </div>
+        </div>
+
+        <div class="column time-column">
+          <div class="date">{{ schedule.arrivalDate }}</div>
+          <div class="time">{{ schedule.arrivalTime }}</div>
+          <div class="airport">{{ schedule.endAirport }}</div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

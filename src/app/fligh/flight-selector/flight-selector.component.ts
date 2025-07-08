@@ -17,6 +17,7 @@ import { AirportService } from '../../service/airport.service';
 import { validateHeaderName } from 'http';
 import { FlightService } from '../../service/flight.service';
 import { ScheduleDto } from '../../models/schedule-dto.model';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -81,32 +82,40 @@ export class FlightSelectorComponent {
 
 
   onSubmit(): void {
-  if (this.flightForm.valid) {
-    const from = this.flightForm.value.sourceAirport?.name;
-    const to = this.flightForm.value.destinationAirport?.name;
-    const departureDateRaw = this.flightForm.value.departureDate;
-    const arrivalDateRaw = this.flightForm.value.arrivalDate;
+    if (this.flightForm.valid) {
+      const from = this.flightForm.value.sourceAirport?.name;
+      const to = this.flightForm.value.destinationAirport?.name;
+      const departureDateRaw = this.flightForm.value.departureDate;
+      const arrivalDateRaw = this.flightForm.value.arrivalDate;
 
-    // Format dates to 'YYYY-MM-DD'
-    const departureDate = departureDateRaw
-      ? formatDate(departureDateRaw, 'yyyy-MM-dd', 'en-US')
-      : undefined;
+      // Format dates to 'YYYY-MM-DD'
+      const departureDate = departureDateRaw
+        ? formatDate(departureDateRaw, 'yyyy-MM-dd', 'en-US')
+        : undefined;
 
-    const arrivalDate = arrivalDateRaw
-      ? formatDate(arrivalDateRaw, 'yyyy-MM-dd', 'en-US')
-      : undefined;
+      const arrivalDate = arrivalDateRaw
+        ? formatDate(arrivalDateRaw, 'yyyy-MM-dd', 'en-US')
+        : undefined;
 
-    this.flightService.getSchedulesDinamically(from, to, departureDate, arrivalDate).subscribe({
-      next: (schedules) => {
-        console.log(schedules);
-        this.schedulesFound.emit(schedules);
-      },
-      error: (err) => {
-        console.error('Error fetching schedules:', err);
-      }
-    });
+      this.flightService.getSchedulesDinamically(from, to, departureDate, arrivalDate).subscribe({
+        next: (schedules) => {
+          console.log(schedules);
+          if (schedules.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No search results',
+              text: 'No schedules match the search criteria.',
+            });
+
+          }
+          this.schedulesFound.emit(schedules);
+        },
+        error: (err) => {
+          console.error('Error fetching schedules:', err);
+        }
+      });
+    }
   }
-}
 
 
   loadCountries(): void {
@@ -116,15 +125,18 @@ export class FlightSelectorComponent {
       }
     });
   }
-clearSearch():void{
-  this.flightService.getSchedulesDinamically().subscribe({
+  clearSearch(): void {
+    this.flightForm.reset();
+
+    this.flightService.getSchedulesDinamically().subscribe({
       next: (schedules) => {
         console.log(schedules);
+
         this.schedulesFound.emit(schedules);
       },
       error: (err) => {
         console.error('Error fetching schedules:', err);
       }
     });
-}
+  }
 }

@@ -7,105 +7,22 @@
   </button>
 </div>
 
-
-
 <div *ngIf="selectedTab === 'future'">
-
-  <div class="ticket-container" *ngFor="let res of nextReservations">
-
-    <mat-card class="ticket">
-
-      <mat-card-actions>
-        <span class="material-icons nav-icon">info</span>
-      </mat-card-actions>
-      <mat-card-header>
-
-        <div class="ticket-header">
-          <div class="ticket-info">
-            <span class="label">Flight number</span>
-            <span class="value">{{ res.flightSchedule?.flightNumber }}</span>
-          </div>
-          <div class="ticket-info">
-            <span class="label">Seat number</span>
-            <span class="value">{{ res.seatNumber }}</span>
-          </div>
-        </div>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div class="ticket-body">
-          <div class="column time-column">
-            <div class="date">{{ res.flightSchedule?.departureDate }}</div>
-            <div class="time">{{ res.flightSchedule?.departureTime }}</div>
-            <div class="airport">{{ res.flightSchedule?.startAirport }}</div>
-            <!-- <div class="terminal">Terminal {{ res.flightSchedule?.startTerminal || '-' }}</div> -->
-          </div>
-
-          <div class="column center-column">
-            <mat-icon class="flight-icon">flight</mat-icon>
-            <div class="duration">{{ getFlightDuration(res.flightSchedule?.departureTime,
-              res.flightSchedule?.arrivalTime) }}</div>
-          </div>
-
-          <div class="column time-column">
-            <div class="date">{{ res.flightSchedule?.arrivalDate }}</div>
-            <div class="time">{{ res.flightSchedule?.arrivalTime }}</div>
-            <div class="airport">{{ res.flightSchedule?.endAirport }}</div>
-            <!-- <div class="terminal">Terminal {{ res.flightSchedule?.endTerminal || '-' }}</div> -->
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+  <div class="reservation-container" *ngIf="nextReservations.length > 0; else noFutureReservations">
+    <app-ticket-view [scheduleList]="nextReservations"></app-ticket-view>
   </div>
+
+  <ng-template #noFutureReservations>
+    <p class="no-schedules">You don’t have future schedules.</p>
+  </ng-template>
 </div>
 
 <div *ngIf="selectedTab === 'past'">
-
-  <div class="ticket-container" *ngFor="let res of pastReservations">
-
-
-    <mat-card class="ticket">
-      <mat-card-actions>
-        <span class="material-icons nav-icon">info</span>
-      </mat-card-actions>
-      <mat-card-header>
-        <div class="ticket-header">
-          <div class="ticket-info">
-            <span class="label">Flight number</span>
-            <span class="value">{{ res.flightSchedule?.flightNumber }}</span>
-          </div>
-          <div class="ticket-info">
-            <span class="label">Seat number</span>
-            <span class="value">{{ res.seatNumber }}</span>
-          </div>
-        </div>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div class="ticket-body">
-          <div class="column time-column">
-            <div class="date">{{ res.flightSchedule?.departureDate }}</div>
-            <div class="time">{{ res.flightSchedule?.departureTime }}</div>
-            <div class="airport">{{ res.flightSchedule?.startAirport }}</div>
-            <!-- <div class="terminal">Terminal {{ res.flightSchedule?.startTerminal || '-' }}</div> -->
-          </div>
-
-          <div class="column center-column">
-            <mat-icon class="flight-icon">flight</mat-icon>
-            <div class="duration">{{ getFlightDuration(res.flightSchedule?.departureTime,
-              res.flightSchedule?.arrivalTime) }}</div>
-          </div>
-
-          <div class="column time-column">
-            <div class="date">{{ res.flightSchedule?.arrivalDate }}</div>
-            <div class="time">{{ res.flightSchedule?.arrivalTime }}</div>
-            <div class="airport">{{ res.flightSchedule?.endAirport }}</div>
-            <!-- <div class="terminal">Terminal {{ res.flightSchedule?.endTerminal || '-' }}</div> -->
-          </div>
-        </div>
-      </mat-card-content>
-
-
-    </mat-card>
+  <div class="reservation-container" *ngIf="pastReservations.length > 0; else noPastReservations">
+    <app-ticket-view [scheduleList]="pastReservations"></app-ticket-view>
   </div>
+
+  <ng-template #noPastReservations>
+    <p class="no-schedules">You don’t have past bookings.</p>
+  </ng-template>
 </div>

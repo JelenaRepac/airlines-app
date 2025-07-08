@@ -29,9 +29,9 @@ export class ScheduleService {
       .pipe(catchError(this.handleError));
   }
 
-  getScheduleById(id: number): Observable<ScheduleInput> {
+  getScheduleById(id: number): Observable<ScheduleInput[]> {
   const url = `${this.apiUrl}/${id}`;
-  return this.http.get<ScheduleInput>(url).pipe(
+  return this.http.get<ScheduleInput[]>(url).pipe(
     catchError(this.handleError)
   );
 }

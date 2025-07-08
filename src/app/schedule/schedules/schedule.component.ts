@@ -8,6 +8,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AfterViewInit } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'flight-schedule',
   templateUrl: './schedule.component.html',
@@ -45,12 +46,9 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
     this.isAdmin = this.authService.isAdmin();
     console.log(this.isAdmin);
 
-    //  this.displayedColumns = this.isAdmin
-    // ? ['flight', 'status', 'arrivalDeparture', 'sourceDestination', 'actions']
-    // : ['flight', 'status', 'arrivalDeparture', 'sourceDestination'];
-
   }
   ngOnChanges(changes: SimpleChanges): void {
+    
     if (changes['schedules'] && this.schedules) {
       this.dataSource.data = this.schedules;
       this.dataSource.sort = this.sort;
@@ -75,37 +73,66 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
       }
     };
   }
+onSortChange(): void {
+  setTimeout(() => {
+    if (this.dataSource.filteredData.length === 0) {
+      Swal.fire({
+        icon: 'info',
+        title: 'No sorted results',
+        text: 'No schedules match the selected sort criteria.',
+      });
+    }
+  });
+}
 
 
   loadSchedules(): void {
-    this.scheduleService.getSchedules().subscribe(schedules => {
-      this.schedules = schedules;
+    this.scheduleService.getSchedules().subscribe({
+      next: (schedules) => {
+        this.schedules = schedules;
 
-      // Reinitialize data source
-      this.dataSource = new MatTableDataSource(this.schedules);
-
-      // Sorting accessor
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'flight':
-            return item.flightInformation?.flightName?.toLowerCase() || '';
-          case 'status':
-            return item.status || '';
-          case 'arrivalDeparture':
-            return item.arrivalDate || '';
-          case 'sourceDestination':
-            return `${item.startAirport || ''} ${item.endAirport || ''}`;
-          default:
-            return (item as any)[property] ?? '';
+        if (schedules.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'No schedules found',
+            text: 'There are no flight schedules for the selected criteria.',
+          });
         }
-      };
 
-      // Delay sort assignment to wait for view init
-      setTimeout(() => {
-        this.dataSource.sort = this.sort;
-      });
+        this.dataSource = new MatTableDataSource(this.schedules);
+
+        this.dataSource.sortingDataAccessor = (item, property) => {
+          switch (property) {
+            case 'flight':
+              return item.flightInformation?.flightName?.toLowerCase() || '';
+            case 'status':
+              return item.status || '';
+            case 'arrivalDeparture':
+              return item.arrivalDate || '';
+            case 'sourceDestination':
+              return `${item.startAirport || ''} ${item.endAirport || ''}`;
+            default:
+              return (item as any)[property] ?? '';
+          }
+        };
+
+
+        // Set sort after table is rendered
+        setTimeout(() => {
+          this.dataSource.sort = this.sort;
+        });
+      },
+      error: (err) => {
+        console.error('Error loading schedules:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error loading schedules',
+          text: 'Please try again later.',
+        });
+      }
     });
   }
+
 
 
 

@@ -99,3 +99,9 @@ mat-card-actions {
   width: 100%; 
   padding: 8px;
 }
+.no-schedules {
+  text-align: center;
+  margin-top: 2rem;
+  font-style: italic;
+  color: #888;
+}

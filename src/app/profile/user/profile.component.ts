@@ -14,13 +14,7 @@ import { VoucherComponent } from "../voucher/voucher.component";
   imports: [SharedModules, ReservationComponent, VoucherComponent]
 })
 export class ProfileComponent implements OnInit {
-  user: User = {
-  firstname: '',
-  lastname: '',
-  email: '',
-  password: '',
-  rank: '',
-};
+  user!: User;
 
   readonlyMode: boolean = true;
   selectedFile: File | null = null;

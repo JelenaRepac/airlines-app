@@ -6,9 +6,9 @@
 
   <div class="panel-body">
     <ng-container>
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 full-width-table" matSort>
+      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange()"
+        class="mat-elevation-z2 full-width-table">
 
-        <!-- Flight Column -->
         <ng-container matColumnDef="flight">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Flight</th>
           <td mat-cell *matCellDef="let schedule">
@@ -17,13 +17,11 @@
           </td>
         </ng-container>
 
-        <!-- Status Column -->
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
           <td mat-cell *matCellDef="let schedule">{{ schedule.status }}</td>
         </ng-container>
 
-        <!-- Arrival / Departure Column -->
         <ng-container matColumnDef="arrivalDeparture">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-arrivalDeparture">Arrival / Departure
           </th>
@@ -44,7 +42,6 @@
 
 
 
-        <!-- Source / Destination Column -->
         <ng-container matColumnDef="sourceDestination">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Source / Destination</th>
           <td mat-cell *matCellDef="let schedule">
@@ -64,7 +61,7 @@
               <button mat-icon-button *ngIf="isAdmin"><mat-icon>visibility</mat-icon></button>
               <button mat-icon-button *ngIf="isAdmin"><mat-icon>edit</mat-icon></button>
               <button mat-icon-button *ngIf="isAdmin"><mat-icon>delete</mat-icon></button>
-              <button *ngIf="!isAdmin" (click)="onButtonClick(schedule.id)">Book</button>
+              <button *ngIf="!isAdmin" class="btn-book" (click)="onButtonClick(schedule.id)">Book the flight</button>
             </div>
           </td>
         </ng-container>
@@ -72,7 +69,6 @@
 
 
 
-        <!-- Header and Row Declarations -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>

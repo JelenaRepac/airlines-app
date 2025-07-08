@@ -13,10 +13,10 @@
       <mat-card-header>
         <mat-card-title> {{ voucher.code }}</mat-card-title>
       </mat-card-header>
-    <mat-card-content>
-  <span class="discount-badge">{{ voucher.discountPercentage }}%</span>
-  <p>{{ voucher.validUntil }}</p>
-</mat-card-content>
+      <mat-card-content>
+        <span class="discount-badge">{{ voucher.discountPercentage }}%</span>
+        <p>{{ voucher.validUntil }}</p>
+      </mat-card-content>
 
     </mat-card>
   </div>
@@ -29,14 +29,14 @@
 <div *ngIf="selectedTab === 'used'">
   <div class="voucher-container" *ngIf="usedVouchers.length > 0; else noUsedVouchers">
     <mat-card class="voucher-card used" *ngFor="let voucher of usedVouchers">
-     <mat-card-header>
+      <mat-card-header>
         <mat-card-title> {{ voucher.code }}</mat-card-title>
       </mat-card-header>
-    <mat-card-content>
-  <span class="discount-badge">{{ voucher.discountPercentage }}%</span>
-  <p>{{ voucher.validUntil }}</p>
-  <p>Used</p>
-</mat-card-content>
+      <mat-card-content>
+        <span class="discount-badge">{{ voucher.discountPercentage }}%</span>
+        <p>{{ voucher.validUntil }}</p>
+        <p>Used</p>
+      </mat-card-content>
 
     </mat-card>
   </div>

@@ -1,30 +1,26 @@
 <app-navbar></app-navbar>
 
-<mat-tab-group>
-  <mat-tab label="Flight Info">
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="flightInfoForm">
+    <form [formGroup]="flightInfoForm">
+      <ng-template matStepLabel>Flight Info</ng-template>
+      <app-ticket-view [scheduleList]="schedule"></app-ticket-view>
 
- <div class="flight-info-tab" *ngIf="schedule">
-      <h2>{{ schedule.flightInformation.flightName }}</h2>
-      <p><strong>Airline Service:</strong> {{ schedule.flightInformation.airlineService }}</p>
-      <p><strong>Flight Type:</strong> {{ schedule.flightInformation.flightType }}</p>
-      <p><strong>Seat Type:</strong> {{ schedule.flightInformation.seatType }}</p>
-      <p><strong>Capacity:</strong> {{ schedule.flightInformation.capacity }}</p>
-      <p><strong>Max Passenger Weight:</strong> {{ schedule.flightInformation.maximumWeightForPassenger }} kg</p>
+      <div class="btn-tab">
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
 
-      <hr>
-
-      <p><strong>Status:</strong> {{ schedule.status }}</p>
-      <p><strong>Departure:</strong> {{ schedule.departureDate }} at {{ schedule.departureTime }}</p>
-      <p><strong>Arrival:</strong> {{ schedule.arrivalDate }} at {{ schedule.arrivalTime }}</p>
-      <p><strong>From:</strong> {{ schedule.startAirport }}</p>
-      <p><strong>To:</strong> {{ schedule.endAirport }}</p>
-    </div>
-
-  </mat-tab>
-
-  <mat-tab label="Seat Info">
+  <mat-step>
+    <ng-template matStepLabel>Seat Info</ng-template>
     <div class="seat-tab">
       <airpline-seats></airpline-seats>
     </div>
-  </mat-tab>
-</mat-tab-group>
+
+      <div class="btn-tab">
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
