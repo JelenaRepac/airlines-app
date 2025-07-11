@@ -26,7 +26,7 @@
     text-align: center;
   }
   
- .flight-form div {
+ /* .flight-form div {
     margin-bottom: 12px;
   }
   
@@ -42,7 +42,7 @@
     border-radius: 5px;
     font-size: 16px;
     width: 100%;
-  }
+  } */
   .btn{
     margin-left: 30%;
     padding: 10px;
@@ -55,7 +55,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  .flight-form input[type="text"],
+  /* .flight-form input[type="text"],
   .flight-form input[type="number"],
   .flight-form select {
     margin-top: 10px;
@@ -64,7 +64,7 @@
     border-radius: 5px;
     font-size: 16px;
     width: 100%;
-  }
+  } */
 
 
   
@@ -101,5 +101,17 @@ button:hover {
   .add-btn:hover {
     background-color: #8d8e9fe9;
   }
+}
+
+
+.input-row {
+  display: flex;
+  gap: 20px;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -24,13 +24,19 @@ interface Airport {
 })
 export class AviationService {
 
-  private baseUrl = 'http://localhost:9090/api/aviation';  
+  private baseUrl = 'http://localhost:9090/api/aviation';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Fetch the list of countries
   getCountries(): Observable<Country[]> {
-    return this.http.get<Country[]>(`${this.baseUrl}/countries`).pipe(
+    const token = this.getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<Country[]>(`${this.baseUrl}/countries`, { headers }).pipe(
       catchError(this.handleError)
     );
   }
@@ -52,6 +58,10 @@ export class AviationService {
       catchError(this.handleError)
     );
   }
+    getToken() {
+    return localStorage.getItem('authToken');
+  }
+
 
   // Handle HTTP errors
   private handleError(error: HttpErrorResponse): Observable<never> {

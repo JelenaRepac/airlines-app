@@ -8,6 +8,11 @@ import { FlightService } from '../../service/flight.service';
 import Swal from 'sweetalert2';
 import { FlightsComponent } from "../flights/flights.component";
 import { MatCardModule } from '@angular/material/card';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 export interface FlightInformationDto {
   id?: number;
   flightName: string;
@@ -22,13 +27,16 @@ export interface FlightInformationDto {
   selector: 'manage-flight',
   templateUrl: './flight-manage.component.html',
   styleUrls: ['./flight-manage.component.css'],
-    imports: [
+  imports: [
     NavbarComponent,
     CommonModule,
     FormsModule,
     FlightsComponent,
-    MatCardModule
-]
+    MatInputModule,
+    MatNativeDateModule,
+    MatSelect,
+    MatOption, MatCardModule
+  ]
 })
 
 
@@ -42,47 +50,46 @@ export class FlightManageComponent {
     maximumWeightForPassenger: 0,
     airlineService: ''
   };
-  
-    flights: FlightInformationDto[] = [];
-    panelOpen = false;
-    showAddFlightModal = false;
-flightTypes = ['International', 'Domestic'];
-seatTypes = ['Economic', 'Business'];
+
+  flights: FlightInformationDto[] = [];
+  panelOpen = false;
+  showAddFlightModal = false;
+  flightTypes = ['International', 'Domestic'];
+  seatTypes = ['Economic', 'Business'];
 
   submittedFlight?: FlightInformationDto;
 
-  constructor(private flightService: FlightService) {}
+  constructor(private flightService: FlightService) { }
 
   submitFlight(): void {
 
-      if (!this.flight.flightName.trim() ||
-          this.flight.capacity <= 0 ||
-          !this.flight.flightType.trim() ||
-          !this.flight.seatType.trim() ||
-          this.flight.maximumWeightForPassenger <= 0 ||
-          !this.flight.airlineService.trim()) {
-            this.flights.push(this.flight); // After submitting, add to the list
+    if (!this.flight.flightName.trim() ||
+      this.flight.capacity <= 0 ||
+      !this.flight.flightType.trim() ||
+      !this.flight.seatType.trim() ||
+      this.flight.maximumWeightForPassenger <= 0 ||
+      !this.flight.airlineService.trim()) {
+      this.flights.push(this.flight); // After submitting, add to the list
 
 
-        Swal.fire({
-          icon: 'warning',
-          title: 'Missing Fields',
-          text: 'Please fill in all flight information before submitting.'
-        });
-        return;
-      }
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill in all flight information before submitting.'
+      });
+      return;
+    }
 
     this.flightService.addFlight(this.flight).subscribe({
       next: (data) => {
         this.submittedFlight = data;
-  
-        this.flights.push({ ...this.submittedFlight }); // Add the flight data to the list (for example)
+        this.loadFlights();
         this.closeAddFlightModal();
         Swal.fire({
           icon: 'success',
           text: 'Successfully inserted new flight!'
         });
-       
+
       },
       error: (err) => {
         console.error('Flight submission failed:', err);
@@ -94,7 +101,6 @@ seatTypes = ['Economic', 'Business'];
 
 
   ngOnInit(): void {
-    // Fetch flights when the component is initialized
     this.loadFlights();
   }
 

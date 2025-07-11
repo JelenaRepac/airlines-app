@@ -107,16 +107,16 @@ export class AuthService {
   }
 
   // Get the user's profile by email
-  getProfile(email: string): Observable<any> {
+  getProfile(email: string ): Observable<any> {
     return this.http.get(`${this.apiUrl}/profile`, {
       params: { email }
     }).pipe(catchError(this.handleError));
   }
 
   // Extract email from the JWT token
-  getEmailFromToken(): string | null {
+  getEmailFromToken(): string  {
     const decodedToken = this.decodeToken(this.getToken()!);
-    return decodedToken ? decodedToken.sub : null;
+    return decodedToken.sub;
   }
 
   // Update user information

@@ -2,56 +2,95 @@
 <div *ngIf="showAddFlightModal" class="flight-form-overlay" (click)="closeAddFlightModal()"></div>
 
 <div *ngIf="showAddFlightModal" class="flight-form">
-    <h2>Insert New Flight</h2>
-    <form (ngSubmit)="submitFlight()" #flightForm="ngForm">
-      <div>
-        <label>Flight Name:</label>
-        <input type="text" [(ngModel)]="flight.flightName" name="flightName" required />
-      </div>
-  
-      <div>
-        <label>Capacity:</label>
-        <input type="number" [(ngModel)]="flight.capacity" name="capacity" required />
-      </div>
-  
-      <div>
-        <label>Flight Type:</label>
-        <select [(ngModel)]="flight.flightType" name="flightType" required>
-          <option *ngFor="let type of flightTypes" [value]="type">{{ type }}</option>
-        </select>
-      </div>
-      
-      <div>
-        <label>Seat Type:</label>
-        <select [(ngModel)]="flight.seatType" name="seatType" required>
-          <option *ngFor="let st of seatTypes" [value]="st">{{ st }}</option>
-        </select>
-      </div>
-      
-  
-      <div>
-        <label>Max Passenger Weight (kg):</label>
-        <input type="number" [(ngModel)]="flight.maximumWeightForPassenger" name="maximumWeightForPassenger" required />
-      </div>
-  
-      <div>
-        <label>Airline Service:</label>
-        <input type="text" [(ngModel)]="flight.airlineService" name="airlineService" required />
-      </div>
-  
-      <button class="btn" type="submit">Submit</button>
+  <h2>Insert New Flight</h2>
+  <form (ngSubmit)="submitFlight()">
 
- 
-    </form>
-  
-  
-  </div>
-  <mat-card class="flight-card">
-    <mat-card-content>
-      <div class="button-container">
-        <button mat-raised-button color="primary" class="add-btn" (click)="openAddFlightModal()">Add Flight</button>
+    <div class="input-row">
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Flight name</mat-label>
+          <input matInput id="flightName" [(ngModel)]="flight.flightName" name="flightName" required />
+        </mat-form-field>
       </div>
-      <app-flights></app-flights>
-    </mat-card-content>
-  </mat-card>
-  
+
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Capacity
+          </mat-label>
+          <input matInput id="capacity" type="number" [(ngModel)]="flight.capacity" name="capacity" required />
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="input-row">
+
+
+      <div class="input-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Flight type</mat-label>
+          <mat-select [(value)]="flight.flightType">
+            <mat-option *ngFor="let type of flightTypes" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+      </div>
+      <div class="input-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Seat type</mat-label>
+          <mat-select [(value)]="flight.seatType">
+            <mat-option *ngFor="let type of seatTypes" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+      </div>
+    </div>
+
+
+    <div class="input-row">
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Max Passenger Weight (kg)
+          </mat-label>
+          <input matInput id="maximumWeightForPassenger" type="number" [(ngModel)]="flight.maximumWeightForPassenger"
+            name="maximumWeightForPassenger" required />
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Airline Service </mat-label>
+          <input matInput id="airlineService" [(ngModel)]="flight.airlineService" name="airlineService"
+            required />
+        </mat-form-field>
+      </div>
+
+    </div>
+
+
+
+    <button class="btn" type="submit">Submit</button>
+
+
+  </form>
+
+
+</div>
+<mat-card class="flight-card">
+  <mat-card-content>
+    <div class="button-container">
+      <button mat-raised-button color="primary" class="add-btn" (click)="openAddFlightModal()">Add Flight</button>
+    </div>
+    <app-flights  [flights]="flights"></app-flights>
+  </mat-card-content>
+</mat-card>

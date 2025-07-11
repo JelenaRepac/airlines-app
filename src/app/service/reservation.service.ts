@@ -15,7 +15,7 @@ export class ReservationService {
 
   //get reservation by user id
   getResrvationByUserId(userId: number): Observable<any> {
-    const token = localStorage.getItem('authToken'); // or wherever you store your token
+    const token = localStorage.getItem('authToken'); 
 
     console.log(token);
     const headers = new HttpHeaders({
@@ -25,14 +25,29 @@ export class ReservationService {
 
     return this.http.get(`${this.reservationUrl}/user`, {
       headers,
-      params: { userId: userId.toString() }  // Always convert numbers to strings here
+      params: { userId: userId.toString() } 
     }).pipe(
       catchError(this.handleError)
     );
   }
 
+  // create reservation
+  createReservation(reservationData: any): Observable<any> {
+    const token = localStorage.getItem('authToken');
 
-  // Handle HTTP errors
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(
+      `${this.reservationUrl}`,  
+      reservationData,
+      { headers }
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
     if (error.error instanceof ErrorEvent) {

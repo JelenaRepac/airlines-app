@@ -35,11 +35,10 @@ export interface Flight {
   ],
 })
 export class FlightsComponent {
-
+ @Input() flights: FlightInformationDto[] = [];
 
   displayedColumns: string[] = ['fromCity', 'toCity', 'departureTime', 'price']; // List of columns to display
 
-  flights: FlightInformationDto[] = [];
   panelOpen = false;
 
   constructor(private flightService: FlightService) {}

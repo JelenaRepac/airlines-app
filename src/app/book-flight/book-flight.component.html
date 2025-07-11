@@ -38,7 +38,7 @@
       <ng-template matStepLabel>Reservation info</ng-template>
       <div class="reservation-tab">
 
-        <app-reservation [scheduleList]="schedule" [selectedSeat]="selectedSeat"></app-reservation>
+        <app-reservation [scheduleList]="schedule" [selectedSeat]="selectedSeat"  (reservationCreated)="onReservationCreated($event)"></app-reservation>
       </div>
 
         <div class="button-row">
@@ -48,7 +48,7 @@
         <button mat-button (click)="stepper.reset()">Reset</button>
       </div>
         <div class="btn-tab-next">
-          <button mat-button matStepperNext>Reserve</button>
+<button mat-button (click)="reserve()">Reserve</button>
         </div></div>
     </mat-step>
   </mat-horizontal-stepper>
