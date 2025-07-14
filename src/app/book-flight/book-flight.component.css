@@ -14,7 +14,7 @@ mat-card-actions {
   padding: 24px;
   background-color: #ffffff;
   border-radius: 12px;
-  height: 400px;
+  height: 100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -56,3 +56,17 @@ button {
   justify-content: flex-end;
   transition: background-color 0.3s ease;
 }
+
+.seat-radio-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 30px;
+}
+
+.selected-seat-info {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 16px;
+}
+

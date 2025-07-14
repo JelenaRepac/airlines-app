@@ -111,3 +111,8 @@ input[type="file"] {
   font-size: 20px;
   vertical-align: middle;
 }
+.link-like {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}

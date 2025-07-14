@@ -27,7 +27,6 @@ import { ScheduleDto } from '../../models/schedule-dto.model';
   styleUrls: ['./manage-schedule.component.css'],
   standalone: true,
   imports: [
-    NavbarComponent,
     MatCardModule,
     ReactiveFormsModule,
     CommonModule,

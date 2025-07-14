@@ -1,6 +1,3 @@
-<app-navbar></app-navbar>
-
-
 <mat-tab-group>
     <mat-tab label="PROFILE">
 
@@ -91,6 +88,11 @@
                     Upload Document
                 </label>
 
+                <span class="link-like" (click)="downloadPassport(user.id, user.passportId!)">
+                    {{ user.passportId }}
+                </span>
+
+
                 <div *ngIf="selectedFileName" class="file-name">
                     Selected: {{ selectedFileName }}
                 </div>
@@ -106,7 +108,9 @@
     <mat-tab label="BOOKINGS">
         <reservation></reservation>
     </mat-tab>
-    <mat-tab label="VAUCHERS"> 
+    <mat-tab label="VAUCHERS">
         <voucher></voucher>
     </mat-tab>
+
+  
 </mat-tab-group>

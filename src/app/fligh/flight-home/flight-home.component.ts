@@ -11,7 +11,7 @@ import { SubscriptionCardComponent } from "../../subscribtion/subscription.compo
 @Component({
   selector: 'flight-home',
   templateUrl: './flight-home.component.html',
-  imports: [NavbarComponent, CommonModule, FlightSelectorComponent, FlightScheduleComponent, SubscriptionCardComponent]
+  imports: [ CommonModule, FlightSelectorComponent, FlightScheduleComponent, SubscriptionCardComponent]
 })
 export class FlightHomeComponent {
 

@@ -1,10 +1,8 @@
-<!-- Floating Button -->
 <div class="chat-button" (click)="toggleChat()">
-  <span *ngIf="!isOpen"class="material-icons nav-icon" routerLink="/airline/home">waving_hand</span>
+<span *ngIf="!isOpen" class="material-icons nav-icon">waving_hand</span>
   <span *ngIf="isOpen">✖</span>
 </div>
 
-<!-- Chat Window -->
 <div class="chat-window" *ngIf="isOpen">
   <div class="chat-header">
     <strong>Need Help?</strong>

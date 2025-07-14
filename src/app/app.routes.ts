@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { SignUpComponent } from "./sign-up/sign-up.component";
 import { LoginComponent } from "./login/login.component";
 import { HomeComponent } from './home/home.component';
-import { ConfirmUserComponent } from './confirm-user/confirm-user.component';
 import { AuthGuard } from './auth-guard/auth-guard.component';
 import { ProfileComponent } from './profile/user/profile.component';
 import { UsersComponent } from './adm/admins/admins.component';
@@ -19,7 +18,6 @@ export const routes: Routes = [
   // Public routes
   { path: 'airline/login', component: LoginComponent },
   { path: 'airline/sign-up', component: SignUpComponent },
-  { path: 'airline/confirm', component: ConfirmUserComponent },
 
   // Protected routess
   { path: 'airline/home', component: HomeComponent, canActivate: [AuthGuard] },

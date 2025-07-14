@@ -9,5 +9,6 @@ export interface User {
   passportNumber?: string;
   country?: string;
   phoneNumber?: string;
-  birthday?: string; // or Date, depending on backend format
+  birthday?: string;
+  passportId?: string;
 }

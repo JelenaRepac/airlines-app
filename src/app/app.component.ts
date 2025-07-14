@@ -17,13 +17,19 @@ import { filter } from 'rxjs/operators';
 export class AppComponent {
   title = 'airlines-app';
   showChat = true;
+  showNavbar = true;
 
   constructor(private router: Router) {
-    this.router.events.
-    pipe(filter(event => event instanceof NavigationEnd)).
-    subscribe((event: NavigationEnd) => {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
       const url = event.urlAfterRedirects;
-      this.showChat = !(url.includes('/login') || url.includes('/sign-up'));
+      const hideElements = url.startsWith('/airline/login') || url.startsWith('/airline/sign-up');
+      this.showChat = !hideElements;
+      this.showNavbar = !hideElements;
+
     });
   }
 }
+
+

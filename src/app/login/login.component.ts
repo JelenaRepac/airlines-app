@@ -16,37 +16,48 @@ export class LoginComponent {
   errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router) { }
+onSubmit() {
+  if (!this.email || !this.password) {
+    this.errorMessage = 'Both email and password are required!';
+  } else {
+    this.authService.isAdmin();
+    this.errorMessage = '';
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        console.log('Login successful:', response);
 
-  onSubmit() {
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Both email and password are required!';
-    } else {
-      this.authService.isAdmin();
-      this.errorMessage = '';
-      this.authService.login(this.email, this.password).subscribe({
-        next: (response) => {
+        // Call getProfile to fetch user data
+        this.authService.getProfile(this.email).subscribe({
+          next: (profile) => {
+            console.log('Profile:', profile);
 
-          console.log('Login successful:', response);
+            // Save user ID to localStorage
+            localStorage.setItem('userId', profile.id); // assuming profile contains `id`
 
-          Swal.fire({
-            icon: 'success',
-            title: 'Login Successful!',
-            text: 'Welcome back! You have successfully login in.',
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1000,
-            toast: true,
-          }).then(() => {
-            this.router.navigate(['airline/home']);
-          });
-
-
-        },
-        error: (error) => {
-          console.error('Login failed:', error);
-          this.errorMessage = 'Invalid credentials. Please try again.';
-        },
-      });
-    }
+            // Navigate after successful profile fetch
+            Swal.fire({
+              icon: 'success',
+              title: 'Login Successful!',
+              text: 'Welcome back! You have successfully logged in.',
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 1000,
+              toast: true,
+            }).then(() => {
+              this.router.navigate(['airline/home']);
+            });
+          },
+          error: (err) => {
+            console.error('Error fetching profile:', err);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Login failed:', error);
+        this.errorMessage = 'Invalid credentials. Please try again.';
+      },
+    });
   }
+}
+
 }

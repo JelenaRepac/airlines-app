@@ -28,7 +28,6 @@ export interface FlightInformationDto {
   templateUrl: './flight-manage.component.html',
   styleUrls: ['./flight-manage.component.css'],
   imports: [
-    NavbarComponent,
     CommonModule,
     FormsModule,
     FlightsComponent,
