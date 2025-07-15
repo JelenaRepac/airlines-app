@@ -33,7 +33,7 @@ export class AuthService {
   // Login and store token in localStorage
   login(email: string, password: string): Observable<any> {
     console.log(this.apiUrl);
-    return this.http.post<any>(`/login`, { email, password }).pipe(
+    return this.http.post<any>(`http://localhost:8000/login`, { email, password }).pipe(
       tap(response => {
         if (response?.token) {
           localStorage.setItem('authToken', response.token);
