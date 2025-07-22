@@ -8,4 +8,5 @@ export interface Reservation {
   confirmed: boolean;
   reservedAt: string;
   flightSchedule?: FlightSchedule;
+  voucherId: string;
 }

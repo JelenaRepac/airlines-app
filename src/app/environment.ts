@@ -13,6 +13,8 @@ export const environment = {
   apiUrlVoucher: 'http://localhost:8001/api/voucher',
   apiUrlPricing: 'http://localhost:8082/api/price',
 
+  apiUrlPayment: 'http://localhost:8083/api/paymant',
+
 
   apiUrlFlightSchedule: 'http://localhost:9090/api/flightSchedule', // Replace with the correct URL in prod
   accessKey: 'a0c2b52e19dd4518239d16ae667b4c22'
