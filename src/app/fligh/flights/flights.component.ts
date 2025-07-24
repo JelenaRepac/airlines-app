@@ -11,8 +11,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {  FlightService } from '../../service/flight.service';
 import { MatIconModule } from '@angular/material/icon';
-import { FlightInformationDto } from '../manage-flight/flight-manage.component';
 import Swal from 'sweetalert2';
+import { FlightInformationDto } from '../../models/flight.model';
 
 export interface Flight {
   flightNumber: string;

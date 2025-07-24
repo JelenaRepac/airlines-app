@@ -1,27 +1,37 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NavbarComponent } from '../../navbar/navbar.component';
-import { FlightService } from '../../service/flight.service';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  CommonModule
+} from '@angular/common';
+import {
+  FormsModule
+} from '@angular/forms';
+import {
+  FlightService
+} from '../../service/flight.service';
+import {
+  FlightInformationDto
+} from '../../models/flight.model';
+import {
+  MatCardModule
+} from '@angular/material/card';
+import {
+  MatNativeDateModule,
+  MatOption
+} from '@angular/material/core';
+import {
+  MatSelect
+} from '@angular/material/select';
+import {
+  MatInputModule
+} from '@angular/material/input';
+import {
+  FlightsComponent
+} from '../flights/flights.component';
 import Swal from 'sweetalert2';
-import { FlightsComponent } from "../flights/flights.component";
-import { MatCardModule } from '@angular/material/card';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatNativeDateModule, MatOption } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-export interface FlightInformationDto {
-  id?: number;
-  flightName: string;
-  capacity: number;
-  flightType: string;
-  seatType: string;
-  maximumWeightForPassenger: number;
-  airlineService: string;
-}
+
 
 @Component({
   selector: 'manage-flight',
@@ -127,3 +137,4 @@ export class FlightManageComponent {
     this.showAddFlightModal = false;
   }
 }
+

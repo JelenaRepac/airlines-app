@@ -2,28 +2,68 @@
   <mat-card class="ticket">
     <mat-card-content>
       <div class="ticket-body">
+
+        <!-- Departure Column -->
         <div class="column time-column">
           <div class="date">{{ schedule.departureDate }}</div>
           <div class="time">{{ schedule.departureTime }}</div>
           <div class="airport">{{ schedule.startAirport }}</div>
         </div>
 
+        <!-- Center Column -->
         <div class="column center-column">
           <mat-icon class="flight-icon">flight</mat-icon>
           <div class="duration">
             {{ getFlightDuration(schedule.departureTime, schedule.arrivalTime) }}
           </div>
-          <div class="price" *ngIf="pricingMap.get(schedule.id)">
-            {{ pricingMap.get(schedule.id)?.price }} {{ pricingMap.get(schedule.id)?.currency }}
+
+
+          <div class="seat-info" *ngIf="selectedSeat">
+            <mat-icon class="seat-icon">event_seat</mat-icon>
+            <span class="seat-number">{{ selectedSeat.seatNumber }}</span>
           </div>
+
+          <div class="price" *ngIf="pricingMap.get(schedule.id) as pricing">
+            <span *ngIf="finalPrice && finalPrice > 0 && finalPrice < pricing.price; else originalPrice"
+              class="discounted-price">
+              {{ finalPrice | number: '1.2-2' }} {{ pricing.currency }}
+            </span>
+
+            <ng-template #originalPrice>
+              <span>
+                {{ pricing.price }} {{ pricing.currency }}
+              </span>
+            </ng-template>
+          </div>
+
+
+
         </div>
 
+        <!-- Arrival Column -->
         <div class="column time-column">
           <div class="date">{{ schedule.arrivalDate }}</div>
           <div class="time">{{ schedule.arrivalTime }}</div>
           <div class="airport">{{ schedule.endAirport }}</div>
         </div>
+
       </div>
     </mat-card-content>
   </mat-card>
+
+
+</div>
+
+<div class="voucher-wrapper" *ngIf="selectedSeat?.seatNumber">
+  <mat-form-field appearance="outline" class="voucher-input">
+    <mat-label>Voucher Code</mat-label>
+    <input matInput [(ngModel)]="voucherCode"
+           (ngModelChange)="onVoucherCodeChange($event)"
+           placeholder="Enter voucher code"
+           name="voucherCode" />
+  </mat-form-field>
+
+    <div class="discount-percentage" *ngIf="discountPercentage > 0">
+    {{ discountPercentage }}% OFF
+  </div>
 </div>

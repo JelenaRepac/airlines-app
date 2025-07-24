@@ -1,0 +1,22 @@
+.payment-success-container {
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 40px;
+  text-align: center;
+  background-color: #f0fff4;
+  border: 1px solid #c6f6d5;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.payment-success-container h2 {
+  color: #2f855a;
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.payment-success-container p {
+  color: #2d3748;
+  font-size: 16px;
+  margin-bottom: 8px;
+}

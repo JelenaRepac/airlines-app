@@ -9,13 +9,21 @@ import { MatStep } from '@angular/material/stepper';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { TicketViewComponent } from '../ticket/ticket-view.component';
-import { ReservationComponent } from "../reservation-info/reservation.component";
+// import { ReservationComponent } from "../reservation-info/reservation.component";
 import { FlightScheduleSeatInformationOutputDto } from '../models/flight-schedule-seat.model';
 import { ReservationService } from '../service/reservation.service';
 import Swal from 'sweetalert2';
 import { Reservation } from '../models/reservation.model';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { SeatsService } from '../service/seats.service';
+import { CheckoutService } from '../service/checkout.service';
+import { loadStripe } from '@stripe/stripe-js';
+import { firstValueFrom } from 'rxjs';
+import { PricingService } from '../service/pricing.service';
+import { response } from 'express';
+import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatInputModule } from '@angular/material/input';
+import { VoucherService } from '../service/voucher.service';
 
 @Component({
     selector: 'app-book-flight',
@@ -27,14 +35,14 @@ import { SeatsService } from '../service/seats.service';
         ReactiveFormsModule,
         CommonModule,
         TicketViewComponent,
-        ReservationComponent,
+        // ReservationComponent,
         MatRadioButton,
         MatRadioGroup,
-        FormsModule]
+        FormsModule, MatInputModule]
 })
 export class BookFlightComponent implements OnInit {
     flightScheduleId!: number;
-    flightInfo: any; 
+    flightInfo: any;
     schedule: ScheduleInput[] = [];
     constructor(
         private route: ActivatedRoute,
@@ -42,7 +50,10 @@ export class BookFlightComponent implements OnInit {
         private flightService: FlightService,
         private scheduleService: ScheduleService,
         private reservationService: ReservationService,
-        private seatService: SeatsService) { }
+        private seatService: SeatsService,
+        private checkoutService: CheckoutService,
+        private pricingService: PricingService,
+        private voucherService: VoucherService) { }
 
     flightInfoForm!: FormGroup;
     reservationData!: Reservation;
@@ -50,17 +61,36 @@ export class BookFlightComponent implements OnInit {
     flightName: string = '';
     error: string = '';
 
+    pricingMap = new Map<number | undefined, { price: number; currency: string }>();
 
     selectedSeat: any = null;
     seats: any[] = [];
-    
+
     allowSeatSelection = false;
 
     seatOption: 'choose' | 'random' = 'choose';
 
 
+    reservationId!: number;
+
+    voucherCode: string = '';
+    discountPercentage: number = 0;
+    originalPrice: number = 0;
+    finalPrice: number = this.originalPrice;
+
+
     ngOnChanges() {
         this.handleSeatOptionChange();
+    }
+
+    onVoucherChanged(voucher: string) {
+        this.voucherCode = voucher;
+        console.log('Voucher from child:', voucher);
+    }
+
+    onFinalPriceChanged(price: number) {
+        this.finalPrice = price;
+        console.log('Final price from child:', price);
     }
 
     handleSeatOptionChange() {
@@ -153,20 +183,87 @@ export class BookFlightComponent implements OnInit {
             console.error('No reservation data available');
             return;
         }
+        this.reservationData.voucherId = this.voucherCode;
         this.reservationData.seatNumber = this.selectedSeat?.seatNumber ?? '';
         console.log(this.reservationData);
 
         this.reservationService.createReservation(this.reservationData).subscribe({
             next: (response) => {
                 console.log('Reservation successful:', response);
+                console.log(response.id + 'iddd');
+                   const email = localStorage.getItem('email');
+                this.reservationId = response.id;
+
                 Swal.fire('Success', 'Reservation created!', 'success');
+                // Call getPrice only if reservationId is valid
+                if (this.reservationId != null && !isNaN(this.reservationId)) {
+                    this.paymentProcess(this.finalPrice, email, this.reservationId, 'USD');
+
+                    // this.getPrice(this.reservationData.flightScheduleId, this.reservationId);
+                } else {
+                    console.error('Invalid reservation ID. Price retrieval aborted.');
+                }
             },
             error: (error) => {
                 console.error('Reservation failed:', error);
                 Swal.fire('Error', 'Failed to create reservation', 'error');
             }
         });
+
+
     }
+    // getPrice(scheduleId: number, reservationId: number) {
+    //     console.log(reservationId);
+    //     this.pricingService.getPriceByScheduleId(scheduleId).subscribe({
+    //         next: (response) => {
+    //             const firstPrice = response[0];
+    //             if (firstPrice) {
+    //                 this.pricingMap.set(scheduleId, {
+    //                     price: firstPrice.price,
+    //                     currency: firstPrice.currency
+    //                 });
+    //                 this.originalPrice = firstPrice.price;
+    //             }
+    //             const email = localStorage.getItem('email');
+    //             if (email) {
+    //                 this.paymentProcess(firstPrice.price, email, reservationId, 'USD');
+    //             } else {
+    //                 console.error('Email not found in localStorage');
+    //             }
+    //         }
+
+    //     });
+    // }
+
+    async paymentProcess(amount: number, userEmail: string | null, reservationId: number, currency: string) {
+        try {
+            console.log("jej")
+            console.log(reservationId)
+            // Fetch session ID from backend
+            const session = await firstValueFrom(this.checkoutService.createCheckoutSession(amount, userEmail, reservationId, currency));
+
+            // Initialize Stripe
+            const stripe = await loadStripe('pk_test_51Rlm4d4gTxY9zBy15DRAx7EK6UFNH7O1a1TKRykzW7rqyBngRbiM4IgGxsvnXPtrPYF1kmnoBAIU6PjAFgOlEJU100jUPEAasA');
+            if (!stripe) {
+                console.error('Stripe failed to initialize');
+                return;
+            }
+
+            // Redirect to checkout
+            const result = await stripe.redirectToCheckout({ sessionId: session.id });
+
+            if (result.error) {
+                // Show error to user if redirect fails
+                console.error('Stripe redirect error:', result.error.message);
+            }
+            console.log("jej")
+
+        } catch (err) {
+            console.error('Error during payment init:', err);
+        }
+    }
+
+
 }
 
 

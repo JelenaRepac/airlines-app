@@ -10,21 +10,39 @@ import { Voucher } from '../models/voucher.model';
 })
 export class VoucherService {
   private apiUrl = environment.apiUrlVoucher;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  
-getVouchersByUserId(userId: number | undefined): Observable<Voucher[]> {
-  const token = localStorage.getItem('authToken');
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  const url = `${this.apiUrl}/user/${userId}`;
 
-  console.log('Calling Voucher API for user ID:', userId);
+  getVouchersByUserId(userId: number | undefined): Observable<Voucher[]> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const url = `${this.apiUrl}/user/${userId}`;
 
-  return this.http.get<Voucher[]>(url, { headers }).pipe(
-    catchError(this.handleError)
-  );
-}
+    console.log('Calling Voucher API for user ID:', userId);
 
+    return this.http.get<Voucher[]>(url, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getVoucherByCode(code: string): Observable<Voucher> {
+
+    const url = `${this.apiUrl}/${code}`;
+
+
+    return this.http.get<Voucher>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  validateVoucher(code: string): Observable<boolean> {
+    const userIdStr = localStorage.getItem('userId');
+    const userId = userIdStr ? Number(userIdStr) : 0; const params = new HttpParams()
+      .set('code', code)
+      .set('userId', userId.toString());
+
+    return this.http.post<boolean>(`${this.apiUrl}/validate`, null, { params });
+  }
 
 
 

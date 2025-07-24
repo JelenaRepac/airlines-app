@@ -51,6 +51,10 @@
 }
 .column{
   width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 }
 
 .time-column .date {
@@ -115,3 +119,37 @@ mat-card-actions {
   display: inline-block;
 }
 
+
+
+.seat-info{
+display: flex;
+flex-direction: column;
+gap: 5px;
+}
+
+.voucher-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: left; 
+  gap: 20px;
+}
+.discounted-price {
+
+  color: #e11d1d; 
+
+}
+
+.discount-percentage {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #ffd0d07a; /* vibrant red */
+  color: #e11d1d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
