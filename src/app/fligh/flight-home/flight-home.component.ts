@@ -11,7 +11,7 @@ import { SubscriptionCardComponent } from "../../subscribtion/subscription.compo
 @Component({
   selector: 'flight-home',
   templateUrl: './flight-home.component.html',
-  imports: [ CommonModule, FlightSelectorComponent, FlightScheduleComponent, SubscriptionCardComponent]
+  imports: [CommonModule, FlightSelectorComponent, FlightScheduleComponent, SubscriptionCardComponent]
 })
 export class FlightHomeComponent {
 
@@ -20,9 +20,14 @@ export class FlightHomeComponent {
   constructor(private router: Router, private auth: AuthService) { }
   isAdminUser = false;
   selectedSchedules: ScheduleDto[] = [];
+  numberOfPassengers!: number;
 
   onSchedulesFound(schedules: ScheduleDto[]): void {
     this.selectedSchedules = schedules;
+  }
+
+  onPassengersChanged(numberOfPassengers: number): void {
+    this.numberOfPassengers = numberOfPassengers;
   }
 
 

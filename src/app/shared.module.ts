@@ -1,6 +1,6 @@
 // shared/shared-modules.ts
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbar } from '@angular/material/toolbar';
+import { MatStep, MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 export const SharedModules = [
     CommonModule,
     FormsModule,
@@ -20,12 +23,16 @@ export const SharedModules = [
     MatIconModule,
     MatInputModule,
     RouterModule,
-    MatDialogModule, 
+    MatDialogModule,
     MatListModule,
     NavbarComponent,
-    MatTableModule, 
-    MatPaginatorModule, 
-    MatSortModule, 
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
     MatTabsModule,
-     MatToolbar
+    MatStep,
+    CommonModule,
+    ReactiveFormsModule, 
+    MatStepperModule,
+    MatSnackBarModule
 ];

@@ -36,9 +36,11 @@ getSchedulesDinamically(
   from?: string,
   to?: string,
   departureDate?: string,
-  arrivalDate?: string
+  arrivalDate?: string,
+  numberOfPassengers?: number
 ): Observable<ScheduleDto[]> {
   let params = new HttpParams();
+  console.log(numberOfPassengers);
 
   console.log(params);
   if (from) {
@@ -57,11 +59,11 @@ getSchedulesDinamically(
     params = params.set('arrivalDate', arrivalDate);
   }
 
-  // const token = localStorage.getItem('authToken'); 
+  if(numberOfPassengers){
+    params = params.set('numberOfPassangers', numberOfPassengers.toString());
 
-  // const headers = new HttpHeaders({
-  //   Authorization: `${token}`
-  // });
+  }
+
 
   return this.http.get<ScheduleDto[]>(`${this.flightScheduleUrl}`, { params });
 }

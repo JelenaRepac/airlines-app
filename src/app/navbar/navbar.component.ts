@@ -3,12 +3,13 @@ import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { SharedModules } from '../shared.module';
+import { MatToolbar } from "@angular/material/toolbar";
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
-  imports: [SharedModules]
+  imports: [SharedModules, MatToolbar]
 })
 export class NavbarComponent {
 

@@ -1,5 +1,6 @@
 
-<app-flight-selector (schedulesFound)="onSchedulesFound($event)"></app-flight-selector>
+<app-flight-selector (schedulesFound)="onSchedulesFound($event)"
+     (numberOfPassengersChanged)="onPassengersChanged($event)"></app-flight-selector>
 
-<flight-schedule [schedules]="selectedSchedules" [panelOpen]="true"></flight-schedule>
+<flight-schedule [schedules]="selectedSchedules" [panelOpen]="true" [numberOfPassengers]="numberOfPassengers"></flight-schedule>>
 <app-subscription-card></app-subscription-card>

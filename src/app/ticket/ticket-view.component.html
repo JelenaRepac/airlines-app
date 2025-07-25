@@ -1,4 +1,5 @@
-<div class="ticket-container" *ngFor="let schedule of scheduleList">
+<div class="ticket-container" *ngFor="let schedule of schedulesToShow">
+
   <mat-card class="ticket">
     <mat-card-content>
       <div class="ticket-body">
@@ -17,11 +18,19 @@
             {{ getFlightDuration(schedule.departureTime, schedule.arrivalTime) }}
           </div>
 
-
-          <div class="seat-info" *ngIf="selectedSeat">
-            <mat-icon class="seat-icon">event_seat</mat-icon>
-            <span class="seat-number">{{ selectedSeat.seatNumber }}</span>
+          <div class="ticket-count" *ngIf="numberOfPassengers > 1 && selectedSeats.length === 0">
+            {{ numberOfPassengers }} tickets
           </div>
+
+          <div class="seat-info" *ngIf="selectedSeats.length > 0" style="display: flex; align-items: center;">
+            <mat-icon class="seat-icon" style="margin-right: 8px;">event_seat</mat-icon>
+            <div>
+              <span *ngFor="let seat of selectedSeats; let last = last">
+                {{ seat.seatNumber }}<span *ngIf="!last">, </span>
+              </span>
+            </div>
+          </div>
+
 
           <div class="price" *ngIf="pricingMap.get(schedule.id) as pricing">
             <span *ngIf="finalPrice && finalPrice > 0 && finalPrice < pricing.price; else originalPrice"
@@ -53,17 +62,14 @@
 
 
 </div>
-
-<div class="voucher-wrapper" *ngIf="selectedSeat?.seatNumber">
+<div class="voucher-wrapper" *ngIf="selectedSeats.length > 0">
   <mat-form-field appearance="outline" class="voucher-input">
     <mat-label>Voucher Code</mat-label>
-    <input matInput [(ngModel)]="voucherCode"
-           (ngModelChange)="onVoucherCodeChange($event)"
-           placeholder="Enter voucher code"
-           name="voucherCode" />
+    <input matInput [(ngModel)]="voucherCode" (ngModelChange)="onVoucherCodeChange($event)"
+      placeholder="Enter voucher code" name="voucherCode" />
   </mat-form-field>
 
-    <div class="discount-percentage" *ngIf="discountPercentage > 0">
+  <div class="discount-percentage" *ngIf="discountPercentage > 0">
     {{ discountPercentage }}% OFF
   </div>
 </div>

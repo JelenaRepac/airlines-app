@@ -23,9 +23,12 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
   @Input() schedules: ScheduleDto[] = [];
   @Input() panelOpen: boolean = true;
   @Input() newSchedule: ScheduleInput | null = null;
+  @Input() numberOfPassengers!: number;
 
-  displayedColumns: string[] = ['flight', 'status', 'arrivalDeparture', 'sourceDestination','actions'];
+
+  displayedColumns = ['flight', 'status', 'arrivalDeparture', 'sourceDestination', 'price', 'actions'];
   dataSource = new MatTableDataSource<ScheduleDto>([]);
+  pricingMap = new Map<number | undefined, { price: number; currency: string }>();
 
 
 
@@ -41,7 +44,7 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
   constructor(private scheduleService: ScheduleService, private router: Router,
     private flightSelectionService: ScheduleService,
     private authService: AuthService,
-    private pricingService:PricingService
+    private pricingService: PricingService
   ) { }
 
   ngOnInit(): void {
@@ -53,7 +56,7 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
 
   }
   ngOnChanges(changes: SimpleChanges): void {
-    
+
     if (changes['schedules'] && this.schedules) {
       this.dataSource.data = this.schedules;
       this.dataSource.sort = this.sort;
@@ -62,6 +65,9 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
     if (changes['newSchedule'] && this.newSchedule) {
       this.loadSchedules();
     }
+
+    this.loadPricingDataForSchedules();
+
 
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
@@ -78,19 +84,42 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
       }
     };
   }
+  loadPricingDataForSchedules(): void {
+    if (!this.schedules || this.schedules.length === 0) return;
 
+    this.schedules.forEach(schedule => {
+      this.pricingService.getPriceByScheduleId(schedule.id).subscribe({
+        next: (response) => {
+          const firstPrice = response[0];
+          if (firstPrice) {
+            const totalPrice = this.numberOfPassengers > 1
+              ? firstPrice.price * this.numberOfPassengers
+              : firstPrice.price;
 
-onSortChange(): void {
-  setTimeout(() => {
-    if (this.dataSource.filteredData.length === 0) {
-      Swal.fire({
-        icon: 'info',
-        title: 'No sorted results',
-        text: 'No schedules match the selected sort criteria.',
+            this.pricingMap.set(schedule.id, {
+              price: totalPrice,
+              currency: firstPrice.currency
+            });
+            // Refresh the table so Angular detects the change
+            this.dataSource.data = [...this.dataSource.data];
+          }
+        },
+        error: err => console.error('Error loading pricing for schedule', schedule.id, err)
       });
-    }
-  });
-}
+    });
+  }
+
+  onSortChange(): void {
+    setTimeout(() => {
+      if (this.dataSource.filteredData.length === 0) {
+        Swal.fire({
+          icon: 'info',
+          title: 'No sorted results',
+          text: 'No schedules match the selected sort criteria.',
+        });
+      }
+    });
+  }
 
 
   loadSchedules(): void {
@@ -107,6 +136,7 @@ onSortChange(): void {
         }
 
         this.dataSource = new MatTableDataSource(this.schedules);
+  this.loadPricingDataForSchedules();
 
         this.dataSource.sortingDataAccessor = (item, property) => {
           switch (property) {
@@ -137,9 +167,9 @@ onSortChange(): void {
           text: 'Please try again later.',
         });
       }
-      
+
     });
-    
+
   }
 
 
@@ -150,8 +180,10 @@ onSortChange(): void {
     this.panelOpen = !this.panelOpen;
   }
   onButtonClick(flightScheduleId: number | undefined): void {
+    const passengers = this.numberOfPassengers ?? 1;
+
     this.flightSelectionService.setSelectedFlightId(flightScheduleId);
-    this.router.navigate(['airline/app-book-flight', flightScheduleId]); // Pass ID as route param
+    this.router.navigate(['airline/app-book-flight', flightScheduleId, passengers]);
   }
 
 

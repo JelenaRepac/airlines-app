@@ -4,9 +4,9 @@
 
         <div class="profile-container">
             <h2>User Profile</h2>
-            <button mat-icon-button class="edit-button" (click)="readonlyMode = !readonlyMode" aria-label="Edit">
-                <mat-icon>{{ readonlyMode ? 'edit' : 'close' }}</mat-icon>
-            </button>
+           <button mat-icon-button class="edit-button" (click)="toggleReadonly()" aria-label="Edit">
+  <mat-icon>{{ readonlyMode ? 'edit' : 'close' }}</mat-icon>
+</button>
             <form (ngSubmit)="onSubmit()" class="profile-form">
 
                 <div class="input-row">
@@ -57,10 +57,18 @@
                     </div>
                     <div class="input-group">
                         <mat-form-field appearance="fill" style="width: 100%;">
-                            <mat-label>Country</mat-label>
-                            <input matInput id="country" [(ngModel)]="user.country" name="country" required
-                                [disabled]="readonlyMode" />
+                            <mat-label>Select Country</mat-label>
+                            <input type="text" matInput [formControl]="countryControl" [matAutocomplete]="auto"
+                             />
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCountry">
+                                <mat-option *ngFor="let country of filteredCountries | async" [value]="country">
+                                    {{ country.name }}
+                                </mat-option>
+                            </mat-autocomplete>
                         </mat-form-field>
+
+
+
                     </div>
                 </div>
 
@@ -112,5 +120,5 @@
         <voucher></voucher>
     </mat-tab>
 
-  
+
 </mat-tab-group>

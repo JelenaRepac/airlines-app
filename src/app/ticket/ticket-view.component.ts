@@ -20,8 +20,11 @@ import { AuthService } from '../service/auth.service';
   imports: [MatCard, MatCardContent, MatIcon, CommonModule, FormsModule, MatInputModule]
 })
 export class TicketViewComponent {
+  @Input() schedule!: ScheduleInput;
   @Input() scheduleList: ScheduleInput[] = [];
-  @Input() selectedSeat!: FlightScheduleSeatInformationOutputDto | null;
+
+  @Input() selectedSeats: FlightScheduleSeatInformationOutputDto[] = [];
+  @Input() numberOfPassengers: number = 1;
 
   @Output() reservationCreated = new EventEmitter<any>();
 
@@ -37,34 +40,93 @@ export class TicketViewComponent {
   discountPercentage: number = 0;
   originalPrice: number = 0;
   finalPrice: number = this.originalPrice;
+  schedulesToShow: ScheduleInput[] = [];
 
-
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['scheduleList'] && this.scheduleList.length > 0) {
-      this.loadPricingData();
-    }
-
+  ngOnInit(): void {
+    // this.getSchedules();
+    this.getUserIdAndEmitReservation();
   }
 
-  loadPricingData() {
-    this.scheduleList.forEach(schedule => {
-      this.pricingService.getPriceByScheduleId(schedule.id).subscribe({
+  ngOnChanges(changes: SimpleChanges): void {
+    // Update schedulesToShow whenever schedule or scheduleList changes
+    if (changes['scheduleList'] || changes['schedule']) {
+      if (this.scheduleList && this.scheduleList.length > 0) {
+        this.schedulesToShow = this.scheduleList;
+      } else if (this.schedule) {
+        this.schedulesToShow = [this.schedule];
+      } else {
+        this.schedulesToShow = [];
+      }
+    }
+
+    if (changes['scheduleList'] && this.scheduleList && this.scheduleList.length > 0) {
+      this.loadPricingData();
+    }
+    if (changes['schedule'] && this.schedule) {
+      this.loadPrice();
+    }
+  }
+
+
+  //  getSchedules()  {
+  //   if (this.scheduleList && this.scheduleList.length > 0) {
+  //     console.log('LISTA '+ this.scheduleList);
+  //     this.schedulesToShow= this.scheduleList;
+  //   } else if (this.schedule) {
+  //     console.log('TU JEEE'+this.schedule);
+  //     this.schedulesToShow= [this.schedule];
+  //   } else {
+  //     this.schedulesToShow= [];
+  //   }
+  // }
+
+loadPricingData() {
+  if (this.scheduleList && this.scheduleList.length > 0) {
+    this.scheduleList.forEach(scheduleItem => {
+      this.pricingService.getPriceByScheduleId(scheduleItem.id).subscribe({
         next: (response) => {
           const firstPrice = response[0];
           if (firstPrice) {
-            this.pricingMap.set(schedule.id, {
-              price: firstPrice.price,
+            const totalPrice = this.numberOfPassengers > 1 
+              ? firstPrice.price * this.numberOfPassengers 
+              : firstPrice.price;
+
+            this.pricingMap.set(scheduleItem.id, {
+              price: totalPrice,
               currency: firstPrice.currency
             });
-            this.originalPrice = firstPrice.price;
-
-            console.log(firstPrice);
+            // You can update originalPrice if needed for single schedule case
           }
-        }
+        },
+        error: err => console.error('Error loading pricing for schedule', scheduleItem.id, err)
       });
     });
   }
+}
+
+loadPrice() {
+  if (!this.schedule) return;
+  this.pricingService.getPriceByScheduleId(this.schedule.id).subscribe({
+    next: (response) => {
+      const firstPrice = response[0];
+      if (firstPrice) {
+        const totalPrice = this.numberOfPassengers > 1 
+          ? firstPrice.price * this.numberOfPassengers 
+          : firstPrice.price;
+
+        this.pricingMap.set(this.schedule.id, {
+          price: totalPrice,
+          currency: firstPrice.currency
+        });
+        this.originalPrice = totalPrice;
+      }
+    },
+    error: err => console.error('Error loading price for schedule', this.schedule.id, err)
+  });
+}
+
+
+
   getFlightDuration(departureTime: string, arrivalTime: string): string {
     const [depHour, depMin] = departureTime.split(':').map(Number);
     const [arrHour, arrMin] = arrivalTime.split(':').map(Number);
@@ -124,10 +186,7 @@ export class TicketViewComponent {
 
 
 
-  ngOnInit(): void {
-    console.log(this.selectedSeat?.seatNumber);
-    this.getUserIdAndEmitReservation();
-  }
+
 
   getUserIdAndEmitReservation(): void {
     const email = this.authService.getEmailFromToken();
@@ -135,14 +194,17 @@ export class TicketViewComponent {
       next: (user) => {
         const userId = user.id;
 
-        const reservation = {
-          flightScheduleId: this.scheduleList[0]?.id,
-          seatNumber: this.selectedSeat,
-          userId: userId,
-          reservedAt: new Date().toISOString().split('Z')[0]
-        };
+        // Prolazi kroz sva izabrana sedišta i pravi rezervaciju za svako
+        this.selectedSeats.forEach(seat => {
+          const reservation = {
+            flightScheduleId: this.schedule.id,
+            seatNumber: seat.seatNumber,  // koristi seatNumber iz trenutnog sedišta
+            userId: userId,
+            reservedAt: new Date().toISOString().split('Z')[0]
+          };
 
-        this.reservationCreated.emit(reservation);
+          this.reservationCreated.emit(reservation);
+        });
       },
       error: (err) => {
         console.error('Failed to fetch user profile:', err);

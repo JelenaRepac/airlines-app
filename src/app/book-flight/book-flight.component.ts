@@ -5,7 +5,7 @@ import { AirplaneSeatsComponent } from "../airplane-seats/airplane-seats.compone
 import { ScheduleService } from '../service/schedule.service';
 import { ScheduleInput } from '../models/schedule-input.model';
 import { CommonModule } from "@angular/common";
-import { MatStep } from '@angular/material/stepper';
+import { MatStep, MatStepper } from '@angular/material/stepper';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { TicketViewComponent } from '../ticket/ticket-view.component';
@@ -20,40 +20,30 @@ import { CheckoutService } from '../service/checkout.service';
 import { loadStripe } from '@stripe/stripe-js';
 import { firstValueFrom } from 'rxjs';
 import { PricingService } from '../service/pricing.service';
-import { response } from 'express';
-import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { MatInputModule } from '@angular/material/input';
 import { VoucherService } from '../service/voucher.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SharedModules } from '../shared.module';
 
 @Component({
     selector: 'app-book-flight',
     templateUrl: './book-flight.component.html',
     styleUrl: './book-flight.component.css',
-    imports: [MatStep,
-        MatStepperModule,
-        AirplaneSeatsComponent,
-        ReactiveFormsModule,
-        CommonModule,
-        TicketViewComponent,
-        // ReservationComponent,
-        MatRadioButton,
-        MatRadioGroup,
-        FormsModule, MatInputModule]
+    imports: [TicketViewComponent, AirplaneSeatsComponent,
+    SharedModules, MatRadioButton, FormsModule, MatRadioGroup],
+    standalone: true
 })
 export class BookFlightComponent implements OnInit {
     flightScheduleId!: number;
     flightInfo: any;
-    schedule: ScheduleInput[] = [];
+    schedule!: ScheduleInput;
     constructor(
         private route: ActivatedRoute,
         private fb: FormBuilder,
-        private flightService: FlightService,
         private scheduleService: ScheduleService,
         private reservationService: ReservationService,
         private seatService: SeatsService,
         private checkoutService: CheckoutService,
-        private pricingService: PricingService,
-        private voucherService: VoucherService) { }
+        private snackBar: MatSnackBar) { }
 
     flightInfoForm!: FormGroup;
     reservationData!: Reservation;
@@ -78,9 +68,16 @@ export class BookFlightComponent implements OnInit {
     originalPrice: number = 0;
     finalPrice: number = this.originalPrice;
 
+    numberOfPassengers!: number;
+    selectedSeats: FlightScheduleSeatInformationOutputDto[] = [];
+
+    seatSelectionLocked = false;
+
 
     ngOnChanges() {
+        console.log(this.schedule+'JJEJEJEJE');
         this.handleSeatOptionChange();
+        this.refreshSeatSelection();
     }
 
     onVoucherChanged(voucher: string) {
@@ -94,6 +91,7 @@ export class BookFlightComponent implements OnInit {
     }
 
     handleSeatOptionChange() {
+
         if (this.seatOption === 'random') {
             this.assignRandomSeat();
         } else {
@@ -103,16 +101,35 @@ export class BookFlightComponent implements OnInit {
     }
 
 
-    assignRandomSeat() {
-        const availableSeats = this.seats.filter(seat => !seat.bookingStatus);
-        const randomSeat = availableSeats[Math.floor(Math.random() * availableSeats.length)];
-        if (randomSeat) {
-            this.selectedSeat = randomSeat;
-            this.seats.forEach(seat => seat.selected = false);
-            randomSeat.selected = true;
-            console.log(randomSeat);
-        }
+   assignRandomSeat() {
+    const availableSeats = this.seats.filter(seat => !seat.bookingStatus);
+
+    if (availableSeats.length < this.numberOfPassengers) {
+        this.snackBar.open('Not enough available seats for your selection.', 'Close', {
+            duration: 3000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'center'
+        });
+        return;
     }
+
+    this.seats.forEach(seat => seat.selected = false);
+    this.selectedSeats = [];
+
+    const shuffled = availableSeats.sort(() => 0.5 - Math.random());
+    const randomSelection = shuffled.slice(0, this.numberOfPassengers);
+
+    randomSelection.forEach(seat => {
+        seat.selected = true;
+        this.selectedSeats.push(seat);
+    });
+
+    this.refreshSeatSelection();  
+    this.seatSelectionLocked = true; 
+
+    console.log('Randomly assigned seats:', this.selectedSeats);
+}
+
     enableSeatSelection() {
         this.allowSeatSelection = true;
     }
@@ -129,6 +146,7 @@ export class BookFlightComponent implements OnInit {
     ngOnInit(): void {
         this.flightInfoForm = this.fb.group({});
         this.flightScheduleId = +this.route.snapshot.paramMap.get('id')!;
+        this.numberOfPassengers = +this.route.snapshot.paramMap.get('passengers')!;
 
         this.loadScheduleListById(this.flightScheduleId);
         this.loadSeats(this.flightScheduleId);
@@ -155,9 +173,9 @@ export class BookFlightComponent implements OnInit {
 
     loadScheduleListById(scheduleId: number): void {
         this.scheduleService.getScheduleById(scheduleId).subscribe({
-            next: (schedules: any) => {
-                console.log('Fetched schedule:', schedules);
-                this.schedule = Array.isArray(schedules) ? schedules : [schedules];
+            next: (schedule: any) => {
+                console.log('Fetched schedule:', schedule);
+                this.schedule = schedule;
 
             },
             error: (err) => {
@@ -168,16 +186,48 @@ export class BookFlightComponent implements OnInit {
 
 
     onSeatSelected(seat: FlightScheduleSeatInformationOutputDto) {
+         if (this.seatSelectionLocked) {
+        console.log('Seat selection is locked after random assignment.');
+        return;
+    }
         if (this.seatOption === 'choose') {
-            this.selectedSeat = seat;
-            this.seats.forEach(s => s.selected = false);
-            seat.selected = true;
-            console.log('Selected seat:', seat);
+            const index = this.selectedSeats.findIndex(s => s?.id === seat.id);
+            if (index === -1) {
+                if (this.selectedSeats.length < this.numberOfPassengers) {
+                    this.selectedSeats.push(seat);
+                } else {
+                    const message = this.numberOfPassengers === 1
+                        ? 'You already have selected one seat'
+                        : `You already have selected ${this.numberOfPassengers} seats`;
+
+                    this.snackBar.open(message, 'Close', {
+                        duration: 3000,
+                        verticalPosition: 'bottom',
+                        horizontalPosition: 'center'
+                    });
+
+                    console.log(message);
+                }
+            } else {
+                this.selectedSeats.splice(index, 1);
+            }
+
+
+            this.refreshSeatSelection();
+            console.log('Selected seats:', this.selectedSeats);
         } else {
             console.log('Cannot select manually when seatOption is random');
         }
     }
 
+    refreshSeatSelection() {
+        this.seats.forEach(seat => {
+            seat.selected = this.selectedSeats.some(selected => selected?.id === seat.id);
+        });
+    }
+
+
+    //REZERVACIJA ONOLIKO KOLIKO PUTNIKA -- NA BACK SALJEM LISTU REZERVACIJA !!!!
     reserve() {
         if (!this.reservationData) {
             console.error('No reservation data available');
@@ -191,7 +241,7 @@ export class BookFlightComponent implements OnInit {
             next: (response) => {
                 console.log('Reservation successful:', response);
                 console.log(response.id + 'iddd');
-                   const email = localStorage.getItem('email');
+                const email = localStorage.getItem('email');
                 this.reservationId = response.id;
 
                 Swal.fire('Success', 'Reservation created!', 'success');

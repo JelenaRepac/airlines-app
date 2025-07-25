@@ -7,12 +7,19 @@ import { ReservationComponent } from "../booking/reservation.component";
 import { User } from '../../models/user.model';
 import { VoucherComponent } from "../voucher/voucher.component";
 import { UploadService } from '../../service/passport.service';
+import { MatSelect, MatSelectModule } from "@angular/material/select";
+import { CountryService } from '../../service/country.service';
+import { Country } from '../../models/country.model';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocomplete } from '@angular/material/autocomplete';
+import { map, Observable, startWith } from 'rxjs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-  imports: [SharedModules, ReservationComponent, VoucherComponent]
+  imports: [SharedModules, ReservationComponent, VoucherComponent, MatSelectModule, FormsModule, ReactiveFormsModule, MatAutocomplete, MatAutocompleteModule]
 })
 export class ProfileComponent implements OnInit {
   user!: User;
@@ -20,12 +27,53 @@ export class ProfileComponent implements OnInit {
   readonlyMode: boolean = true;
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
-  constructor(private authService: AuthService, private router: Router, private uploadService: UploadService) { }
+
+countryControl = new FormControl<Country | string | null>(null);
+  countries: Country[] = []; // your country list
+  filteredCountries!: Observable<Country[]>; selectedCountry: string | null = null;
+
+  constructor(private authService: AuthService,
+    private router: Router,
+    private uploadService: UploadService,
+    private countryService: CountryService) { }
 
   ngOnInit(): void {
     this.loadUserProfile();
+    this.loadCountries();
 
+    this.filteredCountries = this.countryControl.valueChanges.pipe(
+      startWith(null),
+      map(value => typeof value === 'string' ? value : value?.name ?? ''),
+      map(name => name ? this._filterCountries(name) : this.countries.slice())
+    );
 
+     this.countryControl.disable();
+  
+  }
+  toggleReadonly() {
+  this.readonlyMode = !this.readonlyMode;
+
+  if (this.readonlyMode) {
+    this.countryControl.disable();
+  } else {
+    this.countryControl.enable();
+  }
+}
+  private _filterCountries(name: string): Country[] {
+    const filterValue = name.toLowerCase();
+
+    return this.countries.filter(country => country.name.toLowerCase().includes(filterValue));
+  }
+
+  displayCountry(country: Country | null): string {
+    return country ? country.name : '';
+  }
+  loadCountries(): void {
+    this.countryService.getCountries().subscribe((response) => {
+      if (!response.error) {
+        this.countries = response;
+      }
+    });
   }
   checkPendingUpload(): void {
     const userIdStr = localStorage.getItem("userId");
@@ -110,10 +158,10 @@ export class ProfileComponent implements OnInit {
           next: (oauthUrl) => {
             this.goToLink(oauthUrl);
 
-             setTimeout(() => {
-            this.checkPendingUpload();
-          }, 2000);
-          this.selectedFileName = '';
+            setTimeout(() => {
+              this.checkPendingUpload();
+            }, 2000);
+            this.selectedFileName = '';
           },
           error: (err) => {
             console.error('Failed to get OAuth URL', err);
@@ -152,22 +200,22 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  
-  downloadPassport(userId: number, documentName: string ): void {
-  this.uploadService.openDocument(userId, documentName).subscribe({
-    next: (blob) => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = documentName;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    },
-    error: (err) => {
-      console.error('Error downloading document', err);
-    }
-  });
-}
+
+  downloadPassport(userId: number, documentName: string): void {
+    this.uploadService.openDocument(userId, documentName).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = documentName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error downloading document', err);
+      }
+    });
+  }
 
 
 }

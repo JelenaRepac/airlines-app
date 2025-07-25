@@ -28,7 +28,7 @@ export const routes: Routes = [
   { path: 'airline/manage-flight', component: FlightManageComponent, canActivate: [AuthGuard] },
   { path: 'airline/manage-flight-schedule', component: ScheduleManageComponent, canActivate: [AuthGuard] },
   { path: 'airline/book-seats', component: AirplaneSeatsComponent, canActivate: [AuthGuard] },
-  { path: 'airline/app-book-flight/:id', component: BookFlightComponent, canActivate: [AuthGuard] },
+  { path: 'airline/app-book-flight/:id/:passengers', component: BookFlightComponent, canActivate: [AuthGuard] },
   { path: 'payment-success', component: PaymentSuccessComponent, canActivate:[AuthGuard] },
 
   // Fallback

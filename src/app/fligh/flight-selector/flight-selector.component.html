@@ -4,28 +4,37 @@
       <form [formGroup]="flightForm" (ngSubmit)="onSubmit()">
         <div class="form-row">
 
-          <!-- Country From -->
-          <mat-form-field appearance="fill" style="width: 48%;">
+  
+
+          <mat-form-field appearance="fill" style="width: 100%;">
             <mat-label>Source Country</mat-label>
-            <mat-select formControlName="countrySource" >
-              <mat-option *ngFor="let country of countries" [value]="country">{{ country.name }} </mat-option>
-            </mat-select>
+            <input type="text" matInput formControlName="countrySource" [matAutocomplete]="autoSource" />
+            <mat-autocomplete #autoSource="matAutocomplete" [displayWith]="displayCountry">
+              <mat-option *ngFor="let country of filteredSourceCountries | async" [value]="country">
+                {{ country.name }}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
+
 
           <mat-form-field appearance="fill" style="width: 48%;">
             <mat-label>Source Airport</mat-label>
-            <mat-select formControlName="sourceAirport" >
+            <mat-select formControlName="sourceAirport">
               <mat-option *ngFor="let airport of sourceAirports" [value]="airport">{{ airport.name }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="form-row">
           <!-- Country To -->
-          <mat-form-field appearance="fill" style="width: 48%;">
+          
+          <mat-form-field appearance="fill" style="width: 100%;">
             <mat-label>Destination Country</mat-label>
-            <mat-select formControlName="countryDestination" >
-              <mat-option *ngFor="let country of countries" [value]="country">{{ country.name }}</mat-option>
-            </mat-select>
+            <input type="text" matInput formControlName="countryDestination" [matAutocomplete]="autoDestination" />
+            <mat-autocomplete #autoDestination="matAutocomplete" [displayWith]="displayCountry">
+              <mat-option *ngFor="let country of filteredDestinationCountries | async" [value]="country">
+                {{ country.name }}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
 
           <mat-form-field appearance="fill" style="width: 48%;">
@@ -40,24 +49,34 @@
         <div class="form-row">
           <mat-form-field appearance="fill" style="width: 48%;">
             <mat-label>Departure Date</mat-label>
-            <input matInput [matDatepicker]="departurePicker" formControlName="departureDate"  />
+            <input matInput [matDatepicker]="departurePicker" formControlName="departureDate" />
             <mat-datepicker-toggle matSuffix [for]="departurePicker"></mat-datepicker-toggle>
             <mat-datepicker #departurePicker></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="fill" style="width: 48%;">
             <mat-label>Arrival Date</mat-label>
-            <input matInput [matDatepicker]="arrivalPicker" formControlName="arrivalDate"  />
+            <input matInput [matDatepicker]="arrivalPicker" formControlName="arrivalDate" />
             <mat-datepicker-toggle matSuffix [for]="arrivalPicker"></mat-datepicker-toggle>
             <mat-datepicker #arrivalPicker></mat-datepicker>
           </mat-form-field>
         </div>
 
+        <div class="form-row">
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Number of Passengers</mat-label>
+            <mat-select formControlName="numberOfPassengers">
+              <mat-option *ngFor="let count of passengerCounts" [value]="count">{{ count }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
 
 
         <!-- Submit Button -->
         <div class="form-field">
-            <button type="button" [disabled]="!flightForm.valid" (click)="clearSearch()">Delete search params</button>
+          <button type="button" [disabled]="!flightForm.valid" (click)="clearSearch()">Delete search params</button>
           <button type="submit" [disabled]="!flightForm.valid">Search Flights</button>
         </div>
 

@@ -19,16 +19,15 @@ export class CountryService {
 
  
    getCountries(): Observable<any> {
-      const token = localStorage.getItem('authToken'); // or wherever you store your token
+      // const token = localStorage.getItem('authToken'); // or wherever you store your token
   
-      console.log(token);
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      });
+      // console.log(token);
+      // const headers = new HttpHeaders({
+      //   'Authorization': `Bearer ${token}`,
+      //   'Content-Type': 'application/json'
+      // });
   
       return this.http.get(`${this.apiCountryUrl}`, {
-        headers
       }).pipe(
         catchError(this.handleError)
       );
