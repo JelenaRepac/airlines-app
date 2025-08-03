@@ -4,6 +4,8 @@ import { SharedModules } from '../shared.module';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { loadStripe } from '@stripe/stripe-js';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -17,43 +19,22 @@ export class LoginComponent  {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
-// async ngOnInit() {
-//     try {
-//       console.log("jej")
-//       // Fetch session ID from backend
-//       const session = "cs_test_a1CzbMY8ETdTlO0RAqy2jQmLb1qVDnUPUbybA1quJ1PVCl1X7Mpjcmkzbf";
+  constructor(private authService: AuthService, private router: Router, private http: HttpClient) { }
 
-//       // Initialize Stripe
-//       const stripe = await loadStripe('pk_test_51Rlm4d4gTxY9zBy15DRAx7EK6UFNH7O1a1TKRykzW7rqyBngRbiM4IgGxsvnXPtrPYF1kmnoBAIU6PjAFgOlEJU100jUPEAasA');
-//       if (!stripe) {
-//         console.error('Stripe failed to initialize');
-//         return;
-//       }
 
-//       // Redirect to checkout
-//       const result = await stripe.redirectToCheckout({ sessionId: session });
 
-//       if (result.error) {
-//         // Show error to user if redirect fails
-//         console.error('Stripe redirect error:', result.error.message);
-//       }
-//             console.log("jej")
-
-//     } catch (err) {
-//       console.error('Error during payment init:', err);
-//     }
-//   }
   onSubmit() {
     if (!this.email || !this.password) {
       this.errorMessage = 'Both email and password are required!';
     } else {
       this.authService.isAdmin();
       this.errorMessage = '';
+
+       
       this.authService.login(this.email, this.password).subscribe({
         next: (response) => {
           console.log('Login successful:', response);
-
+          
           this.authService.getProfile(this.email).subscribe({
             next: (profile) => {
               console.log('Profile:', profile);

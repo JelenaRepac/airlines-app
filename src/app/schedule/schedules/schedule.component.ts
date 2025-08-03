@@ -28,7 +28,7 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
 
   displayedColumns = ['flight', 'status', 'arrivalDeparture', 'sourceDestination', 'price', 'actions'];
   dataSource = new MatTableDataSource<ScheduleDto>([]);
-  pricingMap = new Map<number | undefined, { price: number; currency: string }>();
+  // pricingMap = new Map<number | undefined, { price: number; currency: string }>();
 
 
 
@@ -66,7 +66,7 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
       this.loadSchedules();
     }
 
-    this.loadPricingDataForSchedules();
+    // this.loadPricingDataForSchedules();
 
 
     this.dataSource.sortingDataAccessor = (item, property) => {
@@ -84,30 +84,30 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
       }
     };
   }
-  loadPricingDataForSchedules(): void {
-    if (!this.schedules || this.schedules.length === 0) return;
+  // loadPricingDataForSchedules(): void {
+  //   if (!this.schedules || this.schedules.length === 0) return;
 
-    this.schedules.forEach(schedule => {
-      this.pricingService.getPriceByScheduleId(schedule.id).subscribe({
-        next: (response) => {
-          const firstPrice = response[0];
-          if (firstPrice) {
-            const totalPrice = this.numberOfPassengers > 1
-              ? firstPrice.price * this.numberOfPassengers
-              : firstPrice.price;
+  //   this.schedules.forEach(schedule => {
+  //     this.pricingService.getPriceByScheduleId(schedule.id).subscribe({
+  //       next: (response) => {
+  //         const firstPrice = response[0];
+  //         if (firstPrice) {
+            // const totalPrice = this.numberOfPassengers > 1
+            //   ? firstPrice.price * this.numberOfPassengers
+            //   : firstPrice.price;
 
-            this.pricingMap.set(schedule.id, {
-              price: totalPrice,
-              currency: firstPrice.currency
-            });
-            // Refresh the table so Angular detects the change
-            this.dataSource.data = [...this.dataSource.data];
-          }
-        },
-        error: err => console.error('Error loading pricing for schedule', schedule.id, err)
-      });
-    });
-  }
+  //           // this.pricingMap.set(schedule.id, {
+  //           //   price: totalPrice,
+  //           //   currency: firstPrice.currency
+  //           // });
+  //           // Refresh the table so Angular detects the change
+  //           this.dataSource.data = [...this.dataSource.data];
+  //         }
+  //       },
+  //       error: err => console.error('Error loading pricing for schedule', schedule.id, err)
+  //     });
+  //   });
+  // }
 
   onSortChange(): void {
     setTimeout(() => {
@@ -136,7 +136,7 @@ export class FlightScheduleComponent implements OnInit, OnChanges, AfterViewInit
         }
 
         this.dataSource = new MatTableDataSource(this.schedules);
-  this.loadPricingDataForSchedules();
+  // this.loadPricingDataForSchedules();
 
         this.dataSource.sortingDataAccessor = (item, property) => {
           switch (property) {

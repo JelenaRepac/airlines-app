@@ -3,8 +3,33 @@
   <span class="spacer"></span>
   <nav>
     <span class="material-icons nav-icon" routerLink="/airline/home">home</span>
+      <span
+      class="material-icons nav-icon"
+      (click)="toggleNotifications()"
+      [matBadge]="unreadNotificationsCount"
+      matBadgeColor="warn"
+      [matBadgeHidden]="unreadNotificationsCount === 0"
+      matBadgeOverlap="false"
+      aria-label="Notifications"
+      #notifIcon
+    >
+      notifications
+    </span>
     <span *ngIf="!isAdminUser" class="material-icons nav-icon" routerLink="/airline/profile">account_circle</span>
     <span *ngIf="isAdminUser" class="material-icons nav-icon" routerLink="/airline/users">people</span>
     <span class="material-icons nav-icon" (click)="logout()">logout</span>
   </nav>
+
+    <div
+      class="notification-dropdown"
+      *ngIf="showNotifications"
+      [@fadeInOut]
+      (clickOutside)="closeNotifications()"
+    >
+      <div *ngIf="notifications.length === 0" class="empty-msg">No new notifications</div>
+      <div *ngFor="let notif of notifications" class="notification-item">
+        {{ notif }}
+      </div>
+    </div>
+
 </mat-toolbar>

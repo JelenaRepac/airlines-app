@@ -1,4 +1,5 @@
 import { FlightInformationDto } from "./flight.model";
+import { Price } from "./pricing.model";
 
 export interface ScheduleInput {
   id?: number;
@@ -10,4 +11,5 @@ export interface ScheduleInput {
   startAirport: string;
   endAirport: string;
   flightInformation: FlightInformationDto;
+  flightPrices:Price[];
 }

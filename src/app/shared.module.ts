@@ -16,6 +16,7 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { MatStep, MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatBadgeModule } from '@angular/material/badge';
 export const SharedModules = [
     CommonModule,
     FormsModule,
@@ -34,5 +35,6 @@ export const SharedModules = [
     CommonModule,
     ReactiveFormsModule, 
     MatStepperModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatBadgeModule
 ];

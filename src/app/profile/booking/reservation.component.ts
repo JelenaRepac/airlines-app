@@ -14,6 +14,8 @@ import { AuthService } from '../../service/auth.service';
 import { User } from '../../models/user.model';
 import Swal from 'sweetalert2';
 import { TicketViewComponent } from '../../ticket/ticket-view.component';
+import { FlightScheduleSeatInformationOutputDto } from '../../models/flight-schedule-seat.model';
+import { Reservation } from '../../models/reservation.model';
 
 @Component({
     standalone: true,
@@ -39,14 +41,17 @@ export class ReservationComponent implements OnInit {
     user!: User;
     userId!: number;
 
+    selectedSeats: FlightScheduleSeatInformationOutputDto[] = [];
 
     constructor(private reservationService: ReservationService, private flightService: FlightService, private authService: AuthService) { }
-    reservations: any[] = [];
-    pastReservations: any[] = [];
-    nextReservations: ScheduleInput[] = [];
+    reservations: Reservation[] = [];
+    pastReservations: Reservation[] = [];
+    nextReservations: Reservation[] = [];
 
     selectedTab: 'past' | 'future' = 'future';
 
+
+    reservedSeat?: string;
     ngOnInit(): void {
         const email = this.getEmailFromToken();
         if (!email) return;
@@ -56,20 +61,20 @@ export class ReservationComponent implements OnInit {
                 this.user = data;
                 this.userId = this.user.id;
 
-                this.reservationService.getResrvationByUserId(this.userId).pipe(
-                    switchMap((reservations: any[]) => {
+                this.reservationService.getResrvationByUserId(this.userId).subscribe({
+                    next: (reservations: any[]) => {
                         this.reservations = reservations;
+
                         console.log(reservations);
 
-                        const scheduleRequests = reservations.map(res =>
-                            this.flightService.getFlightScheduleByid(res.flightScheduleId)
-                        );
+                        // FlightSchedule is already part of each reservation
+                        const schedules: ScheduleInput[] = reservations.map(res => res.flightSchedule);
+                        this.separateReservationsByDate(reservations);
 
-                        return forkJoin(scheduleRequests);
-                    }),
-                ).subscribe({
-                    next: (schedules: ScheduleInput[]) => {
-                        this.separateReservationsByDate(schedules);
+
+                    },
+                    error: (err) => {
+                        console.error('Failed to load reservations', err);
                     }
                 });
             },
@@ -96,27 +101,42 @@ export class ReservationComponent implements OnInit {
 
         return email;
     }
-    separateReservationsByDate(schedules: ScheduleInput[]): void {
+    separateReservationsByDate(reservations: Reservation[]): void {
         const now = new Date();
         this.pastReservations = [];
         this.nextReservations = [];
 
-        for (const schedule of schedules) {
-            const arrival = new Date(`${schedule.arrivalDate}T${schedule.arrivalTime}`);
-            if (arrival < now) {
-                this.pastReservations.push(schedule);
-            } else {
-                this.nextReservations.push(schedule);
+        for (const reservation of reservations) {
+            const flightSchedule = reservation.flightSchedule;
+
+            if (flightSchedule?.arrivalDate && flightSchedule?.arrivalTime) {
+                const arrival = new Date(`${flightSchedule.arrivalDate}T${flightSchedule.arrivalTime}`);
+
+                if (arrival < now) {
+                    this.pastReservations.push(reservation);
+                } else {
+                    this.nextReservations.push(reservation);
+                }
             }
         }
     }
 
 
-
-    get filteredReservations(): ScheduleInput[] {
+    get filteredReservations(): Reservation[] {
         const now = new Date();
-        return this.selectedTab === 'future'
-            ? this.nextReservations.filter(s => new Date(`${s.departureDate}T${s.departureTime}`) >= now)
-            : this.pastReservations.filter(s => new Date(`${s.departureDate}T${s.departureTime}`) < now);
+
+        const list = this.selectedTab === 'future' ? this.nextReservations : this.pastReservations;
+
+        return list.filter(s => {
+            const schedule = s.flightSchedule;
+            if (!schedule || !schedule.departureDate || !schedule.departureTime) {
+                return false; // skip if any value is missing
+            }
+
+            const departure = new Date(`${schedule.departureDate}T${schedule.departureTime}`);
+            return this.selectedTab === 'future'
+                ? departure >= now
+                : departure < now;
+        });
     }
 }

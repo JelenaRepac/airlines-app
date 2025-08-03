@@ -1,12 +1,12 @@
-import { FlightSchedule } from "./flight-schedule.model";
+import { ScheduleInput } from "./schedule-input.model";
 
 export interface Reservation {
-  id: number;
-  flightScheduleId: number;
+  id?: number;
+  // flightScheduleId?: number;
   seatNumber: string;
-  userId: number;
+  userId?: number;
   confirmed: boolean;
   reservedAt: string;
-  flightSchedule?: FlightSchedule;
+  flightSchedule: ScheduleInput;
   voucherId: string;
 }

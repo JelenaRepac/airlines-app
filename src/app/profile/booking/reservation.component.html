@@ -9,7 +9,7 @@
 
 <div *ngIf="selectedTab === 'future'">
   <div class="reservation-container" *ngIf="nextReservations.length > 0; else noFutureReservations">
-    <app-ticket-view [scheduleList]="nextReservations"></app-ticket-view>
+    <app-ticket-view [reservations]="nextReservations" ></app-ticket-view>
   </div>
 
   <ng-template #noFutureReservations>
@@ -19,7 +19,7 @@
 
 <div *ngIf="selectedTab === 'past'">
   <div class="reservation-container" *ngIf="pastReservations.length > 0; else noPastReservations">
-    <app-ticket-view [scheduleList]="pastReservations"></app-ticket-view>
+    <app-ticket-view [reservations]="pastReservations" ></app-ticket-view>
   </div>
 
   <ng-template #noPastReservations>

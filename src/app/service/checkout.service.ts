@@ -9,11 +9,11 @@ export class CheckoutService {
   private apiUrl = environment.apiUrlPayment;
   constructor(private http: HttpClient) { }
 
-createCheckoutSession(amount: number, userEmail: string | null, reservationId: number, currency: string) {
+createCheckoutSession(amount: number, userEmail: string | null, reservationIds: number [], currency: string) {
   const body = {
     amount: amount,
     email: userEmail,
-    reservationId: reservationId,
+    reservationId: reservationIds,
     currency: currency
   };
   return this.http.post<{ id: string }>(

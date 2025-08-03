@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FlightService } from '../service/flight.service';
 import { AirplaneSeatsComponent } from "../airplane-seats/airplane-seats.component";
@@ -29,7 +29,7 @@ import { SharedModules } from '../shared.module';
     templateUrl: './book-flight.component.html',
     styleUrl: './book-flight.component.css',
     imports: [TicketViewComponent, AirplaneSeatsComponent,
-    SharedModules, MatRadioButton, FormsModule, MatRadioGroup],
+        SharedModules, MatRadioButton, FormsModule, MatRadioGroup],
     standalone: true
 })
 export class BookFlightComponent implements OnInit {
@@ -73,9 +73,11 @@ export class BookFlightComponent implements OnInit {
 
     seatSelectionLocked = false;
 
+    @ViewChild('scrollTarget') scrollTarget!: ElementRef;
+
 
     ngOnChanges() {
-        console.log(this.schedule+'JJEJEJEJE');
+        console.log(this.schedule + 'JJEJEJEJE');
         this.handleSeatOptionChange();
         this.refreshSeatSelection();
     }
@@ -94,6 +96,15 @@ export class BookFlightComponent implements OnInit {
 
         if (this.seatOption === 'random') {
             this.assignRandomSeat();
+
+            setTimeout(() => {
+                if (this.scrollTarget?.nativeElement) {
+                    this.scrollTarget.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    console.warn('scrollTarget not available');
+                }
+            }, 200);
+
         } else {
             this.seats.forEach(seat => seat.selected = false);
             this.selectedSeat = null;
@@ -101,34 +112,38 @@ export class BookFlightComponent implements OnInit {
     }
 
 
-   assignRandomSeat() {
-    const availableSeats = this.seats.filter(seat => !seat.bookingStatus);
+    assignRandomSeat() {
+        const availableSeats = this.seats.filter(seat => !seat.bookingStatus);
 
-    if (availableSeats.length < this.numberOfPassengers) {
-        this.snackBar.open('Not enough available seats for your selection.', 'Close', {
-            duration: 3000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'center'
+        if (availableSeats.length < this.numberOfPassengers) {
+            this.snackBar.open('Not enough available seats for your selection.', 'Close', {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center'
+            });
+            return;
+        }
+
+        this.seats.forEach(seat => seat.selected = false);
+        this.selectedSeats = [];
+
+        const shuffled = availableSeats.sort(() => 0.5 - Math.random());
+        const randomSelection = shuffled.slice(0, this.numberOfPassengers);
+
+        randomSelection.forEach(seat => {
+            seat.selected = true;
+            this.selectedSeats.push(seat);
         });
-        return;
+
+        this.refreshSeatSelection();
+        this.seatSelectionLocked = true;
+
+        console.log('Randomly assigned seats:', this.selectedSeats);
+
+        //   setTimeout(() => {
+        //         this.nextButton?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        //     }, 100);
     }
-
-    this.seats.forEach(seat => seat.selected = false);
-    this.selectedSeats = [];
-
-    const shuffled = availableSeats.sort(() => 0.5 - Math.random());
-    const randomSelection = shuffled.slice(0, this.numberOfPassengers);
-
-    randomSelection.forEach(seat => {
-        seat.selected = true;
-        this.selectedSeats.push(seat);
-    });
-
-    this.refreshSeatSelection();  
-    this.seatSelectionLocked = true; 
-
-    console.log('Randomly assigned seats:', this.selectedSeats);
-}
 
     enableSeatSelection() {
         this.allowSeatSelection = true;
@@ -186,10 +201,10 @@ export class BookFlightComponent implements OnInit {
 
 
     onSeatSelected(seat: FlightScheduleSeatInformationOutputDto) {
-         if (this.seatSelectionLocked) {
-        console.log('Seat selection is locked after random assignment.');
-        return;
-    }
+        if (this.seatSelectionLocked) {
+            console.log('Seat selection is locked after random assignment.');
+            return;
+        }
         if (this.seatOption === 'choose') {
             const index = this.selectedSeats.findIndex(s => s?.id === seat.id);
             if (index === -1) {
@@ -229,39 +244,60 @@ export class BookFlightComponent implements OnInit {
 
     //REZERVACIJA ONOLIKO KOLIKO PUTNIKA -- NA BACK SALJEM LISTU REZERVACIJA !!!!
     reserve() {
-        if (!this.reservationData) {
-            console.error('No reservation data available');
+        console.log(this.reservationData);
+        if (
+            !this.selectedSeats || this.selectedSeats.length === 0) {
+            console.error('No reservation data or seats selected');
             return;
         }
-        this.reservationData.voucherId = this.voucherCode;
-        this.reservationData.seatNumber = this.selectedSeat?.seatNumber ?? '';
-        console.log(this.reservationData);
 
-        this.reservationService.createReservation(this.reservationData).subscribe({
-            next: (response) => {
-                console.log('Reservation successful:', response);
-                console.log(response.id + 'iddd');
-                const email = localStorage.getItem('email');
-                this.reservationId = response.id;
+        const reservationIds: number[] = [];
+        const email = localStorage.getItem('email');
+        const userIdStr = localStorage.getItem('userId');
+        const userId = userIdStr ? +userIdStr : undefined; // <-- change null to undefined
 
-                Swal.fire('Success', 'Reservation created!', 'success');
-                // Call getPrice only if reservationId is valid
-                if (this.reservationId != null && !isNaN(this.reservationId)) {
-                    this.paymentProcess(this.finalPrice, email, this.reservationId, 'USD');
+        console.log(userId)
 
-                    // this.getPrice(this.reservationData.flightScheduleId, this.reservationId);
-                } else {
-                    console.error('Invalid reservation ID. Price retrieval aborted.');
+
+        let completed = 0;
+
+        this.selectedSeats.forEach((seat, index) => {
+            const reservationData = { ...this.reservationData }; // clone if needed
+            reservationData.flightSchedule = this.schedule;
+            reservationData.userId = userId;
+            reservationData.seatNumber = seat.seatNumber;
+            reservationData.voucherId = this.voucherCode;
+            reservationData.reservedAt = new Date().toISOString();
+            console.log('RESERVATION' + reservationData)
+
+            this.reservationService.createReservation(reservationData).subscribe({
+                next: (response) => {
+                    console.log(`Reservation successful for seat ${seat.seatNumber}:`, response);
+                    reservationIds.push(response.id);
+                    completed++;
+
+                    // Once all requests are complete, call payment
+                    if (completed === this.selectedSeats.length) {
+                        Swal.fire('Success', 'All reservations created!', 'success');
+
+                        if (reservationIds.length > 0) {
+                            console.log(this.finalPrice)
+                            this.paymentProcess(this.finalPrice, email, reservationIds, 'USD');
+                        } else {
+                            console.error('No valid reservation IDs collected.');
+                        }
+                    }
+                },
+                error: (error) => {
+                    console.error(`Reservation failed for seat ${seat.seatNumber}:`, error);
+                    completed++;
+
+
                 }
-            },
-            error: (error) => {
-                console.error('Reservation failed:', error);
-                Swal.fire('Error', 'Failed to create reservation', 'error');
-            }
+            });
         });
-
-
     }
+
     // getPrice(scheduleId: number, reservationId: number) {
     //     console.log(reservationId);
     //     this.pricingService.getPriceByScheduleId(scheduleId).subscribe({
@@ -285,12 +321,12 @@ export class BookFlightComponent implements OnInit {
     //     });
     // }
 
-    async paymentProcess(amount: number, userEmail: string | null, reservationId: number, currency: string) {
+    async paymentProcess(amount: number, userEmail: string | null, reservationIds: number[], currency: string) {
         try {
             console.log("jej")
-            console.log(reservationId)
+            console.log(reservationIds)
             // Fetch session ID from backend
-            const session = await firstValueFrom(this.checkoutService.createCheckoutSession(amount, userEmail, reservationId, currency));
+            const session = await firstValueFrom(this.checkoutService.createCheckoutSession(amount, userEmail, reservationIds, currency));
 
             // Initialize Stripe
             const stripe = await loadStripe('pk_test_51Rlm4d4gTxY9zBy15DRAx7EK6UFNH7O1a1TKRykzW7rqyBngRbiM4IgGxsvnXPtrPYF1kmnoBAIU6PjAFgOlEJU100jUPEAasA');

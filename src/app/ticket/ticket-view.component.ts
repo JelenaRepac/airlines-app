@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { VoucherService } from '../service/voucher.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '../service/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Reservation } from '../models/reservation.model';
 
 @Component({
   selector: 'app-ticket-view',
@@ -23,8 +25,11 @@ export class TicketViewComponent {
   @Input() schedule!: ScheduleInput;
   @Input() scheduleList: ScheduleInput[] = [];
 
+    @Input() reservations: Reservation[] = [];
+
   @Input() selectedSeats: FlightScheduleSeatInformationOutputDto[] = [];
   @Input() numberOfPassengers: number = 1;
+
 
   @Output() reservationCreated = new EventEmitter<any>();
 
@@ -33,7 +38,7 @@ export class TicketViewComponent {
   @Output() voucherChanged = new EventEmitter<string>();
   @Output() finalPriceChanged = new EventEmitter<number>();
 
-  constructor(private pricingService: PricingService, private voucherService: VoucherService, private authService: AuthService) { }
+  constructor(private snackBar: MatSnackBar, private pricingService: PricingService, private voucherService: VoucherService, private authService: AuthService) { }
   pricingMap = new Map<number | undefined, { price: number; currency: string }>();
 
   voucherCode: string = '';
@@ -43,8 +48,10 @@ export class TicketViewComponent {
   schedulesToShow: ScheduleInput[] = [];
 
   ngOnInit(): void {
+    // this.loadPricingData();
     // this.getSchedules();
     this.getUserIdAndEmitReservation();
+    this.loadPrice();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -59,12 +66,16 @@ export class TicketViewComponent {
       }
     }
 
-    if (changes['scheduleList'] && this.scheduleList && this.scheduleList.length > 0) {
-      this.loadPricingData();
-    }
-    if (changes['schedule'] && this.schedule) {
-      this.loadPrice();
-    }
+    // if (changes['scheduleList'] && this.scheduleList && this.scheduleList.length > 0) {
+    //   this.loadPricingData();
+    //   console.log('pricing' + this.originalPrice)
+
+    // }
+    // if (changes['schedule'] && this.schedule) {
+    //   this.loadPrice();
+    //   console.log('pricing' + this.originalPrice)
+
+    // }
   }
 
 
@@ -80,67 +91,75 @@ export class TicketViewComponent {
   //   }
   // }
 
-loadPricingData() {
-  if (this.scheduleList && this.scheduleList.length > 0) {
-    this.scheduleList.forEach(scheduleItem => {
-      this.pricingService.getPriceByScheduleId(scheduleItem.id).subscribe({
-        next: (response) => {
-          const firstPrice = response[0];
-          if (firstPrice) {
-            const totalPrice = this.numberOfPassengers > 1 
-              ? firstPrice.price * this.numberOfPassengers 
-              : firstPrice.price;
+  loadPricingData() {
+    if (this.scheduleList && this.scheduleList.length > 0) {
+      this.scheduleList.forEach(scheduleItem => {
+        this.pricingService.getPriceByScheduleId(scheduleItem.id).subscribe({
+          next: (response) => {
+            const firstPrice = response[0];
+            if (firstPrice) {
+              const totalPrice = this.numberOfPassengers > 1
+                ? firstPrice.price * this.numberOfPassengers
+                : firstPrice.price;
 
-            this.pricingMap.set(scheduleItem.id, {
-              price: totalPrice,
-              currency: firstPrice.currency
-            });
-            // You can update originalPrice if needed for single schedule case
-          }
-        },
-        error: err => console.error('Error loading pricing for schedule', scheduleItem.id, err)
-      });
-    });
-  }
-}
-
-loadPrice() {
-  if (!this.schedule) return;
-  this.pricingService.getPriceByScheduleId(this.schedule.id).subscribe({
-    next: (response) => {
-      const firstPrice = response[0];
-      if (firstPrice) {
-        const totalPrice = this.numberOfPassengers > 1 
-          ? firstPrice.price * this.numberOfPassengers 
-          : firstPrice.price;
-
-        this.pricingMap.set(this.schedule.id, {
-          price: totalPrice,
-          currency: firstPrice.currency
+              this.pricingMap.set(scheduleItem.id, {
+                price: totalPrice,
+                currency: firstPrice.currency
+              });
+              this.finalPriceChanged.emit(totalPrice);  // Emit discounted price
+            }
+          },
+          error: err => console.error('Error loading pricing for schedule', scheduleItem.id, err)
         });
-        this.originalPrice = totalPrice;
-      }
-    },
-    error: err => console.error('Error loading price for schedule', this.schedule.id, err)
-  });
+      });
+    }
+  }
+
+  loadPrice() {
+    if (!this.schedule) return;
+    this.originalPrice= this.schedule.flightPrices[0].price;
+    // this.pricingService.getPriceByScheduleId(this.schedule.id).subscribe({
+    //   next: (response) => {
+    //     const firstPrice = response[0];
+    //     if (firstPrice) {
+    //       const totalPrice = this.numberOfPassengers > 1
+    //         ? firstPrice.price * this.numberOfPassengers
+    //         : firstPrice.price;
+
+    //       this.pricingMap.set(this.schedule.id, {
+    //         price: totalPrice,
+    //         currency: firstPrice.currency
+    //       });
+    //       this.originalPrice = firstPrice;
+    //       this.finalPriceChanged.emit(totalPrice);  // Emit discounted price
+
+    //     }
+    //   },
+    //   error: err => console.error('Error loading price for schedule', this.schedule.id, err)
+    // });
+  }
+
+
+
+  getFlightDuration(departureTime?: string, arrivalTime?: string): string {
+  if (!departureTime || !arrivalTime) {
+    return 'Unknown';
+  }
+
+  const [depHour, depMin] = departureTime.split(':').map(Number);
+  const [arrHour, arrMin] = arrivalTime.split(':').map(Number);
+
+  let durationHour = arrHour - depHour;
+  let durationMin = arrMin - depMin;
+
+  if (durationMin < 0) {
+    durationHour -= 1;
+    durationMin += 60;
+  }
+
+  return `${durationHour}h ${durationMin}m`;
 }
 
-
-
-  getFlightDuration(departureTime: string, arrivalTime: string): string {
-    const [depHour, depMin] = departureTime.split(':').map(Number);
-    const [arrHour, arrMin] = arrivalTime.split(':').map(Number);
-
-    let durationHour = arrHour - depHour;
-    let durationMin = arrMin - depMin;
-
-    if (durationMin < 0) {
-      durationHour -= 1;
-      durationMin += 60;
-    }
-
-    return `${durationHour}h ${durationMin}m`;
-  }
 
 
   onVoucherCodeChange(newCode: string): void {
@@ -158,7 +177,9 @@ loadPrice() {
             if (result) {
               this.discountPercentage = result.discountPercentage;
               console.log(this.originalPrice);
-              this.finalPrice = this.originalPrice * (1 - this.discountPercentage / 100);
+              this.finalPrice = this.schedule.flightPrices[0].price * (1 - this.discountPercentage / 100);
+
+              this.schedule.flightPrices[0].price= this.finalPrice;
               console.log(this.finalPrice + 'FINALLL')
 
               this.voucherChanged.emit(code);  // Emit current voucher
@@ -172,10 +193,16 @@ loadPrice() {
         })
       },
       error: (err) => {
-        Swal.fire('Error', 'Vaucher is not valid!', 'error');
-        console.error('Voucher validation error:', err);
+        this.snackBar.open('Vaucher is not valid!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+
         this.discountPercentage = 0;
         this.finalPrice = this.originalPrice;
+        return;
+
       }
     });
   }

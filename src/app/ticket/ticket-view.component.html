@@ -30,9 +30,21 @@
               </span>
             </div>
           </div>
+          <div class="price" *ngIf="schedule.flightPrices?.[0] as pricing">
+            <span *ngIf="finalPrice && finalPrice > 0 && finalPrice < pricing.price; else originalPrice"
+              class="discounted-price">
+              {{ finalPrice | number: '1.2-2' }} {{ pricing.currency }}
+            </span>
+
+            <ng-template #originalPrice>
+              <span>
+                {{ (pricing.price * numberOfPassengers) | number: '1.2-2' }} {{ pricing.currency }}
+              </span>
+            </ng-template>
+          </div>
 
 
-          <div class="price" *ngIf="pricingMap.get(schedule.id) as pricing">
+          <!-- <div class="price" *ngIf="pricingMap.get(schedule.id) as pricing">
             <span *ngIf="finalPrice && finalPrice > 0 && finalPrice < pricing.price; else originalPrice"
               class="discounted-price">
               {{ finalPrice | number: '1.2-2' }} {{ pricing.currency }}
@@ -43,7 +55,7 @@
                 {{ pricing.price }} {{ pricing.currency }}
               </span>
             </ng-template>
-          </div>
+          </div> -->
 
 
 
@@ -72,4 +84,51 @@
   <div class="discount-percentage" *ngIf="discountPercentage > 0">
     {{ discountPercentage }}% OFF
   </div>
+</div>
+
+
+<div class="ticket-container" *ngFor="let reservation of reservations">
+  <mat-card class="ticket">
+    <mat-card-content>
+      <div class="ticket-body">
+
+        <!-- Departure Column -->
+        <div class="column time-column">
+          <div class="date">{{ reservation.flightSchedule.departureDate }}</div>
+          <div class="time">{{ reservation.flightSchedule.departureTime }}</div>
+          <div class="airport">{{ reservation.flightSchedule.startAirport }}</div>
+        </div>
+
+        <!-- Center Column -->
+        <div class="column center-column">
+          <mat-icon class="flight-icon">flight</mat-icon>
+          <div class="duration">
+            {{ getFlightDuration(reservation.flightSchedule.departureTime, reservation.flightSchedule.arrivalTime) }}
+          </div>
+
+          <div class="ticket-count" *ngIf="numberOfPassengers > 1 && selectedSeats.length === 0">
+            {{ numberOfPassengers }} tickets
+          </div>
+
+          <div class="seat-info">
+            <mat-icon class="seat-icon">event_seat</mat-icon>
+            <div>
+              <span>
+                {{ reservation.seatNumber }}
+              </span>
+            </div>
+          </div>
+        
+        </div>
+
+        <!-- Arrival Column -->
+        <div class="column time-column">
+          <div class="date">{{ reservation.flightSchedule.arrivalDate }}</div>
+          <div class="time">{{ reservation.flightSchedule.arrivalTime }}</div>
+          <div class="airport">{{ reservation.flightSchedule.endAirport }}</div>
+        </div>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

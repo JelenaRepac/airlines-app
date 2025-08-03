@@ -156,7 +156,8 @@ export class ScheduleManageComponent implements OnInit {
       arrivalTime: raw.arrivalTime,
       startAirport: raw.sourceAirport?.name ?? '',    // <-- take only name
       endAirport: raw.destinationAirport?.name ?? '', // <-- take only name
-      flightInformation: raw.flightInformation
+      flightInformation: raw.flightInformation,
+      flightPrices: []
 
 
     };

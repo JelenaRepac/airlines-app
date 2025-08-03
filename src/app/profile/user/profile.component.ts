@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
 
-countryControl = new FormControl<Country | string | null>(null);
+  countryControl = new FormControl<Country | string | null>(null);
   countries: Country[] = []; // your country list
   filteredCountries!: Observable<Country[]>; selectedCountry: string | null = null;
 
@@ -38,27 +38,36 @@ countryControl = new FormControl<Country | string | null>(null);
     private countryService: CountryService) { }
 
   ngOnInit(): void {
+      this.loadCountries();
     this.loadUserProfile();
-    this.loadCountries();
+  
 
     this.filteredCountries = this.countryControl.valueChanges.pipe(
-      startWith(null),
+startWith(this.countryControl.value),
       map(value => typeof value === 'string' ? value : value?.name ?? ''),
       map(name => name ? this._filterCountries(name) : this.countries.slice())
     );
+    this.countryControl.valueChanges.subscribe(selected => {
+      if (selected && typeof selected === 'object') {
+        this.user.country = selected.name;
+        console.log('Selected country:', this.user.country);
+      } else {
+        this.user.country = '';
+      }
+    });
 
-     this.countryControl.disable();
-  
+    this.countryControl.disable();
+
   }
   toggleReadonly() {
-  this.readonlyMode = !this.readonlyMode;
+    this.readonlyMode = !this.readonlyMode;
 
-  if (this.readonlyMode) {
-    this.countryControl.disable();
-  } else {
-    this.countryControl.enable();
+    if (this.readonlyMode) {
+      this.countryControl.disable();
+    } else {
+      this.countryControl.enable();
+    }
   }
-}
   private _filterCountries(name: string): Country[] {
     const filterValue = name.toLowerCase();
 
@@ -75,6 +84,18 @@ countryControl = new FormControl<Country | string | null>(null);
       }
     });
   }
+
+  setInitialCountry(): void {
+    console.log('COUNTRIEES'+this.countries)
+  if (this.user?.country && this.countries.length > 0) {
+    const match = this.countries.find(c => c.name === this.user.country);
+    if (match) {
+      console.log('COUNTRYYY'+match)
+      this.countryControl.setValue(match);  // set full object
+    }
+  }
+}
+
   checkPendingUpload(): void {
     const userIdStr = localStorage.getItem("userId");
     const fileName = localStorage.getItem("pendingFileName");
@@ -114,6 +135,7 @@ countryControl = new FormControl<Country | string | null>(null);
     this.authService.getProfile(email).subscribe({
       next: (data) => {
         this.user = data;
+        this.setInitialCountry();
       },
       error: (err) => {
         Swal.fire({

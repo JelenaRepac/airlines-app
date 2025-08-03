@@ -4,7 +4,7 @@
       <form [formGroup]="flightForm" (ngSubmit)="onSubmit()">
         <div class="form-row">
 
-  
+
 
           <mat-form-field appearance="fill" style="width: 100%;">
             <mat-label>Source Country</mat-label>
@@ -26,7 +26,7 @@
         </div>
         <div class="form-row">
           <!-- Country To -->
-          
+
           <mat-form-field appearance="fill" style="width: 100%;">
             <mat-label>Destination Country</mat-label>
             <input type="text" matInput formControlName="countryDestination" [matAutocomplete]="autoDestination" />
@@ -47,6 +47,25 @@
         <!-- Date Picker -->
 
         <div class="form-row">
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Choose a date range</mat-label>
+            <mat-date-range-input formGroupName="dateRange" [rangePicker]="picker">
+              <input matStartDate formControlName="departureDate" placeholder="Departure date" />
+              <input matEndDate formControlName="arrivalDate" placeholder="Arrival date" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" style="width: 48%;">
+            <mat-label>Number of Passengers</mat-label>
+            <mat-select formControlName="numberOfPassengers">
+              <mat-option *ngFor="let count of passengerCounts" [value]="count">{{ count }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- 
           <mat-form-field appearance="fill" style="width: 48%;">
             <mat-label>Departure Date</mat-label>
             <input matInput [matDatepicker]="departurePicker" formControlName="departureDate" />
@@ -59,10 +78,9 @@
             <input matInput [matDatepicker]="arrivalPicker" formControlName="arrivalDate" />
             <mat-datepicker-toggle matSuffix [for]="arrivalPicker"></mat-datepicker-toggle>
             <mat-datepicker #arrivalPicker></mat-datepicker>
-          </mat-form-field>
-        </div>
+          </mat-form-field> -->
 
-        <div class="form-row">
+        <!-- <div class="form-row">
           <mat-form-field appearance="fill" style="width: 48%;">
             <mat-label>Number of Passengers</mat-label>
             <mat-select formControlName="numberOfPassengers">
@@ -70,7 +88,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-
+ -->
 
 
 

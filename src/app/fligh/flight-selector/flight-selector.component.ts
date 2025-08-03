@@ -66,16 +66,22 @@ export class FlightSelectorComponent {
     private flightService: FlightService) {
 
     this.flightForm = this.fb.group({
-
-      countrySource: [null],
-      sourceAirport: [null],
-      countryDestination: [null],
-      destinationAirport: [null],
-      departureDate: [null],
-      arrivalDate: [null],
-      numberOfPassengers: [1] // default to 1
+      countrySource: [''],
+      sourceAirport: [''],
+      countryDestination: [''],
+      destinationAirport: [''],
+      dateRange: this.fb.group({
+        departureDate: [],
+        arrivalDate: []
+      }),
+      numberOfPassengers: [1]
     });
+
     let maxAvailableSeats = 180;
+
+
+
+
 
     this.passengerCounts = Array.from({ length: maxAvailableSeats }, (_, i) => i + 1);
 
@@ -131,16 +137,16 @@ export class FlightSelectorComponent {
 
   onSubmit(): void {
     if (this.flightForm.valid) {
-        const passengers = this.flightForm.get('numberOfPassengers')?.value ?? 1;  // default to 1 if undefined or null
+      const passengers = this.flightForm.get('numberOfPassengers')?.value ?? 1;  // default to 1 if undefined or null
 
-      console.log('BROJ PUTNIKA'+this.flightForm.get('numberOfPassengers'))
+      console.log('BROJ PUTNIKA' + this.flightForm.get('numberOfPassengers'))
       this.numberOfPassengersChanged.emit(passengers);
 
 
       const from = this.flightForm.value.sourceAirport?.name;
       const to = this.flightForm.value.destinationAirport?.name;
-      const departureDateRaw = this.flightForm.value.departureDate;
-      const arrivalDateRaw = this.flightForm.value.arrivalDate;
+      const departureDateRaw = this.flightForm.value.dateRange.departureDate;
+      const arrivalDateRaw = this.flightForm.value.dateRange.arrivalDate;
       const numberOfPassengers = this.flightForm.value.numberOfPassengers;
       // Format dates to 'YYYY-MM-DD'
       const departureDate = departureDateRaw

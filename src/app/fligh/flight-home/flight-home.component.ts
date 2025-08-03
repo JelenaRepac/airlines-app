@@ -20,7 +20,7 @@ export class FlightHomeComponent {
   constructor(private router: Router, private auth: AuthService) { }
   isAdminUser = false;
   selectedSchedules: ScheduleDto[] = [];
-  numberOfPassengers!: number;
+  numberOfPassengers: number=1;
 
   onSchedulesFound(schedules: ScheduleDto[]): void {
     this.selectedSchedules = schedules;

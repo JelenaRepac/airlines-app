@@ -5,6 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../environment';
 import { error } from 'node:console';
+import { WebSocketService } from './web-scoket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
 
   private apiUrl = `${environment.apiUrl}`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private webSocketService: WebSocketService) { }
 
   // Get user role from decoded JWT token
   getUserRole(): string {
